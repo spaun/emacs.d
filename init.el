@@ -56,6 +56,7 @@
     scala-mode2
     smex
     solarized-theme
+    subatomic-theme
     tagedit
     yasnippet
     zenburn-theme))

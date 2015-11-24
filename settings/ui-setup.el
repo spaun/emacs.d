@@ -51,9 +51,10 @@
 (setq-default transient-mark-mode t)
 
 ;; Theme
-;;(load-theme 'solarized-dark t)
-;;(load-theme 'solarized-light t)
+;(load-theme 'solarized-dark t)
+;(load-theme 'solarized-light t)
 (load-theme 'zenburn t)
+;(load-theme 'subatomic t)
 
 (require 'diminish)
 (eval-after-load "yasnippet" '(diminish 'yas-minor-mode "YAS"))
