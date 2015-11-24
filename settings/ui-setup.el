@@ -77,11 +77,18 @@
 (eval-after-load "ace-jump-mode" '(ace-jump-mode-enable-mark-sync))
 
 
-;;Smex
-(setq smex-save-file (expand-file-name ".smex-items" my-settings-dir))
+;; Smex
+(require 'smex)
+(setq smex-save-file (expand-file-name ".smex-items" my-persistence-dir))
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
 
-(projectile-global-mode)
+;; Projectile
+(require 'projectile)
+(setq projectile-cache-file
+  (expand-file-name "projectile.cache" my-persistence-dir))
+(setq projectile-known-projects-file
+  (expand-file-name "projectile-bookmarks.eld" my-persistence-dir))
+(projectile-global-mode t)
 
 (provide 'ui-setup)

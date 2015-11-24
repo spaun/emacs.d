@@ -1,5 +1,2 @@
-/backups
-/auto-save-list
 /elpa
-/sessions
-/url
+/persistence

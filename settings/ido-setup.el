@@ -1,6 +1,8 @@
 (require 'ido)
 (ido-mode t)
-(setq ido-enable-prefix nil
+
+(setq ido-save-directory-list-file (expand-file-name "ido-last" my-persistence-dir)
+      ido-enable-prefix nil
       ido-enable-flex-matching t
       ido-case-fold nil
       ido-auto-merge-work-directories-length -1

@@ -1,22 +1,32 @@
 ;; Config
-(defvar my-base-dir "~/.emacs.d"
+(defconst my-base-dir "~/.emacs.d"
   "The root of emacs configuration")
-(defvar my-backup-dir (expand-file-name "backups" my-base-dir)
-  "A root of backup and autosave files")
-(defvar my-session-dir (expand-file-name "sessions" my-base-dir)
-  "A root of saved session files")
-(defvar my-settings-dir (expand-file-name "settings" my-base-dir)
+(defconst my-settings-dir (expand-file-name "settings" my-base-dir)
   "A place to store custom configs")
+(defconst my-persistence-dir (expand-file-name "persistence" my-base-dir)
+  "A root of local data files")
+(defconst my-backup-dir (expand-file-name "backups" my-persistence-dir)
+  "A root of backup and autosave files")
 
-(dolist (dir `(,my-backup-dir ,my-session-dir ,my-settings-dir))
+(dolist (dir `(,my-settings-dir ,my-persistence-dir ,my-backup-dir))
   (unless (file-exists-p dir)
     (make-directory dir)))
+
+;; Backups - set it up early to not be affected by any errors below
+(setq backup-by-copying t
+      backup-directory-alist `(("." . ,my-backup-dir))
+      auto-save-file-name-transforms `(("." ,my-backup-dir t))
+      auto-save-list-file-prefix my-backup-dir
+      delete-old-versions t
+      kept-new-versions 6
+      kept-old-versions 2
+      version-control t
+      vc-make-backup-files t)
 
 (add-to-list 'load-path my-settings-dir)
 
 (setq custom-file (expand-file-name "custom.el" my-settings-dir))
 (if (file-exists-p custom-file) (load custom-file))
-
 
 ;; Packages
 (require 'package)
@@ -64,16 +74,6 @@
 (dolist (p my-packages)
   (unless (package-installed-p p)
     (package-install p)))
-
-;; Backups
-(setq backup-by-copying t
-      backup-directory-alist `(("." . ,my-backup-dir))
-      auto-save-file-name-transforms `(("." ,my-backup-dir t))
-      auto-save-list-file-prefix my-backup-dir
-      delete-old-versions t
-      kept-new-versions 6
-      kept-old-versions 2
-      version-control t)
 
 ;; emacs lisp
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
