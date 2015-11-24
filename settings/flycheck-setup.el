@@ -5,3 +5,5 @@
 (setq flycheck-check-syntax-automatically '(save
                                             idle-change
                                             mode-enabled))
+
+(provide 'flycheck-setup)
