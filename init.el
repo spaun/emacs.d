@@ -62,6 +62,7 @@
     paredit
     perspective
     persp-projectile
+    php-mode
     powerline
     projectile
     rainbow-delimiters
