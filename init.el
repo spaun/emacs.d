@@ -60,6 +60,8 @@
     markdown-mode
     org
     paredit
+    perspective
+    persp-projectile
     powerline
     projectile
     rainbow-delimiters

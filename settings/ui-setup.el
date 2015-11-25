@@ -56,6 +56,8 @@
 (load-theme 'zenburn t)
 ;(load-theme 'subatomic t)
 
+(require 'recentf)
+
 (require 'diminish)
 (eval-after-load "yasnippet" '(diminish 'yas-minor-mode "YAS"))
 (eval-after-load "eldoc" '(diminish 'eldoc-mode "ED"))
@@ -83,6 +85,10 @@
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
 
+
+;; Perspective
+(persp-mode)
+
 ;; Projectile
 (require 'projectile)
 (setq projectile-cache-file
@@ -90,5 +96,9 @@
 (setq projectile-known-projects-file
   (expand-file-name "projectile-bookmarks.eld" my-persistence-dir))
 (projectile-global-mode t)
+
+;; Perspective - Projectile integration
+(require 'persp-projectile)
+
 
 (provide 'ui-setup)
