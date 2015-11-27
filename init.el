@@ -41,7 +41,9 @@
   (package-refresh-contents))
 
 (defvar my-packages
-  '(ace-jump-mode
+  '(ag
+;    ace-jump-mode
+    avy
     clojure-mode
     clojure-mode-extra-font-locking
     clj-refactor
@@ -56,8 +58,10 @@
     ido-at-point
     ido-ubiquitous
     ido-vertical-mode
+    key-chord
     magit
     markdown-mode
+    multiple-cursors
     org
     paredit
     perspective
@@ -66,11 +70,13 @@
     powerline
     projectile
     rainbow-delimiters
+    ;;    region-bindings-mode
     scala-mode2
     smex
     solarized-theme
     subatomic-theme
     tagedit
+    whitespace-cleanup-mode
     yasnippet
     zenburn-theme))
 

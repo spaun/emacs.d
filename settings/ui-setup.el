@@ -22,6 +22,12 @@
 ;; Use C-q to insert TAB (C-q <tab>)
 (setq-default indent-tabs-mode nil)
 
+(setq whitespace-style
+      '(trailing lines space-before-tab indentation space-after-tab)
+      whitespace-line-column 100)
+
+(global-whitespace-cleanup-mode)
+
 ;; Move files to trash when deleting
 (setq delete-by-moving-to-trash t)
 
@@ -68,6 +74,9 @@
 
 (require 'powerline)
 (powerline-default-theme)
+(set-face-attribute 'mode-line nil :box nil)
+(set-face-attribute 'mode-line-inactive nil :box nil)
+(setq powerline-default-separator 'zigzag)
 
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
