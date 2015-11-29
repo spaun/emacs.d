@@ -42,7 +42,6 @@
 
 (defvar my-packages
   '(ag
-;    ace-jump-mode
     avy
     clojure-mode
     clojure-mode-extra-font-locking
@@ -58,7 +57,6 @@
     ido-at-point
     ido-ubiquitous
     ido-vertical-mode
-    key-chord
     magit
     markdown-mode
     multiple-cursors
@@ -70,7 +68,7 @@
     powerline
     projectile
     rainbow-delimiters
-    ;;    region-bindings-mode
+    region-bindings-mode
     scala-mode2
     smex
     solarized-theme
@@ -96,3 +94,4 @@
 (eval-after-load 'org '(require 'org-setup))
 (eval-after-load 'clojure-mode '(require 'clojure-setup))
 (eval-after-load 'flycheck '(require 'flycheck-setup))
+(put 'narrow-to-region 'disabled nil)

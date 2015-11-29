@@ -2,7 +2,6 @@
       inhibit-startup-message t
       default-tab-width 4
       show-paren-delay 0
-      ;; scroll-preserve-screen-position 1
       scroll-conservatively 100000
       scroll-margin 0)
 
@@ -17,6 +16,10 @@
 (global-hl-line-mode)
 (size-indication-mode t)
 (fset 'yes-or-no-p 'y-or-n-p)
+
+;; Undo Tree
+(global-undo-tree-mode)
+(setq undo-tree-visualizer-diff t)
 
 ;; Forbid tabs by default
 ;; Use C-q to insert TAB (C-q <tab>)
@@ -62,8 +65,6 @@
 (load-theme 'zenburn t)
 ;(load-theme 'subatomic t)
 
-(require 'recentf)
-
 (require 'diminish)
 (eval-after-load "yasnippet" '(diminish 'yas-minor-mode "YAS"))
 (eval-after-load "eldoc" '(diminish 'eldoc-mode "ED"))
@@ -81,12 +82,6 @@
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
-(require 'ace-jump-mode)
-(eval-after-load "ace-jump-mode"
-  '(ace-jump-mode-enable-mark-sync))
-(autoload 'ace-jump-mode-pop-mark "ace-jump-mode")
-(eval-after-load "ace-jump-mode" '(ace-jump-mode-enable-mark-sync))
-
 
 ;; Smex
 (require 'smex)
@@ -100,14 +95,34 @@
 
 ;; Projectile
 (require 'projectile)
-(setq projectile-cache-file
-  (expand-file-name "projectile.cache" my-persistence-dir))
-(setq projectile-known-projects-file
-  (expand-file-name "projectile-bookmarks.eld" my-persistence-dir))
+(setq projectile-cache-file (expand-file-name
+                             "projectile.cache"
+                             my-persistence-dir)
+      projectile-known-projects-file (expand-file-name
+                                      "projectile-bookmarks.eld"
+                                      my-persistence-dir))
 (projectile-global-mode t)
 
 ;; Perspective - Projectile integration
 (require 'persp-projectile)
 
+(require 'recentf)
+(setq recentf-save-file (expand-file-name "recentf" my-persistence-dir)
+      recentf-max-saved-items 500
+      recentf-max-menu-items 15
+      recentf-auto-cleanup 'never)
+(recentf-mode 1)
+
+;; Bookmarks
+(setq
+ bookmark-default-file (expand-file-name "bookmarks" my-persistence-dir)
+ bookmark-save-flag 1)
+
+;; Quick navigation
+(require 'avy)
+
+;; Hide unmatched lines
+(require 'mc-hide-unmatched-lines-mode)
+(setq hum/lines-to-expand 1)
 
 (provide 'ui-setup)
