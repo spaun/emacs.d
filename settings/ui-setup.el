@@ -130,6 +130,13 @@
       aw-dispatch-always t
       aw-skope "frame")
 
+;; Eshell
+(setq eshell-directory-name (expand-file-name "eshell" my-persistence-dir))
+
+
+;; Mutiple Curssors
+(require 'multiple-cursors)
+(setq mc/list-file (expand-file-name ".mc-lists.el" my-persistence-dir))
 
 ;; Hide unmatched lines
 (require 'mc-hide-unmatched-lines-mode)

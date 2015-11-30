@@ -26,7 +26,7 @@
 (setq cider-auto-select-error-buffer t)
 
 ;; Where to store the cider history.
-(setq cider-repl-history-file (expand-file-name "cider-history" my-settings-dir))
+(setq cider-repl-history-file (expand-file-name "cider-history" my-persistence-dir))
 
 ;; Wrap when navigating history.
 (setq cider-repl-wrap-history t)
