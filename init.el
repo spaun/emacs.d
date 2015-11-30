@@ -41,7 +41,8 @@
   (package-refresh-contents))
 
 (defvar my-packages
-  '(ag
+  '(ace-window
+    ag
     avy
     clojure-mode
     clojure-mode-extra-font-locking

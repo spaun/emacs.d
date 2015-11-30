@@ -121,6 +121,12 @@
 ;; Quick navigation
 (require 'avy)
 
+(require 'ace-window)
+(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
+      aw-dispatch-always t
+      aw-skope "frame")
+
+
 ;; Hide unmatched lines
 (require 'mc-hide-unmatched-lines-mode)
 (setq hum/lines-to-expand 1)

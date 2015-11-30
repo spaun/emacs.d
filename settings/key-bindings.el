@@ -16,6 +16,9 @@
 (global-set-key (kbd "M-g w") 'avy-goto-word-1)
 (global-set-key (kbd "M-g g") 'avy-goto-line)
 
+(global-set-key (kbd "M-p") 'ace-window)
+
+
 (global-set-key (kbd "C-x f") 'recentf-open-files)
 
 (provide 'key-bindings)
