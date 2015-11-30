@@ -48,6 +48,7 @@
     clojure-mode-extra-font-locking
     clj-refactor
     cider
+    company
     diminish
     evil
     flx-ido

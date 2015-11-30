@@ -79,9 +79,13 @@
 (set-face-attribute 'mode-line-inactive nil :box nil)
 (setq powerline-default-separator 'zigzag)
 
+
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
+
+(require 'company)
+(global-company-mode)
 
 ;; Smex
 (require 'smex)
