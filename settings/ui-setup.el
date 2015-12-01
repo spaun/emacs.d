@@ -148,7 +148,8 @@
 ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 ;; Also following line to ~/.Xresources to have a maximized window immediately
 ;; emacs.fullscreen: maximized
-(add-hook 'emacs-startup-hook 'toggle-frame-maximized)
+;(add-hook 'emacs-startup-hook 'toggle-frame-maximized)
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 
 (provide 'ui-setup)
