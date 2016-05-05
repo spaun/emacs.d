@@ -1,5 +1,6 @@
 (setq font-use-system-font t
       inhibit-startup-message t
+      initial-scratch-message nil
       default-tab-width 4
       show-paren-delay 0
       scroll-conservatively 100000
