@@ -77,6 +77,7 @@
     solarized-theme
     subatomic-theme
     tagedit
+    web-mode
     whitespace-cleanup-mode
     yasnippet
     zenburn-theme))
