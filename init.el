@@ -55,6 +55,7 @@
     flycheck
     flycheck-clojure
     haskell-mode
+    hydra
     js2-mode
     ido-at-point
     ido-ubiquitous
