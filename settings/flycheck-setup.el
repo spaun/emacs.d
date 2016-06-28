@@ -1,3 +1,7 @@
+;;; flycheck-setup.el --- Flycheck configuration
+;;; Commentary:
+;;; Code:
+
 (require 'flycheck)
 
 ;; Remove newline checks, since they would trigger an immediate check
@@ -6,4 +10,8 @@
                                             idle-change
                                             mode-enabled))
 
+(global-flycheck-mode)
+
 (provide 'flycheck-setup)
+
+;;; flycheck-setup.el ends here
