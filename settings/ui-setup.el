@@ -105,7 +105,8 @@
                              my-persistence-dir)
       projectile-known-projects-file (expand-file-name
                                       "projectile-bookmarks.eld"
-                                      my-persistence-dir))
+                                      my-persistence-dir)
+      projectile-switch-project-action 'projectile-persp-switch-project)
 (projectile-global-mode t)
 
 ;; Perspective - Projectile integration
