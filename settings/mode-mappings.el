@@ -1,8 +1,5 @@
 ;; Scala
-(autoload 'scala-mode "scala-mode2")
-(add-to-list 'auto-mode-alist '("\\.scala$" . scala-mode))
-(autoload 'ensime-scala-mode-hook "ensime")
-(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+(add-hook 'scala-mode-hook 'ensime-mode)
 
 ;; Clojure
 (autoload 'clojure-mode "clojure-mode")

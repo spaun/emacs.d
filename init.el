@@ -50,6 +50,7 @@
     cider
     company
     diminish
+    ensime
     evil
     flx-ido
     flycheck
@@ -72,7 +73,6 @@
     projectile
     rainbow-delimiters
     region-bindings-mode
-    scala-mode2
     smex
     solarized-theme
     subatomic-theme
