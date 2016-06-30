@@ -1,3 +1,6 @@
+;;; ui-setup.el --- Common UI setup
+;;; Commentary:
+;;; Code:
 (setq font-use-system-font t
       inhibit-startup-message t
       initial-scratch-message nil
@@ -155,3 +158,5 @@
 
 
 (provide 'ui-setup)
+
+;;; ui-setup ends here

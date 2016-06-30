@@ -1,12 +1,16 @@
-;; Config
+;;; init.el --- The Emacs configuration
+
+;;; Commentary:
+
+;;; Code:
 (defconst my-base-dir "~/.emacs.d"
-  "The root of emacs configuration")
+  "The root of Emacs configuration.")
 (defconst my-settings-dir (expand-file-name "settings" my-base-dir)
-  "A place to store custom configs")
+  "A place to store custom configs.")
 (defconst my-persistence-dir (expand-file-name "persistence" my-base-dir)
-  "A root of local data files")
+  "A root of local data files.")
 (defconst my-backup-dir (expand-file-name "backups" my-persistence-dir)
-  "A root of backup and autosave files")
+  "A root of backup and autosave files.")
 
 (dolist (dir `(,my-settings-dir ,my-persistence-dir ,my-backup-dir))
   (unless (file-exists-p dir)
@@ -99,3 +103,5 @@
 (eval-after-load 'clojure-mode '(require 'clojure-setup))
 (eval-after-load 'flycheck '(require 'flycheck-setup))
 (put 'narrow-to-region 'disabled nil)
+
+;;; init.el ends here

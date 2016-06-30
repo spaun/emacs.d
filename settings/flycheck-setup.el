@@ -9,6 +9,7 @@
 (setq flycheck-check-syntax-automatically '(save
                                             idle-change
                                             mode-enabled))
+(setq-default flycheck-emacs-lisp-load-path 'inherit)
 
 (global-flycheck-mode)
 
