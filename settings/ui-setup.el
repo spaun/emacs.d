@@ -4,14 +4,14 @@
 (setq font-use-system-font t
       inhibit-startup-message t
       initial-scratch-message nil
-      default-tab-width 4
+      tab-width 4
       show-paren-delay 0
       scroll-conservatively 100000
       scroll-margin 0)
 
-(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 (blink-cursor-mode -1)
 (column-number-mode 1)
@@ -20,10 +20,6 @@
 (global-hl-line-mode)
 (size-indication-mode t)
 (fset 'yes-or-no-p 'y-or-n-p)
-
-;; Undo Tree
-(global-undo-tree-mode)
-(setq undo-tree-visualizer-diff t)
 
 ;; Forbid tabs by default
 ;; Use C-q to insert TAB (C-q <tab>)
@@ -69,27 +65,13 @@
 (load-theme 'zenburn t)
 ;(load-theme 'subatomic t)
 
-(require 'diminish)
-(eval-after-load "yasnippet" '(diminish 'yas-minor-mode "YAS"))
-(eval-after-load "eldoc" '(diminish 'eldoc-mode "ED"))
-(eval-after-load "paredit" '(diminish 'paredit-mode "PE"))
-(eval-after-load "tagedit" '(diminish 'tagedit-mode "TE"))
-(eval-after-load "projectile" '(diminish 'projectile-mode "Prj"))
-(eval-after-load "undo-tree" '(diminish 'undo-tree-mode "Undo"))
-
-(require 'powerline)
-(powerline-default-theme)
-(set-face-attribute 'mode-line nil :box nil)
-(set-face-attribute 'mode-line-inactive nil :box nil)
-(setq powerline-default-separator 'zigzag)
-
-
-(require 'rainbow-delimiters)
-(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-
-
-(require 'company)
-(global-company-mode)
+;; (require 'diminish)
+;; (eval-after-load "yasnippet" '(diminish 'yas-minor-mode "YAS"))
+;; (eval-after-load "eldoc" '(diminish 'eldoc-mode "ED"))
+;; (eval-after-load "paredit" '(diminish 'paredit-mode "PE"))
+;; (eval-after-load "tagedit" '(diminish 'tagedit-mode "TE"))
+;; (eval-after-load "projectile" '(diminish 'projectile-mode "Prj"))
+;; (eval-after-load "undo-tree" '(diminish 'undo-tree-mode "Undo"))
 
 ;; Smex
 (require 'smex)
@@ -127,13 +109,6 @@
  bookmark-default-file (expand-file-name "bookmarks" my-persistence-dir)
  bookmark-save-flag 1)
 
-;; Quick navigation
-(require 'avy)
-
-(require 'ace-window)
-(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
-      aw-dispatch-always t
-      aw-skope "frame")
 
 ;; Eshell
 (setq eshell-directory-name (expand-file-name "eshell" my-persistence-dir))

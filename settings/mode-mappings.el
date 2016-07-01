@@ -26,8 +26,4 @@
 ;; org-mode
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 
-(autoload 'web-mode "web-mode")
-(add-to-list 'auto-mode-alist '("\\.html.twig" . web-mode))
-(setq web-mode-markup-indent-offset 2)
-
 (provide 'mode-mappings)

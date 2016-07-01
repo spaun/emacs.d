@@ -16,12 +16,6 @@
 (global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click)
 (global-set-key (kbd "C-S-p") 'mc/mark-pop)
 
-(global-set-key (kbd "M-g c") 'avy-goto-char-2)
-(global-set-key (kbd "M-g w") 'avy-goto-word-1)
-(global-set-key (kbd "M-g g") 'avy-goto-line)
-
-(global-set-key (kbd "C-x o") 'ace-window)
-
 (global-set-key (kbd "C-x f") 'recentf-open-files)
 
 (global-set-key (kbd "C-x g") 'magit-status)
