@@ -51,37 +51,29 @@
 
 (setq use-package-always-ensure t)
 
-
 (defvar my-packages
   '(
-    ag
     clojure-mode
     clojure-mode-extra-font-locking
     clj-refactor
     cider
     ensime
-    flx-ido
     flycheck-clojure
     haskell-mode
     hydra
     js2-mode
+    flx-ido
     ido-at-point
     ido-ubiquitous
     ido-vertical-mode
-    magit
+    smex
     markdown-mode
     multiple-cursors
     org
-    paredit
-    perspective
-    persp-projectile
     php-mode
-    projectile
     region-bindings-mode
-    smex
     tagedit
     whitespace-cleanup-mode
-    yasnippet
 ))
 
 ;; emacs lisp
@@ -102,7 +94,6 @@
 
 (use-package
   ace-window
-  :commands ace-window
   :config (setq
            aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
            aw-dispatch-always nil
@@ -111,7 +102,6 @@
 
 (use-package
   avy
-  :commands (avy-goto-char-2 avy-goto-word-1 avy-goto-line)
   :bind (("M-g c" . avy-goto-char-2)
          ("M-g w" . avy-goto-word-1)
          ("M-g g" . avy-goto-line)))
@@ -165,6 +155,51 @@
 (use-package
   evil
   :commands evil-mode)
+
+(use-package
+  ag
+  :commands ag)
+
+(use-package
+  magit
+  :bind (("C-x g" . magit-status)
+         ("C-x M-g" . magit-dispatch-popup)))
+
+(use-package
+  paredit
+  :diminish 'paredit-mode
+  :commands paredit-mode
+  :bind (("C-M-u" . paredit-backward-up)
+         ("C-M-n" . paredit-forward-up)
+         ("M-S" . paredit-splice-sexp-killing-backward)
+         ("M-R" . paredit-raise-sexp)
+         ("M-(" . paredit-wrap-round)
+         ("M-[" . paredit-wrap-square)
+         ("M-{" . paredit-wrap-curly)))
+
+(use-package
+  perspective
+  :demand
+  :config
+  (persp-mode))
+
+(use-package
+  projectile
+  :demand
+  :diminish (projectile-mode . "PRJ")
+  :config
+  (setq projectile-cache-file
+        (expand-file-name "projectile.cache" my-persistence-dir)
+        projectile-known-projects-file
+        (expand-file-name "projectile-bookmarks.eld" my-persistence-dir))
+  (projectile-global-mode t)
+  (if (featurep 'perspective)
+      (use-package persp-projectile :demand)))
+
+(use-package
+  yasnippet
+  :mode (("yasnippet/snippets" . snippet-mode)
+         ("\\.yasnippet$" . snippet-mode)))
 
 (use-package
   zenburn-theme

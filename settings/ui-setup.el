@@ -66,36 +66,14 @@
 ;(load-theme 'subatomic t)
 
 ;; (require 'diminish)
-;; (eval-after-load "yasnippet" '(diminish 'yas-minor-mode "YAS"))
 ;; (eval-after-load "eldoc" '(diminish 'eldoc-mode "ED"))
-;; (eval-after-load "paredit" '(diminish 'paredit-mode "PE"))
 ;; (eval-after-load "tagedit" '(diminish 'tagedit-mode "TE"))
-;; (eval-after-load "projectile" '(diminish 'projectile-mode "Prj"))
-;; (eval-after-load "undo-tree" '(diminish 'undo-tree-mode "Undo"))
 
 ;; Smex
 (require 'smex)
 (setq smex-save-file (expand-file-name ".smex-items" my-persistence-dir))
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
-
-
-;; Perspective
-(persp-mode)
-
-;; Projectile
-(require 'projectile)
-(setq projectile-cache-file (expand-file-name
-                             "projectile.cache"
-                             my-persistence-dir)
-      projectile-known-projects-file (expand-file-name
-                                      "projectile-bookmarks.eld"
-                                      my-persistence-dir)
-      projectile-switch-project-action 'projectile-persp-switch-project)
-(projectile-global-mode t)
-
-;; Perspective - Projectile integration
-(require 'persp-projectile)
 
 (require 'recentf)
 (setq recentf-save-file (expand-file-name "recentf" my-persistence-dir)
