@@ -70,7 +70,6 @@
     markdown-mode
     multiple-cursors
     org
-    php-mode
     region-bindings-mode
     tagedit
     whitespace-cleanup-mode
@@ -205,6 +204,16 @@
   yasnippet
   :mode (("yasnippet/snippets" . snippet-mode)
          ("\\.yasnippet$" . snippet-mode)))
+
+(use-package
+  php-mode
+  :config
+  (setq
+   php-template-compatibility nil
+   php-mode-coding-style 'psr2)
+  (add-hook
+   'php-mode-hook
+   (lambda () (subword-mode 1))))
 
 (use-package
   zenburn-theme
