@@ -178,6 +178,11 @@
          ("M-{" . paredit-wrap-curly)))
 
 (use-package
+  eldoc
+  :diminish 'eldoc-mode
+  :commands eldoc-mode)
+
+(use-package
   perspective
   :demand
   :config
