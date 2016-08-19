@@ -191,7 +191,7 @@
 (use-package
   projectile
   :demand
-  :diminish (projectile-mode . "PRJ")
+  :diminish 'projectile-mode
   :config
   (setq projectile-cache-file
         (expand-file-name "projectile.cache" my-persistence-dir)
