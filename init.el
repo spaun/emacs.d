@@ -9,8 +9,9 @@
   "A place to store custom configs.")
 (defconst my-persistence-dir (expand-file-name "persistence" my-base-dir)
   "A root of local data files.")
-(defconst my-backup-dir (expand-file-name "backups" my-persistence-dir)
+(defconst my-backup-dir (expand-file-name "backup" my-persistence-dir)
   "A root of backup and autosave files.")
+(defconst my-lein-command "/home/spaun/bin/lein")
 
 (dolist (dir `(,my-settings-dir ,my-persistence-dir ,my-backup-dir))
   (unless (file-exists-p dir)
@@ -18,9 +19,8 @@
 
 ;; Backups - set it up early to not be affected by any errors below
 (setq backup-by-copying t
-      backup-directory-alist `(("." . ,my-backup-dir))
-      auto-save-file-name-transforms `(("." ,my-backup-dir t))
-      auto-save-list-file-prefix my-backup-dir
+      backup-directory-alist `((".*" . ,my-backup-dir))
+      auto-save-file-name-transforms `((".*" ,my-backup-dir t))
       delete-old-versions t
       kept-new-versions 6
       kept-old-versions 2
@@ -35,78 +35,229 @@
 ;; Packages
 
 (require 'package)
-(setq
- package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                    ("org" . "http://orgmode.org/elpa/")
-                    ("melpa" . "http://melpa.org/packages/")))
+(setq package-archives
+      '(("gnu" . "http://elpa.gnu.org/packages/")
+        ("org" . "http://orgmode.org/elpa/")
+        ("melpa" . "http://melpa.org/packages/")))
 
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
 
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
+(defvar my-packages
+  '(diminish
+    solarized-theme
+    subatomic-theme
+    use-package
+    zenburn-theme))
+
+(dolist (p my-packages)
+  (unless (package-installed-p p)
+    (package-install p)))
 
 (require 'use-package)
 
 (setq use-package-always-ensure t)
+;; (defvar my-packages
+;;   '(
+;;     ensime
+;;     hydra
+;;     js2-mode
+;;     multiple-cursors
+;;     org
+;;     region-bindings-mode
+;;     tagedit
+;;     ))
 
-(defvar my-packages
-  '(
-    clojure-mode
-    clojure-mode-extra-font-locking
-    clj-refactor
-    cider
-    ensime
-    flycheck-clojure
-    haskell-mode
-    hydra
-    js2-mode
-    flx-ido
-    ido-at-point
-    ido-ubiquitous
-    ido-vertical-mode
-    smex
-    markdown-mode
-    multiple-cursors
-    org
-    region-bindings-mode
-    tagedit
-    whitespace-cleanup-mode
-))
+;; UX
+(defalias 'yes-or-no-p 'y-or-n-p)
 
-;; emacs lisp
-(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-
-(require 'ui-setup)
-(require 'mode-mappings)
-(require 'key-bindings)
-
-(eval-after-load 'ido '(require 'ido-setup))
-(eval-after-load 'org '(require 'org-setup))
-(eval-after-load 'clojure-mode '(require 'clojure-setup))
+;; Enable the functionality disabled by default
 (put 'narrow-to-region 'disabled nil)
 
-(use-package
-  diminish)
+(load-theme 'zenburn t)
+;(load-theme 'solarized-dark t)
+;(load-theme 'solarized-light t)
+;(load-theme 'subatomic t)
 
-(use-package
-  ace-window
+(setq font-use-system-font t
+      inhibit-startup-message t
+      initial-scratch-message nil
+      scroll-conservatively 100000
+      scroll-margin 0)
+
+;; Start maximized
+;; Alternative way:
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; Also following line to ~/.Xresources to have a maximized window immediately
+;; emacs.fullscreen: maximized
+;(add-hook 'emacs-startup-hook 'toggle-frame-maximized)
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;; Real emacs knights don't use shift to mark things
+(setq shift-select-mode nil)
+
+;; Move files to trash when deleting
+(setq delete-by-moving-to-trash t)
+
+;; Transparently open compressed files
+(auto-compression-mode t)
+
+;; Forbid tabs by default
+;; Use C-q to insert TAB (C-q <tab>)
+(setq-default indent-tabs-mode nil)
+
+;; Default tab width is 4
+(setq-default tab-width 4)
+
+;; Show column number on mode line
+(column-number-mode 1)
+
+;; Show buffer size on mode line
+(size-indication-mode t)
+
+;; Highlight current line
+(global-hl-line-mode)
+
+;; Don't blink the cursor
+(blink-cursor-mode -1)
+
+;; Unclutter the UI
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+
+;; UTF-8 please
+(setq locale-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+
+;; Show time on the mode line, only in text terminal
+(when (not (display-graphic-p))
+  (display-time-mode t))
+
+;; Highlight matching paren
+(use-package paren
+  :demand
+  :config
+  (setq show-paren-delay 0)
+  (show-paren-mode t))
+
+(use-package whitespace-cleanup-mode
+  :demand
+  :config
+  (setq
+   whitespace-style
+   '(trailing lines space-before-tab indentation space-after-tab)
+   whitespace-line-column 100)
+  (global-whitespace-cleanup-mode))
+
+(use-package smex
+  :bind (("M-x" . smex))
+  :config
+  (setq
+   smex-save-file (expand-file-name "smex-items" my-persistence-dir))
+  (smex-initialize))
+
+(use-package ibuffer
+  :bind ("C-x C-b" . ibuffer))
+
+(use-package recentf
+  :demand
+  :bind (("C-x f" . recentf-open-files))
+  :config
+  (defun my-recentf-exclude-p (file)
+    "Recentf exclude predicate (borrowed from bbatsov's prelude"
+    (let ((file-dir (file-truename (file-name-directory file))))
+      (seq-some
+       (lambda (dir) (string-prefix-p dir file-dir))
+       (seq-map 'file-truename (list my-persistence-dir package-user-dir)))))
+  (add-to-list 'recentf-exclude 'my-recentf-exclude-p)
+  (setq
+   recentf-save-file (expand-file-name "recentf" my-persistence-dir)
+   recentf-max-saved-items 500
+   recentf-max-menu-items 15
+   recentf-auto-cleanup 'never)
+  (recentf-mode 1))
+
+;; Ido setup
+(use-package ido
+  :demand
+  :config
+  (setq
+   ido-save-directory-list-file (expand-file-name "ido-last" my-persistence-dir)
+   ido-enable-prefix nil
+   ido-enable-flex-matching t
+   ido-case-fold nil
+   ido-auto-merge-work-directories-length -1
+   ido-create-new-buffer 'always
+   ido-use-filename-at-point nil
+   ido-max-prospects 10)
+  (set-default 'imenu-auto-rescan t)
+  (add-to-list 'ido-ignore-directories "target")
+  (ido-mode t)
+  (use-package flx-ido
+    :demand
+    :config
+    (setq
+     ido-use-faces nil)
+    (flx-ido-mode 1))
+  (use-package ido-at-point
+    :demand
+    :config
+    (ido-at-point-mode))
+  (use-package ido-ubiquitous
+    :demand
+    :config
+    (ido-ubiquitous-mode 1))
+  (use-package ido-vertical-mode
+    :demand
+    :config
+    (setq
+     ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
+    (ido-vertical-mode)))
+
+(use-package bookmark
+  :demand
+  :config
+  (setq
+   bookmark-default-file (expand-file-name "bookmarks" my-persistence-dir)
+   bookmark-save-flag 1))
+
+(use-package eshell
+  :config
+  (setq
+   eshell-directory-name (expand-file-name "eshell" my-persistence-dir)))
+
+(use-package multiple-cursors
+  :config
+  (require 'mc-hide-unmatched-lines-mode)
+  (setq
+   mc/list-file (expand-file-name "mc-lists.el" my-persistence-dir)
+   hum/lines-to-expand 1))
+
+;; emacs lisp
+(use-package elisp-mode
+  :ensure nil
+  :config
+  (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+  (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
+
+(use-package ace-window
   :config (setq
            aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
            aw-dispatch-always nil
-           aw-skope "frame")
+           aw-scope 'frame)
   :bind ("C-x o" . ace-window))
 
-(use-package
-  avy
+(use-package avy
   :bind (("M-g c" . avy-goto-char-2)
          ("M-g w" . avy-goto-word-1)
          ("M-g g" . avy-goto-line)))
 
-(use-package
-  flycheck
+(use-package flycheck
   :demand
   :diminish "FC"
   :config
@@ -115,55 +266,51 @@
    flycheck-emacs-lisp-load-path (quote inherit))
   (global-flycheck-mode))
 
-(use-package
-  company
+(use-package company
   :demand
   :diminish 'company-mode
   :config
   (global-company-mode))
 
-(use-package
-  rainbow-delimiters
+(use-package rainbow-delimiters
   :demand
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-(use-package
-  powerline
+;; TODO Configure this
+(use-package spaceline-config
+  :ensure spaceline
   :demand
   :config
-  (powerline-default-theme)
+  (setq powerline-default-separator 'wave)
   (set-face-attribute 'mode-line nil :box nil)
   (set-face-attribute 'mode-line-inactive nil :box nil)
-  (setq powerline-default-separator 'zigzag))
+  (when (fboundp 'spaceline-emacs-theme)
+    (spaceline-emacs-theme)))
 
-(use-package
-  undo-tree
+(use-package undo-tree
   :demand
   :diminish 'undo-tree-mode
   :config
   (global-undo-tree-mode)
   (setq undo-tree-visualizer-diff t))
 
-(use-package
-  web-mode
+(use-package web-mode
   :mode "\\.html\\.twig"
   :config
   (setq web-mode-markup-indent-offset 2))
 
-(use-package
-  evil
+(use-package evil
   :commands evil-mode)
 
-(use-package
-  ag
+(use-package ag
   :commands ag)
 
-(use-package
-  magit
+(use-package magit
   :bind (("C-x g" . magit-status)
          ("C-x M-g" . magit-dispatch-popup)))
 
+;; TODO Possibly replace with smartparens
 (use-package
   paredit
   :diminish 'paredit-mode
@@ -176,19 +323,16 @@
          ("M-[" . paredit-wrap-square)
          ("M-{" . paredit-wrap-curly)))
 
-(use-package
-  eldoc
+(use-package eldoc
   :diminish 'eldoc-mode
   :commands eldoc-mode)
 
-(use-package
-  perspective
+(use-package perspective
   :demand
   :config
   (persp-mode))
 
-(use-package
-  projectile
+(use-package projectile
   :demand
   :diminish 'projectile-mode
   :config
@@ -200,13 +344,11 @@
   (if (featurep 'perspective)
       (use-package persp-projectile :demand)))
 
-(use-package
-  yasnippet
+(use-package yasnippet
   :mode (("yasnippet/snippets" . snippet-mode)
          ("\\.yasnippet$" . snippet-mode)))
 
-(use-package
-  php-mode
+(use-package php-mode
   :config
   (setq
    php-template-compatibility nil
@@ -215,16 +357,31 @@
    'php-mode-hook
    (lambda () (subword-mode 1))))
 
-(use-package
-  zenburn-theme
-  :defer t)
+(use-package haskell-mode)
 
-(use-package
-  solarized-theme
-  :defer t)
+(use-package clojure-mode
+  :config
+  (use-package cider
+    :config
+    (setq
+     cider-lein-command my-lein-command
+     nrepl-hide-special-buffers t
+     ;; go right to the REPL buffer when it's finished connecting
+     cider-repl-pop-to-buffer-on-connect t
+     ;; When there's a cider error, show it's buffer and switch to it
+     cider-show-error-buffer t
+     cider-auto-select-error-buffer t
+     ;; Where to store the cider history.
+     cider-repl-history-file (expand-file-name "cider-history" my-persistence-dir)
+     ;; Wrap when navigating history.
+     cider-repl-wrap-history t)
+  (use-package clj-refactor)
+  (add-hook 'clojure-mode-hook 'paredit-mode)
+  (add-hook 'clojure-mode-hook 'subword-mode)
+  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+  (add-hook 'cider-repl-mode-hook 'paredit-mode)
+  :bind (:map clojure-mode-map
+         ("<f5>" . cider-refresh))))
 
-(use-package
-  subatomic-theme
-  :defer t)
-
+(provide 'init)
 ;;; init.el ends here
