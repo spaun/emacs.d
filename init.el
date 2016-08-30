@@ -21,6 +21,7 @@
 (setq backup-by-copying t
       backup-directory-alist `((".*" . ,my-backup-dir))
       auto-save-file-name-transforms `((".*" ,my-backup-dir t))
+      auto-save-list-file-prefix my-backup-dir
       delete-old-versions t
       kept-new-versions 6
       kept-old-versions 2
@@ -236,7 +237,9 @@
   (require 'mc-hide-unmatched-lines-mode)
   (setq
    mc/list-file (expand-file-name "mc-lists.el" my-persistence-dir)
-   hum/lines-to-expand 1))
+   hum/lines-to-expand 1)
+  :bind (("C-S-p" . mc/mark-pop)
+         ("C-S-<mouse-1>" . mc/add-cursor-on-click)))
 
 ;; emacs lisp
 (use-package elisp-mode
@@ -263,7 +266,7 @@
   :config
   (setq
    flycheck-check-syntax-automatically '(save idle-change mode-enabled)
-   flycheck-emacs-lisp-load-path (quote inherit))
+   flycheck-emacs-lisp-load-path 'inherit)
   (global-flycheck-mode))
 
 (use-package company
