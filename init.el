@@ -59,16 +59,6 @@
 (require 'use-package)
 
 (setq use-package-always-ensure t)
-;; (defvar my-packages
-;;   '(
-;;     ensime
-;;     hydra
-;;     js2-mode
-;;     multiple-cursors
-;;     org
-;;     region-bindings-mode
-;;     tagedit
-;;     ))
 
 ;; UX
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -343,7 +333,7 @@
         (expand-file-name "projectile.cache" my-persistence-dir)
         projectile-known-projects-file
         (expand-file-name "projectile-bookmarks.eld" my-persistence-dir))
-  (projectile-global-mode t)
+  (projectile-mode t)
   (if (featurep 'perspective)
       (use-package persp-projectile :demand)))
 
@@ -384,7 +374,20 @@
   (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
   (add-hook 'cider-repl-mode-hook 'paredit-mode)
   :bind (:map clojure-mode-map
-         ("<f5>" . cider-refresh))))
+              ("<f5>" . cider-refresh))))
+
+(use-package org
+  :config
+  (require 'epa-file)
+  (require 'org-crypt)
+  (epa-file-enable)
+  (org-crypt-use-before-save-magic)
+  (setq
+   org-tags-exclude-from-inheritance (quote ("crypt"))
+   auto-save-default nil
+   org-src-fontify-natively t
+   org-return-follows-link t)
+  :bind (("C-c d" . org-decrypt-entry)))
 
 (provide 'init)
 ;;; init.el ends here
