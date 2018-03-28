@@ -189,6 +189,7 @@
   (set-default 'imenu-auto-rescan t)
   (add-to-list 'ido-ignore-directories "target")
   (ido-mode t)
+  (ido-everywhere t)
   (use-package flx-ido
     :demand
     :config
@@ -199,7 +200,9 @@
     :demand
     :config
     (ido-at-point-mode))
-  (use-package ido-ubiquitous
+  (use-package ido-completing-read+
+    :preface
+    (defvar ido-cur-list nil)
     :demand
     :config
     (ido-ubiquitous-mode 1))
@@ -343,12 +346,13 @@
 
 (use-package php-mode
   :config
-  (setq
-   php-template-compatibility nil
-   php-mode-coding-style 'psr2)
+  (require 'php-ext)
   (add-hook
    'php-mode-hook
-   (lambda () (subword-mode 1))))
+   (lambda () (subword-mode 1)))
+  (setq
+   php-template-compatibility nil
+   php-mode-coding-style 'psr2))
 
 (use-package haskell-mode)
 
@@ -386,7 +390,8 @@
    org-tags-exclude-from-inheritance (quote ("crypt"))
    auto-save-default nil
    org-src-fontify-natively t
-   org-return-follows-link t)
+   org-return-follows-link t
+   org-html-doctype "html5")
   :bind (("C-c d" . org-decrypt-entry)))
 
 (provide 'init)
