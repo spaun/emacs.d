@@ -323,11 +323,6 @@
   :diminish 'eldoc-mode
   :commands eldoc-mode)
 
-(use-package perspective
-  :demand
-  :config
-  (persp-mode))
-
 (use-package projectile
   :demand
   :diminish 'projectile-mode
@@ -336,9 +331,7 @@
         (expand-file-name "projectile.cache" my-persistence-dir)
         projectile-known-projects-file
         (expand-file-name "projectile-bookmarks.eld" my-persistence-dir))
-  (projectile-mode t)
-  (if (featurep 'perspective)
-      (use-package persp-projectile :demand)))
+  (projectile-mode t))
 
 (use-package yasnippet
   :mode (("yasnippet/snippets" . snippet-mode)
