@@ -386,8 +386,11 @@
    auto-save-default nil
    org-src-fontify-natively t
    org-return-follows-link t
-   org-html-doctype "html5")
+   org-html-doctype "html5"
+   org-html-htmlize-output-type 'css)
   :bind (("C-c d" . org-decrypt-entry)))
+
+(use-package htmlize)
 
 (provide 'init)
 ;;; init.el ends here
