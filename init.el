@@ -50,7 +50,8 @@
     solarized-theme
     subatomic-theme
     use-package
-    zenburn-theme))
+    zenburn-theme
+    doom-themes))
 
 (dolist (p my-packages)
   (unless (package-installed-p p)
@@ -66,7 +67,8 @@
 ;; Enable the functionality disabled by default
 (put 'narrow-to-region 'disabled nil)
 
-(load-theme 'zenburn t)
+(load-theme 'doom-nord-light t)
+;(load-theme 'zenburn t)
 ;(load-theme 'solarized-dark t)
 ;(load-theme 'solarized-light t)
 ;(load-theme 'subatomic t)
