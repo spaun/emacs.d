@@ -373,7 +373,7 @@
   (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
   (add-hook 'cider-repl-mode-hook 'paredit-mode)
   :bind (:map clojure-mode-map
-              ("<f5>" . cider-refresh))))
+              ("<f5>" . cider-ns-refresh))))
 
 (use-package org
   :config
