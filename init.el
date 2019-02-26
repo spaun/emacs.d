@@ -386,9 +386,20 @@
    auto-save-default nil
    org-src-fontify-natively t
    org-return-follows-link t
+   org-agenda-files '("~/org/tasks.org")
    org-html-doctype "html5"
    org-html-htmlize-output-type 'css)
-  :bind (("C-c d" . org-decrypt-entry)))
+  (org-link-set-parameters
+   "thunderlink"
+   :follow (lambda (path)
+     "Opens an email in Thunderbird with ThunderLink."
+     (start-process "myname" nil "thunderbird" "-thunderlink" (concat "thunderlink:" path))))
+  :bind
+  (("C-c l" . org-store-link)
+   ("C-c a" . org-agenda)
+   ("C-c c" . org-capture)
+   :map org-mode-map
+   ("C-c d" . org-decrypt-entry)))
 
 (use-package htmlize)
 
