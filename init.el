@@ -67,8 +67,8 @@
 ;; Enable the functionality disabled by default
 (put 'narrow-to-region 'disabled nil)
 
-(load-theme 'doom-nord-light t)
-;(load-theme 'zenburn t)
+;(load-theme 'doom-nord-light t)
+(load-theme 'zenburn t)
 ;(load-theme 'solarized-dark t)
 ;(load-theme 'solarized-light t)
 ;(load-theme 'subatomic t)
