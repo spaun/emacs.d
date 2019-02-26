@@ -246,14 +246,26 @@
 (use-package ace-window
   :config (setq
            aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
-           aw-dispatch-always nil
+           aw-dispatch-always t
+           aw-background t
            aw-scope 'frame)
-  :bind ("C-x o" . ace-window))
+  :bind ("M-o" . ace-window))
 
 (use-package avy
-  :bind (("M-g c" . avy-goto-char-2)
-         ("M-g w" . avy-goto-word-1)
-         ("M-g g" . avy-goto-line)))
+  :ensure t
+  :bind (("M-g s" . avy-goto-char-timer)
+         ("M-g l" . goto-line))
+  :config
+  (setq avy-background t))
+
+
+
+
+
+
+
+
+
 
 (use-package flycheck
   :demand
