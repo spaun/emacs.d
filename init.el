@@ -179,6 +179,8 @@
 (use-package ido
   :demand
   :config
+  (declare-function ido-mode "ext:ido")
+  (declare-function ido-everywhere "ext:ido")
   (setq
    ido-save-directory-list-file (expand-file-name "ido-last" my-persistence-dir)
    ido-enable-prefix nil
@@ -257,15 +259,6 @@
          ("M-g l" . goto-line))
   :config
   (setq avy-background t))
-
-
-
-
-
-
-
-
-
 
 (use-package flycheck
   :demand
@@ -358,7 +351,7 @@
    'php-mode-hook
    (lambda () (subword-mode 1)))
   (setq
-   php-template-compatibility nil
+   php-mode-template-compatibility nil
    php-mode-coding-style 'psr2))
 
 (use-package haskell-mode)
@@ -391,6 +384,10 @@
   :config
   (require 'epa-file)
   (require 'org-crypt)
+  (declare-function org-link-set-parameters "ext:org")
+  (declare-function org-crypt-use-before-save-magic "ext:org-crypt")
+  (defvar org-html-doctype)
+  (defvar org-html-htmlize-output-type)
   (epa-file-enable)
   (org-crypt-use-before-save-magic)
   (setq
@@ -400,7 +397,7 @@
    org-return-follows-link t
    org-agenda-files '("~/org/tasks.org")
    org-html-doctype "html5"
-   org-html-htmlize-output-type 'css)
+   org-html-htmlize-output-type 'css
    org-log-into-drawer "LOGBOOK"
    org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i!)" "PAUSED(p!)" "|" "DONE(d!)" "CANCELLED(c@)")))
   (org-link-set-parameters
