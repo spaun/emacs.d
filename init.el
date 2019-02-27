@@ -401,6 +401,8 @@
    org-agenda-files '("~/org/tasks.org")
    org-html-doctype "html5"
    org-html-htmlize-output-type 'css)
+   org-log-into-drawer "LOGBOOK"
+   org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i!)" "PAUSED(p!)" "|" "DONE(d!)" "CANCELLED(c@)")))
   (org-link-set-parameters
    "thunderlink"
    :follow (lambda (path)
