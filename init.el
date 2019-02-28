@@ -396,6 +396,7 @@
    org-src-fontify-natively t
    org-return-follows-link t
    org-agenda-files '("~/org/tasks.org")
+   org-archive-location "~/org/tasks-archive.org::* Finished Tasks"
    org-html-doctype "html5"
    org-html-htmlize-output-type 'css
    org-log-into-drawer "LOGBOOK"
