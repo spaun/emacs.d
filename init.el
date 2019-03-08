@@ -217,6 +217,11 @@
      ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
     (ido-vertical-mode)))
 
+(use-package lsp-mode
+  :commands lsp
+  :config
+  (use-package lsp-ui :commands lsp-ui-mode))
+
 (use-package bookmark
   :demand
   :config
@@ -347,9 +352,8 @@
 (use-package php-mode
   :config
   (require 'php-ext)
-  (add-hook
-   'php-mode-hook
-   (lambda () (subword-mode 1)))
+  (add-hook 'php-mode-hook (lambda () (subword-mode 1)))
+  (add-hook 'php-mode-hook #'lsp)
   (setq
    php-mode-template-compatibility nil
    php-mode-coding-style 'psr2))
