@@ -270,6 +270,7 @@
   :demand
   :diminish "FC"
   :config
+  (declare-function global-flycheck-mode "ext:flycheck")
   (setq
    flycheck-check-syntax-automatically '(save idle-change mode-enabled)
    flycheck-emacs-lisp-load-path 'inherit)
@@ -317,7 +318,7 @@
 
 (use-package magit
   :bind (("C-x g" . magit-status)
-         ("C-x M-g" . magit-dispatch-popup)))
+         ("C-x M-g" . magit-dispatch)))
 
 ;; TODO Possibly replace with smartparens
 (use-package
