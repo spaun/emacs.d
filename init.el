@@ -351,11 +351,26 @@
   :mode (("yasnippet/snippets" . snippet-mode)
          ("\\.yasnippet$" . snippet-mode)))
 
+;; To install php lsp do the following:
+;;   - composer global config minimum-stability dev
+;;   - composer global require felixfbecker/language-server
+;;   - composer global run-script --working-dir=$HOME/.config/composer/vendor/felixfbecker/language-server parse-stubs
 (use-package php-mode
   :config
   (require 'php-ext)
-  (add-hook 'php-mode-hook (lambda () (subword-mode 1)))
-  (add-hook 'php-mode-hook #'lsp)
+  (defvar lsp-clients-php-server-command nil)
+  (add-hook 'php-mode-hook
+            (lambda ()
+              (subword-mode 1)
+              (setq
+               lsp-clients-php-server-command
+               (list "php"
+                     (concat
+                      (string-trim
+                       (shell-command-to-string
+                        "composer -q global config bin-dir --absolute"))
+                      "/php-language-server.php")))
+              (lsp)))
   (setq
    php-mode-template-compatibility nil
    php-mode-coding-style 'psr2))
