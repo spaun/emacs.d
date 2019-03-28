@@ -86,6 +86,8 @@
 ;; emacs.fullscreen: maximized
 ;(add-hook 'emacs-startup-hook 'toggle-frame-maximized)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+(add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
+(add-to-list 'default-frame-alist '(horizontal-scroll-bars . nil))
 
 ;; Real emacs knights don't use shift to mark things
 (setq shift-select-mode nil)
@@ -118,8 +120,6 @@
 ;; Unclutter the UI
 (menu-bar-mode -1)
 (tool-bar-mode -1)
-(when window-system
-  (scroll-bar-mode -1))
 
 ;; UTF-8 please
 (setq locale-coding-system 'utf-8)
