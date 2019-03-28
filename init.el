@@ -221,7 +221,11 @@
 (use-package lsp-mode
   :commands lsp
   :config
-  (use-package lsp-ui :commands lsp-ui-mode))
+  (use-package lsp-ui
+    :commands
+    lsp-ui-mode
+    :config
+    (setq lsp-ui-sideline-enable nil)))
 
 (use-package bookmark
   :demand
