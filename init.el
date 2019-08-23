@@ -361,7 +361,6 @@
 ;;   - composer global run-script --working-dir=$HOME/.config/composer/vendor/felixfbecker/language-server parse-stubs
 (use-package php-mode
   :config
-  (require 'php-ext)
   (defvar lsp-clients-php-server-command nil)
   (add-hook 'php-mode-hook
             (lambda ()
