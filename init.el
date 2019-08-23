@@ -148,13 +148,6 @@
    whitespace-line-column 100)
   (global-whitespace-cleanup-mode))
 
-(use-package smex
-  :bind (("M-x" . smex))
-  :config
-  (setq
-   smex-save-file (expand-file-name "smex-items" my-persistence-dir))
-  (smex-initialize))
-
 (use-package ibuffer
   :bind ("C-x C-b" . ibuffer))
 
@@ -176,47 +169,27 @@
    recentf-auto-cleanup 'never)
   (recentf-mode 1))
 
-;; Ido setup
-(use-package ido
-  :demand
+(use-package swiper
+  :ensure t
   :config
-  (declare-function ido-mode "ext:ido")
-  (declare-function ido-everywhere "ext:ido")
-  (setq
-   ido-save-directory-list-file (expand-file-name "ido-last" my-persistence-dir)
-   ido-enable-prefix nil
-   ido-enable-flex-matching t
-   ido-case-fold nil
-   ido-auto-merge-work-directories-length -1
-   ido-create-new-buffer 'always
-   ido-use-filename-at-point nil
-   ido-max-prospects 10)
-  (set-default 'imenu-auto-rescan t)
-  (add-to-list 'ido-ignore-directories "target")
-  (ido-mode t)
-  (ido-everywhere t)
-  (use-package flx-ido
-    :demand
-    :config
-    (setq
-     ido-use-faces nil)
-    (flx-ido-mode 1))
-  (use-package ido-at-point
-    :demand
-    :config
-    (ido-at-point-mode))
-  (use-package ido-completing-read+
-    :preface
-    (defvar ido-cur-list nil)
-    :demand
-    :config
-    (ido-ubiquitous-mode 1))
-  (use-package ido-vertical-mode
-    :demand
-    :config
-    (setq
-     ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
-    (ido-vertical-mode)))
+  (use-package counsel
+    :ensure t)
+  (defvar ivy-use-virtual-buffers nil)
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t)
+  (setq enable-recursive-minibuffers t)
+  :bind (("C-s" . swiper)
+         ("C-c C-r" . ivy-resume)
+         ("M-x" . counsel-M-x)
+         ("C-x C-f" . counsel-find-file)
+         ("<f2> i" . counsel-info-lookup-symbol)
+         ("<f2> u" . counsel-unicode-char)
+         ("C-c g" . counsel-git)
+         ("C-c j" . counsel-git-grep)
+         ("C-c k" . counsel-ag)
+         ("C-x l" . counsel-locate)
+         :map minibuffer-local-map
+         ("C-r" . counsel-minibuffer-history)))
 
 (use-package lsp-mode
   :commands lsp
