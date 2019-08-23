@@ -2,3 +2,6 @@
 /persistence
 /session.*
 /settings/custom.el
+/transient
+/.mc-lists.el
+/.lsp-session-v1
