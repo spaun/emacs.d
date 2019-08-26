@@ -33,6 +33,8 @@
 (setq custom-file (expand-file-name "custom.el" my-settings-dir))
 (if (file-exists-p custom-file) (load custom-file))
 
+(setq ring-bell-function 'ignore)
+
 ;; Packages
 
 (require 'package)
