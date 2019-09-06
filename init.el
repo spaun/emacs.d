@@ -197,10 +197,11 @@
   :commands lsp
   :config
   (use-package lsp-ui
-    :commands
-    lsp-ui-mode
     :config
-    (setq lsp-ui-sideline-enable nil)))
+    (setq lsp-ui-sideline-enable nil
+          lsp-ui-doc-enable nil))
+  (use-package company-lsp
+    :commands company-lsp))
 
 (use-package bookmark
   :demand
@@ -258,6 +259,7 @@
 (use-package company
   :demand
   :diminish 'company-mode
+  :bind (("C-<tab>" . company-complete))
   :config
   (global-company-mode))
 
@@ -327,31 +329,16 @@
   (projectile-mode t))
 
 (use-package yasnippet
+  :hook (prog-mode . yas-minor-mode)
   :mode (("yasnippet/snippets" . snippet-mode)
          ("\\.yasnippet$" . snippet-mode)))
 
-;; To install php lsp do the following:
-;;   - composer global config minimum-stability dev
-;;   - composer global require felixfbecker/language-server
-;;   - composer global run-script --working-dir=$HOME/.config/composer/vendor/felixfbecker/language-server parse-stubs
+;;; npm i -g intelephense
 (use-package php-mode
+  :hook (php-mode . (lambda () (subword-mode 1) (lsp)))
   :config
-  (defvar lsp-clients-php-server-command nil)
-  (add-hook 'php-mode-hook
-            (lambda ()
-              (subword-mode 1)
-              (setq
-               lsp-clients-php-server-command
-               (list "php"
-                     (concat
-                      (string-trim
-                       (shell-command-to-string
-                        "composer -q global config bin-dir --absolute"))
-                      "/php-language-server.php")))
-              (lsp)))
-  (setq
-   php-mode-template-compatibility nil
-   php-mode-coding-style 'psr2))
+  (setq php-mode-template-compatibility nil
+        php-mode-coding-style 'psr2))
 
 (use-package haskell-mode)
 
