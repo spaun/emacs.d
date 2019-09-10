@@ -334,9 +334,15 @@
   :mode (("yasnippet/snippets" . snippet-mode)
          ("\\.yasnippet$" . snippet-mode)))
 
+(use-package smart-semicolon)
+
 ;;; npm i -g intelephense
 (use-package php-mode
-  :hook (php-mode . (lambda () (subword-mode 1) (lsp)))
+  :hook (php-mode . (lambda
+                      ()
+                      (subword-mode 1)
+                      (lsp)
+                      (smart-semicolon-mode)))
   :config
   (setq php-mode-template-compatibility nil
         php-mode-coding-style 'psr2))
