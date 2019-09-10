@@ -150,9 +150,6 @@
    whitespace-line-column 100)
   (global-whitespace-cleanup-mode))
 
-(use-package ibuffer
-  :bind ("C-x C-b" . ibuffer))
-
 (use-package recentf
   :demand
   :bind (("C-x f" . recentf-open-files))
@@ -185,12 +182,6 @@
          ("C-c C-r" . ivy-resume)
          ("M-x" . counsel-M-x)
          ("C-x C-f" . counsel-find-file)
-         ("<f2> i" . counsel-info-lookup-symbol)
-         ("<f2> u" . counsel-unicode-char)
-         ("C-c g" . counsel-git)
-         ("C-c j" . counsel-git-grep)
-         ("C-c k" . counsel-ag)
-         ("C-x l" . counsel-locate)
          :map minibuffer-local-map
          ("C-r" . counsel-minibuffer-history)))
 
@@ -211,11 +202,6 @@
   (setq
    bookmark-default-file (expand-file-name "bookmarks" my-persistence-dir)
    bookmark-save-flag 1))
-
-(use-package eshell
-  :config
-  (setq
-   eshell-directory-name (expand-file-name "eshell" my-persistence-dir)))
 
 (use-package multiple-cursors
   :config
@@ -299,9 +285,7 @@
 (use-package ag
   :commands ag)
 
-(use-package magit
-  :bind (("C-x g" . magit-status)
-         ("C-x M-g" . magit-dispatch)))
+(use-package magit)
 
 ;; TODO Possibly replace with smartparens
 (use-package
@@ -324,10 +308,10 @@
   :demand
   :diminish 'projectile-mode
   :config
-  (setq projectile-cache-file
-        (expand-file-name "projectile.cache" my-persistence-dir)
-        projectile-known-projects-file
-        (expand-file-name "projectile-bookmarks.eld" my-persistence-dir))
+  (setq projectile-completion-system 'ivy
+        projectile-indexing-method 'hybrid
+        projectile-sort-order 'recentf
+        projectile-enable-caching t)
   (projectile-mode t))
 
 (use-package yasnippet
@@ -410,6 +394,39 @@
    ("C-c d" . org-decrypt-entry)))
 
 (use-package htmlize)
+
+(use-package hydra
+  :ensure t
+  :bind (("M-i" . hydra-file/body))
+  :config
+  (defhydra hydra-file (:color teal :hint nil)
+    "
+%s(concat \"Project: \" (or (projectile-project-root) \"none\"))
+  _f_: project file     _a_: project ag           _i_: project ibuffer  _g_: magit status
+  _F_: file             _A_: ag                   _I_: ibuffer          _G_: magit dispatch
+  _d_: project dir      _o_: project multi-occur  _b_: project buffer   _p_: switch project
+  _D_: dir              _O_: multi-occur          _B_: buffer
+  _r_: project recentf
+  _R_: recentf
+"
+    ("f" projectile-find-file)
+    ("F" counsel-find-file)
+    ("d" projectile-find-dir)
+    ("D" counsel-dired)
+    ("r" projectile-recentf)
+    ("R" counsel-recentf)
+    ("a" projectile-ag)
+    ("A" counsel-ag)
+    ("o" projectile-multi-occur)
+    ("O" multi-occur)
+    ("b" projectile-switch-to-buffer)
+    ("B" counsel-switch-buffer)
+    ("i" projectile-ibuffer)
+    ("I" counsel-ibuffer)
+    ("g" magit-status)
+    ("G" magit-dispatch)
+    ("p" projectile-switch-project)
+    ("q" nil "cancel" :color blue)))
 
 (provide 'init)
 ;;; init.el ends here
