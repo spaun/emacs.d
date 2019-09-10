@@ -173,6 +173,7 @@
 
 (use-package swiper
   :ensure t
+  :diminish 'ivy-mode
   :config
   (use-package counsel
     :ensure t)
@@ -249,7 +250,7 @@
 
 (use-package flycheck
   :demand
-  :diminish "FC"
+  :diminish 'flycheck-mode
   :config
   (declare-function global-flycheck-mode "ext:flycheck")
   (setq
