@@ -198,7 +198,8 @@
   :config
   (use-package lsp-ui
     :config
-    (setq lsp-ui-sideline-enable nil
+    (setq lsp-prefer-flymake nil
+          lsp-ui-sideline-enable nil
           lsp-ui-doc-enable nil))
   (use-package company-lsp
     :commands company-lsp))
