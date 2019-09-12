@@ -3,37 +3,17 @@
 ;;; Commentary:
 
 ;;; Code:
-(defconst my-base-dir "~/.emacs.d"
-  "The root of Emacs configuration.")
-(defconst my-settings-dir (expand-file-name "settings" my-base-dir)
-  "A place to store custom configs.")
-(defconst my-persistence-dir (expand-file-name "persistence" my-base-dir)
-  "A root of local data files.")
-(defconst my-backup-dir (expand-file-name "backup" my-persistence-dir)
-  "A root of backup and autosave files.")
-(defconst my-lein-command "/home/spaun/bin/lein")
 
-(dolist (dir `(,my-settings-dir ,my-persistence-dir ,my-backup-dir))
-  (unless (file-exists-p dir)
-    (make-directory dir)))
-
-;; Backups - set it up early to not be affected by any errors below
-(setq backup-by-copying t
-      backup-directory-alist `((".*" . ,my-backup-dir))
-      auto-save-file-name-transforms `((".*" ,my-backup-dir t))
-      auto-save-list-file-prefix my-backup-dir
-      delete-old-versions t
-      kept-new-versions 6
-      kept-old-versions 2
-      version-control t
-      vc-make-backup-files t)
-
-(add-to-list 'load-path my-settings-dir)
-
-(setq custom-file (expand-file-name "custom.el" my-settings-dir))
-(if (file-exists-p custom-file) (load custom-file))
-
-(setq ring-bell-function 'ignore)
+(setq
+ ;; Backups - set it up early to not be affected by any errors below
+ backup-by-copying t
+ delete-old-versions t
+ kept-new-versions 6
+ kept-old-versions 2
+ version-control t
+ vc-make-backup-files t
+ ;; Don't ring on any ocasion
+ ring-bell-function 'ignore)
 
 ;; Packages
 
@@ -49,11 +29,7 @@
 
 (defvar my-packages
   '(diminish
-    solarized-theme
-    subatomic-theme
-    use-package
-    zenburn-theme
-    doom-themes))
+    use-package))
 
 (dolist (p my-packages)
   (unless (package-installed-p p)
@@ -63,17 +39,25 @@
 
 (setq use-package-always-ensure t)
 
+(use-package no-littering
+  :ensure t
+  :config
+  (setq custom-file (no-littering-expand-etc-file-name "custom.el")
+        auto-save-file-name-transforms
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
+
 ;; UX
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; Enable the functionality disabled by default
 (put 'narrow-to-region 'disabled nil)
 
-;(load-theme 'doom-nord-light t)
-(load-theme 'zenburn t)
-;(load-theme 'solarized-dark t)
-;(load-theme 'solarized-light t)
-;(load-theme 'subatomic t)
+(use-package zenburn-theme
+  :ensure t
+  :config
+  (load-theme 'zenburn t))
+
+(use-package doom-themes)
 
 (setq font-use-system-font t
       inhibit-startup-message t
@@ -154,15 +138,10 @@
   :demand
   :bind (("C-x f" . recentf-open-files))
   :config
-  (defun my-recentf-exclude-p (file)
-    "Recentf exclude predicate (borrowed from bbatsov's prelude"
-    (let ((file-dir (file-truename (file-name-directory file))))
-      (seq-some
-       (lambda (dir) (string-prefix-p dir file-dir))
-       (seq-map 'file-truename (list my-persistence-dir package-user-dir)))))
-  (add-to-list 'recentf-exclude 'my-recentf-exclude-p)
+  (add-to-list 'recentf-exclude (expand-file-name "elpa" user-emacs-directory))
+  (add-to-list 'recentf-exclude  no-littering-etc-directory)
+  (add-to-list 'recentf-exclude  no-littering-var-directory)
   (setq
-   recentf-save-file (expand-file-name "recentf" my-persistence-dir)
    recentf-max-saved-items 500
    recentf-max-menu-items 15
    recentf-auto-cleanup 'never)
@@ -190,9 +169,12 @@
   :config
   (use-package lsp-ui
     :config
+    (defvar lsp-intelephense-storage-path)
     (setq lsp-prefer-flymake nil
           lsp-ui-sideline-enable nil
-          lsp-ui-doc-enable nil))
+          lsp-ui-doc-enable nil
+          lsp-intelephense-storage-path
+          (no-littering-expand-var-file-name "intelephense")))
   (use-package company-lsp
     :commands company-lsp))
 
@@ -200,14 +182,12 @@
   :demand
   :config
   (setq
-   bookmark-default-file (expand-file-name "bookmarks" my-persistence-dir)
    bookmark-save-flag 1))
 
 (use-package multiple-cursors
   :config
   (require 'mc-hide-unmatched-lines-mode)
   (setq
-   mc/list-file (expand-file-name "mc-lists.el" my-persistence-dir)
    hum/lines-to-expand 1)
   :bind (("C-S-p" . mc/mark-pop)
          ("C-S-<mouse-1>" . mc/add-cursor-on-click)))
@@ -339,15 +319,12 @@
   (use-package cider
     :config
     (setq
-     cider-lein-command my-lein-command
      nrepl-hide-special-buffers t
      ;; go right to the REPL buffer when it's finished connecting
      cider-repl-pop-to-buffer-on-connect t
      ;; When there's a cider error, show it's buffer and switch to it
      cider-show-error-buffer t
      cider-auto-select-error-buffer t
-     ;; Where to store the cider history.
-     cider-repl-history-file (expand-file-name "cider-history" my-persistence-dir)
      ;; Wrap when navigating history.
      cider-repl-wrap-history t)
   (use-package clj-refactor)
