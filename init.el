@@ -173,6 +173,7 @@
     (setq lsp-prefer-flymake nil
           lsp-ui-sideline-enable nil
           lsp-ui-doc-enable nil
+          lsp-file-watch-threshold 15000
           lsp-intelephense-storage-path
           (no-littering-expand-var-file-name "intelephense")))
   (use-package company-lsp
