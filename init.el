@@ -266,9 +266,15 @@
   (setq undo-tree-visualizer-diff t))
 
 (use-package web-mode
-  :mode "\\.html\\.twig"
+  :mode (("\\.html\\.twig" . web-mode)
+         ("\\.html" . web-mode)
+         ("\\.vue" . web-mode))
   :config
-  (setq web-mode-markup-indent-offset 2))
+  (setq web-mode-markup-indent-offset 2
+        web-mode-css-indent-offset 2
+        web-mode-code-indent-offset 2
+        web-mode-enable-auto-closing t
+        web-mode-enable-auto-quoting t))
 
 (use-package evil
   :commands evil-mode)
