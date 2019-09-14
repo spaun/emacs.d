@@ -375,7 +375,8 @@
 
 (use-package hydra
   :ensure t
-  :bind (("M-i" . hydra-file/body))
+  :bind (("M-i" . hydra-file/body)
+         ("M-p" . hydra-dev/body))
   :config
   (defhydra hydra-file (:color teal :hint nil)
     "
@@ -404,6 +405,17 @@
     ("g" magit-status)
     ("G" magit-dispatch)
     ("p" projectile-switch-project)
+    ("q" nil "cancel" :color blue))
+  (defhydra hydra-dev (:color amaranth :hint nil)
+    "
+  _e_: list errors  _d_: toggle doc
+  _j_: next error
+  _k_: prev error
+"
+    ("e" (lambda () (interactive) (flycheck-list-errors) (set-frame-selected-window nil (get-buffer-window flycheck-error-list-buffer))) :color blue)
+    ("j" flycheck-next-error)
+    ("k" flycheck-previous-error)
+    ("d" (lambda () (interactive) (with-selected-window (frame-selected-window) (lsp-describe-thing-at-point))) :color blue)
     ("q" nil "cancel" :color blue)))
 
 (provide 'init)
