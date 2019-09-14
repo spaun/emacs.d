@@ -155,12 +155,14 @@
     :ensure t)
   (defvar ivy-use-virtual-buffers nil)
   (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t)
-  (setq enable-recursive-minibuffers t)
-  :bind (("C-s" . swiper)
+  (setq ivy-use-virtual-buffers t
+        enable-recursive-minibuffers t)
+  :bind (("C-s" . swiper-isearch)
+         ("C-r" . swiper-isearch-backward)
          ("C-c C-r" . ivy-resume)
          ("M-x" . counsel-M-x)
          ("C-x C-f" . counsel-find-file)
+         ("M-y" . counsel-yank-pop)
          :map minibuffer-local-map
          ("C-r" . counsel-minibuffer-history)))
 
@@ -293,7 +295,11 @@
         projectile-indexing-method 'hybrid
         projectile-sort-order 'recentf
         projectile-enable-caching t)
-  (projectile-mode t))
+  (projectile-mode t)
+  (use-package counsel-projectile
+    :ensure t
+    :config
+    (counsel-projectile-mode)))
 
 (use-package yasnippet
   :hook (prog-mode . yas-minor-mode)
@@ -388,23 +394,23 @@
   _r_: project recentf
   _R_: recentf
 "
-    ("f" projectile-find-file)
+    ("f" counsel-projectile-find-file)
     ("F" counsel-find-file)
-    ("d" projectile-find-dir)
+    ("d" counsel-projectile-find-dir)
     ("D" counsel-dired)
     ("r" projectile-recentf)
     ("R" counsel-recentf)
-    ("a" projectile-ag)
+    ("a" counsel-projectile-ag)
     ("A" counsel-ag)
     ("o" projectile-multi-occur)
     ("O" multi-occur)
-    ("b" projectile-switch-to-buffer)
+    ("b" counsel-projectile-switch-to-buffer)
     ("B" counsel-switch-buffer)
     ("i" projectile-ibuffer)
     ("I" counsel-ibuffer)
     ("g" magit-status)
     ("G" magit-dispatch)
-    ("p" projectile-switch-project)
+    ("p" counsel-projectile-switch-project)
     ("q" nil "cancel" :color blue))
   (defhydra hydra-dev (:color amaranth :hint nil)
     "
