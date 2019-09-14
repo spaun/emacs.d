@@ -217,6 +217,14 @@
   :config
   (setq avy-background t))
 
+(use-package dumb-jump
+  :ensure t
+  :bind (("M-g o" . dumb-jump-go)
+         ("M-g O" . dumb-jump-go-other-window)
+         ("M-g b" . dumb-jump-back))
+  :config
+  (dumb-jump-mode))
+
 (use-package flycheck
   :demand
   :diminish 'flycheck-mode
