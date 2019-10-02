@@ -151,6 +151,9 @@
    recentf-auto-cleanup 'never)
   (recentf-mode 1))
 
+(use-package wgrep
+  :ensure t)
+
 (use-package swiper
   :ensure t
   :diminish 'ivy-mode
