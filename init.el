@@ -55,9 +55,13 @@
 (use-package zenburn-theme
   :ensure t
   :config
-  (load-theme 'zenburn t))
+  ;(load-theme 'zenburn t)
+  )
 
-(use-package doom-themes)
+(use-package doom-themes
+  :ensure t
+  :config
+  (load-theme 'doom-one t))
 
 (setq font-use-system-font t
       inhibit-startup-message t
