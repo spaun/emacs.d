@@ -329,6 +329,23 @@
 
 (use-package smart-semicolon)
 
+(use-package elpy
+  :ensure t
+  :config
+  (setq
+   elpy-rpc-virtualenv-path (no-littering-expand-var-file-name "elpy/rpc-venv")
+   elpy-modules (delq 'elpy-module-flymake elpy-modules)))
+
+(use-package python
+  :ensure nil
+  :mode ("\\.py" . python-mode)
+  :interpreter ("ipython" . python-mode)
+  :config
+  (setq python-indent-offset 4
+        python-shell-interpreter "ipython"
+        python-shell-interpreter-args "-i --simple-prompt")
+  (elpy-enable))
+
 ;;; npm i -g intelephense
 (use-package php-mode
   :mode ("\\.php" . php-mode)
