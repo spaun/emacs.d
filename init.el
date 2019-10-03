@@ -331,6 +331,7 @@
 
 ;;; npm i -g intelephense
 (use-package php-mode
+  :mode ("\\.php" . php-mode)
   :hook (php-mode . (lambda
                       ()
                       (subword-mode 1)
