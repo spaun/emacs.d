@@ -389,11 +389,12 @@
   (declare-function org-crypt-use-before-save-magic "ext:org-crypt")
   (defvar org-html-doctype)
   (defvar org-html-htmlize-output-type)
+  (defvar org-crypt-disable-auto-save)
   (epa-file-enable)
   (org-crypt-use-before-save-magic)
   (setq
    org-tags-exclude-from-inheritance (quote ("crypt"))
-   auto-save-default nil
+   org-crypt-disable-auto-save 'encrypt
    org-src-fontify-natively t
    org-return-follows-link t
    org-agenda-files '("~/org/tasks.org")
