@@ -329,6 +329,9 @@
 
 (use-package smart-semicolon)
 
+(use-package yaml-mode
+  :mode ("\\.yml" . yaml-mode))
+
 (use-package elpy
   :ensure t
   :config
