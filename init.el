@@ -78,6 +78,7 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
 (add-to-list 'default-frame-alist '(horizontal-scroll-bars . nil))
+(add-to-list 'default-frame-alist '(undecorated . t))
 
 ;; Real emacs knights don't use shift to mark things
 (setq shift-select-mode nil)
