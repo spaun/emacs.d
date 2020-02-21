@@ -403,7 +403,9 @@
    org-src-fontify-natively t
    org-return-follows-link t
    org-agenda-files '("~/org/tasks.org")
-   org-archive-location "~/org/tasks-archive.org::* Finished Tasks"
+   org-archive-location (format-time-string
+                         "~/org/tasks-archive-%Y.org::* Finished Tasks"
+                         (current-time))
    org-link-frame-setup '((file . find-file))
    org-html-doctype "html5"
    org-html-htmlize-output-type 'css
