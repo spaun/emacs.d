@@ -180,8 +180,7 @@
   (use-package lsp-ui
     :config
     (defvar lsp-intelephense-storage-path)
-    (setq lsp-prefer-flymake nil
-          lsp-ui-sideline-enable nil
+    (setq lsp-ui-sideline-enable nil
           lsp-ui-doc-enable nil
           lsp-file-watch-threshold 20000
           lsp-intelephense-storage-path
