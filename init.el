@@ -436,8 +436,8 @@
 %s(concat \"Project: \" (or (projectile-project-root) \"none\"))
   _f_: project file     _a_: project ag           _i_: project ibuffer  _g_: magit status
   _F_: file             _A_: ag                   _I_: ibuffer          _G_: magit dispatch
-  _d_: project dir      _o_: project multi-occur  _b_: project buffer   _p_: switch project
-  _D_: dir              _O_: multi-occur          _B_: buffer
+  _d_: project dir      _o_: project multi-occur  _b_: project buffer   _h_: magit file dispatch
+  _D_: dir              _O_: multi-occur          _B_: buffer           _p_: switch project
   _r_: project recentf
   _R_: recentf
 "
@@ -457,6 +457,7 @@
     ("I" counsel-ibuffer)
     ("g" magit-status)
     ("G" magit-dispatch)
+    ("h" magit-file-dispatch)
     ("p" counsel-projectile-switch-project)
     ("q" nil "cancel" :color blue))
   (defhydra hydra-dev (:color amaranth :hint nil)
