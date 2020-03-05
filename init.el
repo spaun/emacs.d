@@ -241,7 +241,8 @@
   (declare-function global-flycheck-mode "ext:flycheck")
   (setq
    flycheck-check-syntax-automatically '(save idle-change mode-enabled)
-   flycheck-emacs-lisp-load-path 'inherit)
+   flycheck-emacs-lisp-load-path 'inherit
+   flycheck-checker-error-threshold nil)
   (global-flycheck-mode))
 
 (use-package company
