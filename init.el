@@ -144,6 +144,11 @@
    whitespace-line-column 100)
   (global-whitespace-cleanup-mode))
 
+(use-package beginend
+  :ensure t
+  :config
+  (beginend-global-mode))
+
 (use-package recentf
   :demand
   :bind (("C-x f" . recentf-open-files))
