@@ -160,6 +160,16 @@
 (use-package wgrep
   :ensure t)
 
+(use-package eyebrowse
+  :ensure t
+  :bind (("M-1" . eyebrowse-switch-to-window-config-1)
+         ("M-2" . eyebrowse-switch-to-window-config-2)
+         ("M-3" . eyebrowse-switch-to-window-config-3))
+  :config
+  (setq
+   eyebrowse-new-workspace t)
+  (eyebrowse-mode))
+
 (use-package swiper
   :ensure t
   :diminish 'ivy-mode
