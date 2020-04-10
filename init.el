@@ -263,7 +263,10 @@
 (use-package company
   :demand
   :diminish 'company-mode
-  :bind (("C-<tab>" . company-complete))
+  :bind (("C-." . company-complete)
+         :map company-active-map
+         ("C-n" . company-select-next-or-abort)
+         ("C-p" . company-select-previous-or-abort))
   :config
   (global-company-mode))
 
