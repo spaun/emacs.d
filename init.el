@@ -17,6 +17,9 @@
  ;; Increse GC threshold to 100Mb
  gc-cons-threshold 100000000)
 
+(dotimes (n 10)
+  (global-unset-key (kbd (format "C-%d" n)))
+  (global-unset-key (kbd (format "M-%d" n))))
 ;; Packages
 
 (require 'package)
