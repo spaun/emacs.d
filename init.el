@@ -13,7 +13,9 @@
  version-control t
  vc-make-backup-files t
  ;; Don't ring on any ocasion
- ring-bell-function 'ignore)
+ ring-bell-function 'ignore
+ ;; Increse GC threshold to 100Mb
+ gc-cons-threshold 100000000)
 
 ;; Packages
 
