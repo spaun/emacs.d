@@ -453,6 +453,13 @@
    :map org-mode-map
    ("C-c d" . org-decrypt-entry)))
 
+(use-package pass)
+
+(use-package auth-source-pass
+  :pin melpa
+  :config
+  (auth-source-pass-enable))
+
 (dolist  (p '(my-mu4e my-transmission))
   (require p nil t))
 
