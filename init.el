@@ -123,6 +123,11 @@
 (when (not (display-graphic-p))
   (display-time-mode t))
 
+(use-package flyspell
+  :hook
+  ((text-mode . flyspell-mode)
+   (prog-mode . flyspell-prog-mode)))
+
 ;; Highlight matching paren
 (use-package paren
   :config
