@@ -47,6 +47,7 @@
 (use-package no-littering
   :ensure t
   :config
+  (add-to-list 'load-path no-littering-etc-directory)
   (setq custom-file (no-littering-expand-etc-file-name "custom.el")
         auto-save-file-name-transforms
         `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
@@ -410,6 +411,8 @@
   :bind (:map clojure-mode-map
               ("<f5>" . cider-ns-refresh))))
 
+(use-package htmlize)
+
 (use-package org
   :config
   (require 'epa-file)
@@ -450,7 +453,8 @@
    :map org-mode-map
    ("C-c d" . org-decrypt-entry)))
 
-(use-package htmlize)
+(dolist  (p '(my-mu4e my-transmission))
+  (require p nil t))
 
 (use-package hydra
   :ensure t
