@@ -12,6 +12,13 @@
  kept-old-versions 2
  version-control t
  vc-make-backup-files t
+
+ font-use-system-font t
+ inhibit-startup-message t
+ initial-scratch-message nil
+ scroll-conservatively 100000
+ scroll-margin 0
+
  ;; Don't ring on any ocasion
  ring-bell-function 'ignore
  ;; Increse GC threshold to 100Mb
@@ -21,31 +28,25 @@
   (global-unset-key (kbd (format "C-%d" n)))
   (global-unset-key (kbd (format "M-%d" n))))
 ;; Packages
+(eval-when-compile
+  (require 'package)
+  (setq package-archives
+        '(("gnu" . "http://elpa.gnu.org/packages/")
+          ("org" . "http://orgmode.org/elpa/")
+          ("melpa" . "http://melpa.org/packages/")))
 
-(require 'package)
-(setq package-archives
-      '(("gnu" . "http://elpa.gnu.org/packages/")
-        ("org" . "http://orgmode.org/elpa/")
-        ("melpa" . "http://melpa.org/packages/")))
+  (package-initialize)
+  (unless package-archive-contents
+    (package-refresh-contents))
 
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
+  (dolist (p '(diminish use-package))
+    (unless (package-installed-p p)
+      (package-install p)))
 
-(defvar my-packages
-  '(diminish
-    use-package))
-
-(dolist (p my-packages)
-  (unless (package-installed-p p)
-    (package-install p)))
-
-(require 'use-package)
-
-(setq use-package-always-ensure t)
+  (require 'use-package)
+  (setq use-package-always-ensure t))
 
 (use-package no-littering
-  :ensure t
   :config
   (add-to-list 'load-path no-littering-etc-directory)
   (setq custom-file (no-littering-expand-etc-file-name "custom.el")
@@ -59,21 +60,14 @@
 (put 'narrow-to-region 'disabled nil)
 
 (use-package zenburn-theme
-  :ensure t
   :config
   ;(load-theme 'zenburn t)
   )
 
 (use-package doom-themes
-  :ensure t
   :config
   (load-theme 'doom-one t))
 
-(setq font-use-system-font t
-      inhibit-startup-message t
-      initial-scratch-message nil
-      scroll-conservatively 100000
-      scroll-margin 0)
 
 ;; Start maximized
 ;; Alternative way:
@@ -131,13 +125,11 @@
 
 ;; Highlight matching paren
 (use-package paren
-  :demand
   :config
   (setq show-paren-delay 0)
   (show-paren-mode t))
 
 (use-package whitespace-cleanup-mode
-  :demand
   :config
   (setq
    whitespace-style
@@ -146,12 +138,10 @@
   (global-whitespace-cleanup-mode))
 
 (use-package beginend
-  :ensure t
   :config
   (beginend-global-mode))
 
 (use-package recentf
-  :demand
   :bind (("C-x f" . recentf-open-files))
   :config
   (add-to-list 'recentf-exclude (expand-file-name "elpa" user-emacs-directory))
@@ -163,11 +153,9 @@
    recentf-auto-cleanup 'never)
   (recentf-mode 1))
 
-(use-package wgrep
-  :ensure t)
+(use-package wgrep)
 
 (use-package eyebrowse
-  :ensure t
   :bind (("M-1" . eyebrowse-switch-to-window-config-1)
          ("M-2" . eyebrowse-switch-to-window-config-2)
          ("M-3" . eyebrowse-switch-to-window-config-3))
@@ -177,23 +165,22 @@
   (eyebrowse-mode))
 
 (use-package swiper
-  :ensure t
   :diminish 'ivy-mode
   :config
-  (use-package counsel
-    :ensure t)
+  (use-package counsel)
   (defvar ivy-use-virtual-buffers nil)
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t
         enable-recursive-minibuffers t)
-  :bind (("C-s" . swiper-isearch)
-         ("C-r" . swiper-isearch-backward)
-         ("C-c C-r" . ivy-resume)
-         ("M-x" . counsel-M-x)
-         ("C-x C-f" . counsel-find-file)
-         ("M-y" . counsel-yank-pop)
-         :map minibuffer-local-map
-         ("C-r" . counsel-minibuffer-history)))
+  :bind
+  (("C-s" . swiper-isearch)
+   ("C-r" . swiper-isearch-backward)
+   ("C-c C-r" . ivy-resume)
+   ("M-x" . counsel-M-x)
+   ("C-x C-f" . counsel-find-file)
+   ("M-y" . counsel-yank-pop)
+   :map minibuffer-local-map
+   ("C-r" . counsel-minibuffer-history)))
 
 (use-package lsp-mode
   :commands lsp
@@ -210,12 +197,6 @@
           lsp-intelephense-stubs ["apache" "bcmath" "bz2" "calendar" "com_dotnet" "Core" "ctype" "curl" "date" "dba" "dom" "enchant" "exif" "fileinfo" "filter" "fpm" "ftp" "gd" "hash" "iconv" "imap" "interbase" "intl" "json" "ldap" "libxml" "mbstring" "mcrypt" "meta" "mssql" "mysqli" "oci8" "odbc" "openssl" "pcntl" "pcre" "PDO" "pdo_ibm" "pdo_mysql" "pdo_pgsql" "pdo_sqlite" "pgsql" "Phar" "posix" "pspell" "readline" "recode" "Reflection" "regex" "session" "shmop" "SimpleXML" "snmp" "soap" "sockets" "sodium" "SPL" "sqlite3" "standard" "superglobals" "sybase" "sysvmsg" "sysvsem" "sysvshm" "tidy" "tokenizer" "wddx" "xml" "xmlreader" "xmlrpc" "xmlwriter" "Zend OPcache" "zip" "zlib" "redis"]))
   (use-package company-lsp
     :commands company-lsp))
-
-(use-package bookmark
-  :demand
-  :config
-  (setq
-   bookmark-save-flag 1))
 
 (use-package multiple-cursors
   :config
@@ -241,14 +222,12 @@
   :bind ("M-o" . ace-window))
 
 (use-package avy
-  :ensure t
   :bind (("M-g s" . avy-goto-char-timer)
          ("M-g l" . goto-line))
   :config
   (setq avy-background t))
 
 (use-package dumb-jump
-  :ensure t
   :bind (("M-g o" . dumb-jump-go)
          ("M-g O" . dumb-jump-go-other-window)
          ("M-g b" . dumb-jump-back))
@@ -277,14 +256,12 @@
   (global-company-mode))
 
 (use-package rainbow-delimiters
-  :demand
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 ;; TODO Configure this
 (use-package spaceline-config
   :ensure spaceline
-  :demand
   :config
   (setq powerline-default-separator 'wave)
   (set-face-attribute 'mode-line nil :box nil)
@@ -319,8 +296,7 @@
 (use-package magit)
 
 ;; TODO Possibly replace with smartparens
-(use-package
-  paredit
+(use-package paredit
   :diminish 'paredit-mode
   :commands paredit-mode
   :bind (("C-M-u" . paredit-backward-up)
@@ -345,7 +321,6 @@
         projectile-enable-caching t)
   (projectile-mode t)
   (use-package counsel-projectile
-    :ensure t
     :config
     (counsel-projectile-mode)))
 
@@ -360,7 +335,6 @@
   :mode ("\\.yml" . yaml-mode))
 
 (use-package elpy
-  :ensure t
   :config
   (setq
    elpy-rpc-virtualenv-path (no-littering-expand-var-file-name "elpy/rpc-venv")
@@ -464,7 +438,6 @@
   (require p nil t))
 
 (use-package hydra
-  :ensure t
   :bind (("M-i" . hydra-file/body)
          ("M-p" . hydra-dev/body))
   :config
