@@ -461,6 +461,10 @@
   :bind
   ("C-; o" . link-hint-open-link)
   ("C-; c" . link-hint-copy-link))
+
+(use-package orgalist
+  :commands orgalist-mode)
+
 (dolist  (p '(my-mu4e my-transmission))
   (require p nil t))
 
