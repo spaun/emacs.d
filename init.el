@@ -403,15 +403,18 @@
 (use-package htmlize)
 
 (use-package org
+  :pin org
   :config
   (require 'epa-file)
   (require 'org-crypt)
+  (require 'org-protocol)
   (declare-function org-link-set-parameters "ext:org")
   (declare-function org-crypt-use-before-save-magic "ext:org-crypt")
   (defvar org-html-doctype)
   (defvar org-html-htmlize-output-type)
   (defvar org-crypt-disable-auto-save)
   (defvar org-crypt-key)
+  (defvar org-capture-templates)
   (epa-file-enable)
   (org-crypt-use-before-save-magic)
   (setq
@@ -429,7 +432,12 @@
    org-html-htmlize-output-type 'css
    org-log-into-drawer "LOGBOOK"
    org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i!)" "PAUSED(p@)" "|" "DONE(d!)" "CANCELLED(c@)"))
-   org-M-RET-may-split-line nil)
+   org-M-RET-may-split-line nil
+   org-capture-templates '(
+    ("l" "Link" entry (file+headline "~/safe/org/tasks.org" "Links")
+     "* %a\n  %?\n  Added: %U")
+    ("L" "Link with quote" entry (file+headline "~/safe/org/tasks.org" "Links")
+     "* %a\n  #+BEGIN_QUOTE\n  %i\n  #+END_QUOTE\n  %?\n  Added: %U")))
   (org-link-set-parameters
    "thunderlink"
    :follow (lambda (path)
