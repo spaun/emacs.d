@@ -457,6 +457,10 @@
   :config
   (auth-source-pass-enable))
 
+(use-package link-hint
+  :bind
+  ("C-; o" . link-hint-open-link)
+  ("C-; c" . link-hint-copy-link))
 (dolist  (p '(my-mu4e my-transmission))
   (require p nil t))
 
