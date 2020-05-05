@@ -420,9 +420,9 @@
    org-crypt-key (getenv "CRYPTO_KEY")
    org-src-fontify-natively t
    org-return-follows-link t
-   org-agenda-files '("~/org/tasks.org")
+   org-agenda-files '("~/safe/org/tasks.org")
    org-archive-location (format-time-string
-                         "~/org/tasks-archive-%Y.org::* Finished Tasks"
+                         "~/safe/org/archive/tasks-%Y.org::* Finished Tasks"
                          (current-time))
    org-link-frame-setup '((file . find-file))
    org-html-doctype "html5"
