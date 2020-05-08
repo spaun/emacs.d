@@ -238,15 +238,10 @@
   :bind ("M-o" . ace-window))
 
 (use-package avy
-  :bind (("M-g s" . avy-goto-char-timer)
-         ("M-g l" . goto-line))
   :config
   (setq avy-background t))
 
 (use-package dumb-jump
-  :bind (("M-g o" . dumb-jump-go)
-         ("M-g O" . dumb-jump-go-other-window)
-         ("M-g b" . dumb-jump-back))
   :config
   (dumb-jump-mode))
 
@@ -476,7 +471,7 @@
 
 (use-package hydra
   :bind (("M-i" . hydra-file/body)
-         ("M-p" . hydra-dev/body))
+         ("M-j" . hydra-jump/body))
   :config
   (defhydra hydra-file (:color teal :hint nil)
     "
@@ -507,16 +502,33 @@
     ("h" magit-file-dispatch)
     ("p" counsel-projectile-switch-project)
     ("q" nil "cancel" :color blue))
-  (defhydra hydra-dev (:color amaranth :hint nil)
+
+  (defhydra hydra-jump (:color teal :hint nil)
     "
-  _e_: list errors  _d_: toggle doc
-  _j_: next error
-  _k_: prev error
+Jump to:
+  _l_: line     _o_: dumb def         _e_: errors
+  _s_: char     _O_: dumb def (ow)    _j_: next error
+  _d_: doc      _b_: dumb back        _k_: prev error
 "
-    ("e" (lambda () (interactive) (flycheck-list-errors) (set-frame-selected-window nil (get-buffer-window flycheck-error-list-buffer))) :color blue)
-    ("j" flycheck-next-error)
-    ("k" flycheck-previous-error)
-    ("d" (lambda () (interactive) (with-selected-window (frame-selected-window) (lsp-describe-thing-at-point))) :color blue)
+    ("e" (lambda () (interactive)
+           (flycheck-list-errors)
+           (set-frame-selected-window
+            nil
+            (get-buffer-window flycheck-error-list-buffer))))
+    ("j" flycheck-next-error :color amaranth)
+    ("k" flycheck-previous-error :color amaranth)
+    ("d" (lambda () (interactive)
+           (with-selected-window
+               (frame-selected-window)
+             (if (bound-and-true-p lsp-mode)
+                 (lsp-describe-thing-at-point)
+               (describe-symbol (symbol-at-point))))))
+    ("s" avy-goto-char-timer)
+    ("l" goto-line)
+    ("w" avy-goto-word-0)
+    ("o" dumb-jump-go)
+    ("O" dump-jump-go-other-window)
+    ("b" dump-jump-go-back)
     ("q" nil "cancel" :color blue)))
 
 (provide 'init)
