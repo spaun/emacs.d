@@ -25,8 +25,9 @@
  gc-cons-threshold 100000000)
 
 (dotimes (n 10)
-  (global-unset-key (kbd (format "C-%d" n)))
-  (global-unset-key (kbd (format "M-%d" n))))
+  (unbind-key (format "C-%d" n) global-map)
+  (unbind-key (format "M-%d" n) global-map))
+
 ;; Packages
 (eval-when-compile
   (require 'package)
@@ -308,7 +309,12 @@
 (use-package ag
   :commands ag)
 
-(use-package magit)
+(use-package magit
+  :config
+  (unbind-key "M-1" magit-mode-map)
+  (unbind-key "M-2" magit-mode-map)
+  (unbind-key "M-3" magit-mode-map)
+  (unbind-key "M-4" magit-mode-map))
 
 ;; TODO Possibly replace with smartparens
 (use-package paredit
