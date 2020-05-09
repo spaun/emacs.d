@@ -25,8 +25,8 @@
  gc-cons-threshold 100000000)
 
 (dotimes (n 10)
-  (unbind-key (format "C-%d" n) global-map)
-  (unbind-key (format "M-%d" n) global-map))
+  (global-unset-key (kbd (format "C-%d" n)))
+  (global-unset-key (kbd (format "M-%d" n))))
 
 ;; Packages
 (eval-when-compile
