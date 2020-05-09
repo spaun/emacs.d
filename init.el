@@ -143,19 +143,27 @@
    whitespace-line-column 100)
   (global-whitespace-cleanup-mode))
 
-  (use-package beginend
-    :diminish beginend-global-mode
-    :hook
-    ((dired-mode . beginend-dired-mode)
-     (prog-mode . beginend-prog-mode)
-     (message-mode . beginend-message-mode)
-     (mu4e-view-mode . beginend-message-mode)
-     (mu4e-compose-mode . beginend-message-mode)
-     (occur-mode . beginend-occur-mode)
-     (ibuffer-mode-hook . beginend-ibuffer-mode)
-     (magit-status-mode . beginend-magit-status-mode))
-    :config
-    (dolist (mode beginend-modes) (diminish (cdr mode))))
+(use-package beginend
+  :diminish beginend-global-mode
+  :hook
+  ((dired-mode . beginend-dired-mode)
+   (prog-mode . beginend-prog-mode)
+   (message-mode . beginend-message-mode)
+   (mu4e-view-mode . beginend-message-mode)
+   (mu4e-compose-mode . beginend-message-mode)
+   (mu4e-headers-mode . beginend-mu4e-headers-mode)
+   (occur-mode . beginend-occur-mode)
+   (ibuffer-mode-hook . beginend-ibuffer-mode)
+   (magit-status-mode . beginend-magit-status-mode))
+  :config
+  (beginend-define-mode mu4e-headers-mode
+    (progn
+      (point-min))
+    (progn
+      (point-max)
+      (forward-line -1)
+      (end-of-line)))
+  (dolist (mode beginend-modes) (diminish (cdr mode))))
 
 (use-package recentf
   :bind (("C-x f" . recentf-open-files))
