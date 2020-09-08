@@ -468,9 +468,9 @@
    org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i!)" "PAUSED(p@)" "|" "DONE(d!)" "CANCELLED(c@)"))
    org-M-RET-may-split-line nil
    org-capture-templates '(
-    ("l" "Link" entry (file+headline "~/safe/org/tasks.org" "Links")
+    ("l" "Link" entry (file+headline "~/safe/org/bookmarks.org" "Links")
      "* %a\n  %?\n  Added: %U")
-    ("L" "Link with quote" entry (file+headline "~/safe/org/tasks.org" "Links")
+    ("L" "Link with quote" entry (file+headline "~/safe/org/bookmarks.org" "Links")
      "* %a\n  #+BEGIN_QUOTE\n  %i\n  #+END_QUOTE\n  %?\n  Added: %U")))
   (org-link-set-parameters
    "thunderlink"
