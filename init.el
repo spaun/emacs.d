@@ -472,6 +472,11 @@
   ("C-; o" . link-hint-open-link)
   ("C-; c" . link-hint-copy-link))
 
+(use-package move-text
+  :bind
+  ("M-p" . move-text-up)
+  ("M-n" . move-text-down))
+
 (use-package orgalist
   :commands orgalist-mode)
 
