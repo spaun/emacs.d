@@ -179,15 +179,39 @@
 
 (use-package wgrep)
 
-(use-package eyebrowse
-  :bind (("M-1" . eyebrowse-switch-to-window-config-1)
-         ("M-2" . eyebrowse-switch-to-window-config-2)
-         ("M-3" . eyebrowse-switch-to-window-config-3)
-         ("M-4" . eyebrowse-switch-to-window-config-4))
+;; (use-package eyebrowse
+;;   :bind (("M-1" . eyebrowse-switch-to-window-config-1)
+;;          ("M-2" . eyebrowse-switch-to-window-config-2)
+;;          ("M-3" . eyebrowse-switch-to-window-config-3)
+;;          ("M-4" . eyebrowse-switch-to-window-config-4))
+;;   :config
+;;   (setq
+;;    eyebrowse-new-workspace t)
+;;   (eyebrowse-mode))
+
+(use-package tab-bar
+  :bind (("M-1" . (lambda () (interactive) (tab-bar-select-tab-by-name "ws1")))
+         ("M-2" . (lambda () (interactive) (tab-bar-select-tab-by-name "ws2")))
+         ("M-3" . (lambda () (interactive) (tab-bar-select-tab-by-name "mail")))
+         ("M-4" . (lambda () (interactive) (tab-bar-select-tab-by-name "org"))))
   :config
   (setq
-   eyebrowse-new-workspace t)
-  (eyebrowse-mode))
+   tab-bar-new-button-show nil
+   tab-bar-close-button-show nil)
+  (defun init-workspaces ()
+    (tab-bar-mode)
+    (tab-bar-rename-tab "ws1")
+    (tab-bar-new-tab)
+    (tab-bar-rename-tab "ws2")
+    (tab-bar-new-tab)
+    (tab-bar-rename-tab "mail")
+    (tab-bar-new-tab)
+    (tab-bar-rename-tab "org")
+    (tab-bar-select-tab "ws1"))
+  (init-workspaces)
+  (add-hook
+   'after-make-frame-functions
+   (lambda (frame) (select-frame frame) (init-workspaces))))
 
 (use-package swiper
   :diminish 'ivy-mode
