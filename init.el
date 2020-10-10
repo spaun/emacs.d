@@ -276,7 +276,7 @@
 
 (use-package dumb-jump
   :config
-  (dumb-jump-mode))
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
 (use-package flycheck
   :demand
@@ -544,9 +544,9 @@
   (defhydra hydra-jump (:color teal :hint nil)
     "
 Jump to:
-  _l_: line     _o_: dumb def         _e_: errors
-  _s_: char     _O_: dumb def (ow)    _j_: next error
-  _d_: doc      _b_: dumb back        _k_: prev error
+  _l_: line    _e_: errors
+  _s_: char    _j_: next error
+  _d_: doc     _k_: prev error
 "
     ("e" (lambda () (interactive)
            (flycheck-list-errors)
@@ -564,9 +564,6 @@ Jump to:
     ("s" avy-goto-char-timer)
     ("l" goto-line)
     ("w" avy-goto-word-0)
-    ("o" dumb-jump-go)
-    ("O" dump-jump-go-other-window)
-    ("b" dump-jump-go-back)
     ("q" nil "cancel" :color blue)))
 
 (provide 'init)
