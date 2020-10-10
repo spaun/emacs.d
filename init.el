@@ -411,6 +411,17 @@
   (setq php-mode-template-compatibility nil
         php-mode-coding-style 'psr2))
 
+(use-package toml-mode)
+
+(use-package rust-mode
+  :hook (rust-mode . lsp))
+
+(use-package cargo
+  :hook (rust-mode . cargo-minor-mode))
+
+(use-package flycheck-rust
+  :hook (flycheck-mode . flycheck-rust-setup))
+
 (use-package haskell-mode)
 
 (use-package clojure-mode
