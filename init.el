@@ -508,7 +508,7 @@
 (use-package orgalist
   :commands orgalist-mode)
 
-(dolist  (p '(my-mu4e my-transmission))
+(dolist  (p '(my-mu4e my-transmission my-functions))
   (require p nil t))
 
 (use-package hydra
