@@ -548,9 +548,9 @@
   (defhydra hydra-jump (:color teal :hint nil)
     "
 Jump to:
-  _l_: line    _e_: errors
-  _s_: char    _j_: next error
-  _d_: doc     _k_: prev error
+  _l_: line     _O_: dumb def (ow)    _e_: errors
+  _s_: char     _b_: dumb back        _j_: next error
+  _d_: doc                            _k_: prev error
 "
     ("e" (lambda () (interactive)
            (flycheck-list-errors)
@@ -568,6 +568,8 @@ Jump to:
     ("s" avy-goto-char-timer)
     ("l" goto-line)
     ("w" avy-goto-word-0)
+    ("O" dump-jump-go-other-window)
+    ("b" dump-jump-go-back)
     ("q" nil "cancel" :color blue)))
 
 (provide 'init)
