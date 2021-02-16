@@ -67,7 +67,10 @@
 
 (use-package doom-themes
   :config
-  (load-theme 'doom-one t))
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+  (load-theme 'doom-one-light t)
+  (doom-themes-org-config))
 
 
 ;; Start maximized
