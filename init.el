@@ -81,12 +81,25 @@
   (unless package-archive-contents
     (package-refresh-contents))
 
-  (dolist (p '(diminish use-package))
+  (dolist (p '(delight use-package))
     (unless (package-installed-p p)
       (package-install p)))
 
   (require 'use-package)
   (setq use-package-always-ensure t))
+
+(use-package autorevert
+  :ensure nil
+  :delight auto-revert-mode)
+
+(use-package abbrev
+  :ensure nil
+  :delight)
+
+(use-package subword
+  :ensure nil
+  :delight
+  :hook ((php-mode clojure-mode) . subword-mode))
 
 (use-package no-littering
   :config
@@ -103,6 +116,7 @@
   (doom-themes-org-config))
 
 (use-package flyspell
+  :delight
   :hook
   ((text-mode . flyspell-mode)
    (prog-mode . flyspell-prog-mode)))
@@ -114,6 +128,7 @@
   (show-paren-mode t))
 
 (use-package whitespace-cleanup-mode
+  :delight
   :config
   (setq
    whitespace-style
@@ -122,7 +137,7 @@
   (global-whitespace-cleanup-mode))
 
 (use-package beginend
-  :diminish beginend-global-mode
+  :delight beginend-global-mode
   :hook
   ((dired-mode . beginend-dired-mode)
    (prog-mode . beginend-prog-mode)
@@ -141,7 +156,7 @@
       (point-max)
       (forward-line -1)
       (end-of-line)))
-  (dolist (mode beginend-modes) (diminish (cdr mode))))
+  (dolist (mode beginend-modes) (delight (cdr mode) nil 'beginend)))
 
 (use-package recentf
   :bind (("C-x f" . recentf-open-files))
@@ -182,9 +197,8 @@
    (lambda (frame) (select-frame frame) (init-workspaces))))
 
 (use-package swiper
-  :diminish 'ivy-mode
+  :delight ivy-mode
   :config
-  (use-package counsel)
   (defvar ivy-use-virtual-buffers nil)
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t
@@ -199,21 +213,32 @@
    :map minibuffer-local-map
    ("C-r" . counsel-minibuffer-history)))
 
+(use-package counsel
+  :after swiper)
+
+(use-package amx
+  :after ivy-mode)
+
 (use-package lsp-mode
   :commands lsp
+  :delight
+  :hook (php-mode . lsp))
+
+(use-package company-lsp
+  :after lsp-mode
+  :commands company-lsp)
+
+(use-package lsp-ui
+  :after lsp-mode
   :config
-  (use-package lsp-ui
-    :config
-    (defvar lsp-intelephense-storage-path)
-    (defvar lsp-intelephense-stubs)
-    (setq lsp-ui-sideline-enable nil
-          lsp-ui-doc-enable nil
-          lsp-file-watch-threshold 20000
-          lsp-intelephense-storage-path
-          (no-littering-expand-var-file-name "intelephense")
-          lsp-intelephense-stubs ["apache" "bcmath" "bz2" "calendar" "com_dotnet" "Core" "ctype" "curl" "date" "dba" "dom" "enchant" "exif" "fileinfo" "filter" "fpm" "ftp" "gd" "hash" "iconv" "imap" "interbase" "intl" "json" "ldap" "libxml" "mbstring" "mcrypt" "meta" "mssql" "mysqli" "oci8" "odbc" "openssl" "pcntl" "pcre" "PDO" "pdo_ibm" "pdo_mysql" "pdo_pgsql" "pdo_sqlite" "pgsql" "Phar" "posix" "pspell" "readline" "recode" "Reflection" "regex" "session" "shmop" "SimpleXML" "snmp" "soap" "sockets" "sodium" "SPL" "sqlite3" "standard" "superglobals" "sybase" "sysvmsg" "sysvsem" "sysvshm" "tidy" "tokenizer" "wddx" "xml" "xmlreader" "xmlrpc" "xmlwriter" "Zend OPcache" "zip" "zlib" "redis"]))
-  (use-package company-lsp
-    :commands company-lsp))
+  (defvar lsp-intelephense-storage-path)
+  (defvar lsp-intelephense-stubs)
+  (setq
+   lsp-ui-sideline-enable nil
+   lsp-ui-doc-enable nil
+   lsp-file-watch-threshold 20000
+   lsp-intelephense-storage-path (no-littering-expand-var-file-name "intelephense")
+   lsp-intelephense-stubs ["apache" "bcmath" "bz2" "calendar" "com_dotnet" "Core" "ctype" "curl" "date" "dba" "dom" "enchant" "exif" "fileinfo" "filter" "fpm" "ftp" "gd" "hash" "iconv" "imap" "interbase" "intl" "json" "ldap" "libxml" "mbstring" "mcrypt" "meta" "mssql" "mysqli" "oci8" "odbc" "openssl" "pcntl" "pcre" "PDO" "pdo_ibm" "pdo_mysql" "pdo_pgsql" "pdo_sqlite" "pgsql" "Phar" "posix" "pspell" "readline" "recode" "Reflection" "regex" "session" "shmop" "SimpleXML" "snmp" "soap" "sockets" "sodium" "SPL" "sqlite3" "standard" "superglobals" "sybase" "sysvmsg" "sysvsem" "sysvshm" "tidy" "tokenizer" "wddx" "xml" "xmlreader" "xmlrpc" "xmlwriter" "Zend OPcache" "zip" "zlib" "redis"]))
 
 (use-package multiple-cursors
   :config
@@ -222,13 +247,6 @@
    hum/lines-to-expand 1)
   :bind (("C-S-p" . mc/mark-pop)
          ("C-S-<mouse-1>" . mc/add-cursor-on-click)))
-
-;; emacs lisp
-(use-package elisp-mode
-  :ensure nil
-  :config
-  (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-  (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
 
 (use-package ace-window
   :config (setq
@@ -248,7 +266,7 @@
 
 (use-package flycheck
   :demand
-  :diminish 'flycheck-mode
+  :delight
   :config
   (declare-function global-flycheck-mode "ext:flycheck")
   (setq
@@ -259,7 +277,7 @@
 
 (use-package company
   :demand
-  :diminish 'company-mode
+  :delight
   :bind (("C-." . company-complete)
          :map company-active-map
          ("C-n" . company-select-next-or-abort)
@@ -268,8 +286,8 @@
   (global-company-mode))
 
 (use-package rainbow-delimiters
-  :config
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+  :hook
+  ('prog-mode . 'rainbow-delimiters-mode))
 
 ;; TODO Configure this
 (use-package spaceline-config
@@ -283,7 +301,7 @@
 
 (use-package undo-tree
   :demand
-  :diminish 'undo-tree-mode
+  :delight
   :config
   (global-undo-tree-mode)
   (setq undo-tree-visualizer-diff t))
@@ -314,8 +332,9 @@
 
 ;; TODO Possibly replace with smartparens
 (use-package paredit
-  :diminish 'paredit-mode
+  :delight
   :commands paredit-mode
+  :hook ((emacs-lisp-mode clojure-mode cider-repl-mode) . paredit-mode)
   :bind (("C-M-u" . paredit-backward-up)
          ("C-M-n" . paredit-forward-up)
          ("M-S" . paredit-splice-sexp-killing-backward)
@@ -325,28 +344,34 @@
          ("M-{" . paredit-wrap-curly)))
 
 (use-package eldoc
-  :diminish 'eldoc-mode
-  :commands eldoc-mode)
+  :delight
+  :commands eldoc-mode
+  :hook (prog-mode . eldoc-mode))
 
 (use-package projectile
   :demand
-  :diminish 'projectile-mode
+  :delight '(:eval (concat " " (projectile-project-name)))
   :config
-  (setq projectile-completion-system 'ivy
-        projectile-indexing-method 'hybrid
-        projectile-sort-order 'recentf
-        projectile-enable-caching t)
-  (projectile-mode t)
-  (use-package counsel-projectile
-    :config
-    (counsel-projectile-mode)))
+  (setq
+   projectile-completion-system 'ivy
+   projectile-indexing-method 'hybrid
+   projectile-sort-order 'recentf
+   projectile-enable-caching t)
+  (projectile-mode t))
+
+(use-package counsel-projectile
+  :after (counsel projectile)
+  :config
+  (counsel-projectile-mode))
 
 (use-package yasnippet
   :hook (prog-mode . yas-minor-mode)
   :mode (("yasnippet/snippets" . snippet-mode)
          ("\\.yasnippet$" . snippet-mode)))
 
-(use-package smart-semicolon)
+(use-package smart-semicolon
+  :delight
+  :hook (php-mode . smart-semicolon-mode))
 
 (use-package yaml-mode
   :mode ("\\.yml" . yaml-mode))
@@ -370,11 +395,6 @@
 ;;; npm i -g intelephense
 (use-package php-mode
   :mode ("\\.php" . php-mode)
-  :hook (php-mode . (lambda
-                      ()
-                      (subword-mode 1)
-                      (lsp)
-                      (smart-semicolon-mode)))
   :config
   (setq php-mode-template-compatibility nil
         php-mode-coding-style 'psr2))
@@ -392,26 +412,25 @@
 
 (use-package haskell-mode)
 
-(use-package clojure-mode
+(use-package clojure-mode)
+
+(use-package cider
+  :after clojure-mode
   :config
-  (use-package cider
-    :config
-    (setq
-     nrepl-hide-special-buffers t
-     ;; go right to the REPL buffer when it's finished connecting
-     cider-repl-pop-to-buffer-on-connect t
-     ;; When there's a cider error, show it's buffer and switch to it
-     cider-show-error-buffer t
-     cider-auto-select-error-buffer t
-     ;; Wrap when navigating history.
-     cider-repl-wrap-history t)
-  (use-package clj-refactor)
-  (add-hook 'clojure-mode-hook 'paredit-mode)
-  (add-hook 'clojure-mode-hook 'subword-mode)
-  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-  (add-hook 'cider-repl-mode-hook 'paredit-mode)
+  (setq
+   nrepl-hide-special-buffers t
+   ;; go right to the REPL buffer when it's finished connecting
+   cider-repl-pop-to-buffer-on-connect t
+   ;; When there's a cider error, show it's buffer and switch to it
+   cider-show-error-buffer t
+   cider-auto-select-error-buffer t
+   ;; Wrap when navigating history.
+   cider-repl-wrap-history t)
   :bind (:map clojure-mode-map
-              ("<f5>" . cider-ns-refresh))))
+              ("<f5>" . cider-ns-refresh)))
+
+(use-package clj-refactor
+  :after cider)
 
 (use-package htmlize)
 
