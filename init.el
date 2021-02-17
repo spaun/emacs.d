@@ -4,6 +4,8 @@
 
 ;;; Code:
 
+(set-language-environment "UTF-8")
+
 (setq
  ;; Backups - set it up early to not be affected by any errors below
  backup-by-copying t
@@ -19,10 +21,49 @@
  scroll-conservatively 100000
  scroll-margin 0
 
- ;; Don't ring on any ocasion
+ ;; Don't ring on any occasion
  ring-bell-function 'ignore
  ;; Increse GC threshold to 100Mb
- gc-cons-threshold 100000000)
+ gc-cons-threshold 100000000
+ ;; Real emacs knights don't use shift to mark things
+ shift-select-mode nil
+ ;; Move files to trash when deleting
+ delete-by-moving-to-trash t)
+
+;; Forbid tabs by default
+;; Use C-q to insert TAB (C-q <tab>)
+(setq-default indent-tabs-mode nil)
+;; Default tab width is 4
+(setq-default tab-width 4)
+
+;; Start maximized
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+(add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
+(add-to-list 'default-frame-alist '(horizontal-scroll-bars . nil))
+(add-to-list 'default-frame-alist '(undecorated . t))
+
+;; Transparently open compressed files
+(auto-compression-mode t)
+;; Show column number on mode line
+(column-number-mode 1)
+;; Show buffer size on mode line
+(size-indication-mode t)
+;; Highlight current line
+(global-hl-line-mode)
+;; Don't blink the cursor
+(blink-cursor-mode -1)
+;; Unclutter the UI
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+
+;; UX
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+;; Enable the functionality disabled by default
+(put 'narrow-to-region 'disabled nil)
+
+;; Show time on the mode line, only in text terminal
+(display-time-mode (not (display-graphic-p)))
 
 (dotimes (n 10)
   (global-unset-key (kbd (format "C-%d" n)))
@@ -54,78 +95,12 @@
         auto-save-file-name-transforms
         `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
 
-;; UX
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-;; Enable the functionality disabled by default
-(put 'narrow-to-region 'disabled nil)
-
-(use-package zenburn-theme
-  :config
-  ;(load-theme 'zenburn t)
-  )
-
 (use-package doom-themes
   :config
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
   (load-theme 'doom-one-light t)
   (doom-themes-org-config))
-
-
-;; Start maximized
-;; Alternative way:
-;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
-;; Also following line to ~/.Xresources to have a maximized window immediately
-;; emacs.fullscreen: maximized
-;(add-hook 'emacs-startup-hook 'toggle-frame-maximized)
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
-(add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
-(add-to-list 'default-frame-alist '(horizontal-scroll-bars . nil))
-(add-to-list 'default-frame-alist '(undecorated . t))
-
-;; Real emacs knights don't use shift to mark things
-(setq shift-select-mode nil)
-
-;; Move files to trash when deleting
-(setq delete-by-moving-to-trash t)
-
-;; Transparently open compressed files
-(auto-compression-mode t)
-
-;; Forbid tabs by default
-;; Use C-q to insert TAB (C-q <tab>)
-(setq-default indent-tabs-mode nil)
-
-;; Default tab width is 4
-(setq-default tab-width 4)
-
-;; Show column number on mode line
-(column-number-mode 1)
-
-;; Show buffer size on mode line
-(size-indication-mode t)
-
-;; Highlight current line
-(global-hl-line-mode)
-
-;; Don't blink the cursor
-(blink-cursor-mode -1)
-
-;; Unclutter the UI
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-
-;; UTF-8 please
-(setq locale-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-selection-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-
-;; Show time on the mode line, only in text terminal
-(when (not (display-graphic-p))
-  (display-time-mode t))
 
 (use-package flyspell
   :hook
@@ -573,4 +548,5 @@ Jump to:
     ("q" nil "cancel" :color blue)))
 
 (provide 'init)
+
 ;;; init.el ends here
