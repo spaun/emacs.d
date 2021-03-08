@@ -99,7 +99,7 @@
 (use-package subword
   :ensure nil
   :delight
-  :hook ((php-mode clojure-mode) . subword-mode))
+  :hook ((php-mode clojure-mode typescript-mode) . subword-mode))
 
 (use-package no-littering
   :config
@@ -371,7 +371,7 @@
 
 (use-package smart-semicolon
   :delight
-  :hook (php-mode . smart-semicolon-mode))
+  :hook ((php-mode typescript-mode) . smart-semicolon-mode))
 
 (use-package yaml-mode
   :mode ("\\.yml" . yaml-mode))
@@ -398,6 +398,17 @@
   :config
   (setq php-mode-template-compatibility nil
         php-mode-coding-style 'psr2))
+
+(use-package typescript-mode
+  :mode (("\\.ts" . typescript-mode)
+         ("\\.tsx" . typescript-mode)))
+
+(use-package tide
+  :delight
+  :after (typescript-mode company flycheck)
+  :hook ((typescript-mode . tide-setup)
+         (typescript-mode . tide-hl-identifier-mode)
+         (before-save . tide-format-before-save)))
 
 (use-package toml-mode)
 
