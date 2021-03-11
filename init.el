@@ -553,9 +553,9 @@
   (defhydra hydra-jump (:color teal :hint nil)
     "
 Jump to:
-  _l_: line     _O_: dumb def (ow)    _e_: errors
-  _s_: char     _b_: dumb back        _j_: next error
-  _d_: doc                            _k_: prev error
+  _l_: line    _e_: errors
+  _s_: char    _j_: next error
+  _d_: doc     _k_: prev error
 "
     ("e" (lambda () (interactive)
            (flycheck-list-errors)
