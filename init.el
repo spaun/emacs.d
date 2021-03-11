@@ -221,8 +221,7 @@
 
 (use-package lsp-mode
   :commands lsp
-  :delight
-  :hook (php-mode . lsp))
+  :delight)
 
 (use-package company-lsp
   :after lsp-mode
@@ -395,6 +394,7 @@
 ;;; npm i -g intelephense
 (use-package php-mode
   :mode ("\\.php" . php-mode)
+  :hook (php-mode . lsp)
   :config
   (setq php-mode-template-compatibility nil
         php-mode-coding-style 'psr2))
