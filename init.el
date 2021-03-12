@@ -28,7 +28,8 @@
  ;; Real emacs knights don't use shift to mark things
  shift-select-mode nil
  ;; Move files to trash when deleting
- delete-by-moving-to-trash t)
+ delete-by-moving-to-trash t
+ server-socket-dir (getenv "XDG_RUNTIME_DIR"))
 
 ;; Forbid tabs by default
 ;; Use C-q to insert TAB (C-q <tab>)
