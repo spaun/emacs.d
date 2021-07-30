@@ -378,12 +378,6 @@
 (use-package yaml-mode
   :mode ("\\.yml" . yaml-mode))
 
-(use-package elpy
-  :config
-  (setq
-   elpy-rpc-virtualenv-path (no-littering-expand-var-file-name "elpy/rpc-venv")
-   elpy-modules (delq 'elpy-module-flymake elpy-modules)))
-
 (use-package python
   :ensure nil
   :mode ("\\.py" . python-mode)
@@ -391,8 +385,7 @@
   :config
   (setq python-indent-offset 4
         python-shell-interpreter "ipython"
-        python-shell-interpreter-args "-i --simple-prompt")
-  (elpy-enable))
+        python-shell-interpreter-args "-i --simple-prompt"))
 
 ;;; npm i -g intelephense
 (use-package php-mode
