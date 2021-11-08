@@ -509,6 +509,8 @@
 (use-package orgalist
   :commands orgalist-mode)
 
+(load custom-file)
+
 (dolist  (p '(my-mu4e my-transmission my-functions))
   (require p nil t))
 
