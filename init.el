@@ -221,8 +221,13 @@
   :after ivy-mode)
 
 (use-package lsp-mode
+  :delight
   :commands lsp
-  :delight)
+  :init
+  (setq
+   lsp-keymap-prefix "M-q")
+  :config
+  (define-key lsp-mode-map (kbd lsp-keymap-prefix) lsp-command-map))
 
 (use-package company-lsp
   :after lsp-mode
