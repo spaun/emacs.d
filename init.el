@@ -348,9 +348,9 @@
          ("C-M-n" . paredit-forward-up)
          ("M-S" . paredit-splice-sexp-killing-backward)
          ("M-R" . paredit-raise-sexp)
-         ("M-(" . paredit-wrap-round)
-         ("M-[" . paredit-wrap-square)
-         ("M-{" . paredit-wrap-curly)))
+         ("M-)" . paredit-wrap-round)
+         ("M-]" . paredit-wrap-square)
+         ("M-}" . paredit-wrap-curly)))
 
 (use-package eldoc
   :delight
