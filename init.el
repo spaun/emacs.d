@@ -75,7 +75,6 @@
   (require 'package)
   (setq package-archives
         '(("gnu" . "https://elpa.gnu.org/packages/")
-          ("org" . "https://orgmode.org/elpa/")
           ("melpa" . "https://melpa.org/packages/")))
 
   (package-initialize)
@@ -449,7 +448,7 @@
 (use-package htmlize)
 
 (use-package org
-  :pin org
+  :pin gnu
   :config
   (require 'epa-file)
   (require 'org-crypt)
