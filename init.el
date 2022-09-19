@@ -216,6 +216,9 @@
 (use-package counsel
   :after swiper)
 
+(use-package ivy-hydra
+  :after ivy-mode)
+
 (use-package amx
   :after ivy-mode)
 
