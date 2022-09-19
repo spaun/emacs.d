@@ -99,7 +99,7 @@
 (use-package subword
   :ensure nil
   :delight
-  :hook ((php-mode clojure-mode typescript-mode) . subword-mode))
+  :hook (php-mode clojure-mode typescript-mode))
 
 (use-package no-littering
   :config
@@ -224,16 +224,12 @@
 
 (use-package lsp-mode
   :delight
-  :commands lsp
+  :commands lsp-deferred
   :init
   (setq
    lsp-keymap-prefix "M-q")
   :config
   (define-key lsp-mode-map (kbd lsp-keymap-prefix) lsp-command-map))
-
-(use-package company-lsp
-  :after lsp-mode
-  :commands company-lsp)
 
 (use-package lsp-ui
   :after lsp-mode
@@ -399,7 +395,7 @@
 ;;; npm i -g intelephense
 (use-package php-mode
   :mode ("\\.php" . php-mode)
-  :hook (php-mode . lsp)
+  :hook (php-mode . lsp-deferred)
   :config
   (setq php-mode-template-compatibility nil
         php-mode-coding-style 'psr2))
@@ -418,13 +414,25 @@
 (use-package toml-mode)
 
 (use-package rust-mode
-  :hook (rust-mode . lsp))
+  :hook (rust-mode . lsp-deferred))
 
 (use-package cargo
   :hook (rust-mode . cargo-minor-mode))
 
 (use-package flycheck-rust
   :hook (flycheck-mode . flycheck-rust-setup))
+
+(defun ime-go-before-save ()
+  (interactive)
+  (when lsp-mode
+    (lsp-organize-imports)
+    (lsp-format-buffer)))
+
+(use-package go-mode
+  :hook (go-mode . lsp-deferred)
+  :config
+  (add-hook 'go-mode-hook
+            (lambda () (add-hook 'before-save-hook 'ime-go-before-save))))
 
 (use-package haskell-mode)
 
