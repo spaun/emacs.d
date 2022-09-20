@@ -424,15 +424,14 @@
 
 (defun ime-go-before-save ()
   (interactive)
-  (when lsp-mode
-    (lsp-organize-imports)
-    (lsp-format-buffer)))
+  (lsp-organize-imports)
+  (lsp-format-buffer))
 
 (use-package go-mode
-  :hook (go-mode . lsp-deferred)
-  :config
-  (add-hook 'go-mode-hook
-            (lambda () (add-hook 'before-save-hook 'ime-go-before-save))))
+  :hook ((go-mode . lsp-deferred)
+         (go-mode . (lambda () (add-hook 'before-save-hook #'ime-go-before-save))))
+  :bind (:map go-mode-map
+              ("<f9>" . (lambda () (interactive) (compile "go run .")))))
 
 (use-package haskell-mode)
 
