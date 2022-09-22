@@ -512,10 +512,7 @@
   :config
   (auth-source-pass-enable))
 
-(use-package link-hint
-  :bind
-  ("C-; o" . link-hint-open-link)
-  ("C-; c" . link-hint-copy-link))
+(use-package link-hint)
 
 (use-package move-text
   :bind
@@ -567,8 +564,8 @@
   (defhydra hydra-jump (:color teal :hint nil)
     "
 Jump to:
-  _l_: line    _e_: errors
-  _s_: char    _j_: next error
+  _l_: line    _e_: errors        _g_: link
+  _s_: char    _j_: next error    _G_: copy link
   _d_: doc     _k_: prev error
 "
     ("e" (lambda () (interactive)
@@ -586,9 +583,8 @@ Jump to:
                (describe-symbol (symbol-at-point))))))
     ("s" avy-goto-char-timer)
     ("l" goto-line)
-    ("w" avy-goto-word-0)
-    ("O" dump-jump-go-other-window)
-    ("b" dump-jump-go-back)
+    ("g" link-hint-open-link)
+    ("G" link-hint-copy-link)
     ("q" nil "cancel" :color blue)))
 
 (provide 'init)
