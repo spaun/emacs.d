@@ -341,7 +341,7 @@
 (use-package paredit
   :delight
   :commands paredit-mode
-  :hook ((emacs-lisp-mode clojure-mode cider-repl-mode) . paredit-mode)
+  :hook ((emacs-lisp-mode clojure-mode) . paredit-mode)
   :bind (("C-M-u" . paredit-backward-up)
          ("C-M-n" . paredit-forward-up)
          ("M-S" . paredit-splice-sexp-killing-backward)
@@ -436,24 +436,6 @@
 (use-package haskell-mode)
 
 (use-package clojure-mode)
-
-(use-package cider
-  :after clojure-mode
-  :config
-  (setq
-   nrepl-hide-special-buffers t
-   ;; go right to the REPL buffer when it's finished connecting
-   cider-repl-pop-to-buffer-on-connect t
-   ;; When there's a cider error, show it's buffer and switch to it
-   cider-show-error-buffer t
-   cider-auto-select-error-buffer t
-   ;; Wrap when navigating history.
-   cider-repl-wrap-history t)
-  :bind (:map clojure-mode-map
-              ("<f5>" . cider-ns-refresh)))
-
-(use-package clj-refactor
-  :after cider)
 
 (use-package htmlize)
 
