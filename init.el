@@ -299,11 +299,19 @@
 (use-package spaceline-config
   :ensure spaceline
   :config
+  (spaceline-define-segment my-project-name
+    "The current project name"
+    (propertize (format "<%s>"
+                        (or (and (boundp 'project-name) project-name)
+                            (when-let ((project-current (project-current)))
+                              (file-name-nondirectory (directory-file-name (project-root project-current))))
+                            "-")) 'face 'bold))
   (setq powerline-default-separator 'wave)
   (set-face-attribute 'mode-line nil :box nil)
   (set-face-attribute 'mode-line-inactive nil :box nil)
+  (spaceline-toggle-my-project-name-on)
   (when (fboundp 'spaceline-emacs-theme)
-    (spaceline-emacs-theme)))
+    (spaceline-emacs-theme 'my-project-name)))
 
 (use-package undo-tree
   :demand
@@ -355,22 +363,6 @@
   :delight
   :commands eldoc-mode
   :hook (prog-mode . eldoc-mode))
-
-(use-package projectile
-  :demand
-  :delight '(:eval (concat " " (projectile-project-name)))
-  :config
-  (setq
-   projectile-completion-system 'ivy
-   projectile-indexing-method 'hybrid
-   projectile-sort-order 'recentf
-   projectile-enable-caching t)
-  (projectile-mode t))
-
-(use-package counsel-projectile
-  :after (counsel projectile)
-  :config
-  (counsel-projectile-mode))
 
 (use-package yasnippet
   :hook (prog-mode . yas-minor-mode)
@@ -516,32 +508,26 @@
   :config
   (defhydra hydra-file (:color teal :hint nil)
     "
-%s(concat \"Project: \" (or (projectile-project-root) \"none\"))
-  _f_: project file     _a_: project ag           _i_: project ibuffer  _g_: magit status
-  _F_: file             _A_: ag                   _I_: ibuffer          _G_: magit dispatch
-  _d_: project dir      _o_: project multi-occur  _b_: project buffer   _h_: magit file dispatch
-  _D_: dir              _O_: multi-occur          _B_: buffer           _p_: switch project
-  _r_: project recentf
-  _R_: recentf
+%s(concat \"Project: \" (if (project-current) (project-root (project-current)) \"none\"))
+  _f_: project file  _a_: project ag   _b_: project buffer   _g_: magit status
+  _F_: file          _A_: ag           _B_: buffer           _G_: magit dispatch
+  _d_: project dir   _r_: project rg   _p_: switch project   _h_: magit file dispatch
+  _D_: dir           _R_: rg
 "
-    ("f" counsel-projectile-find-file)
+    ("f" project-find-file)
     ("F" counsel-find-file)
-    ("d" counsel-projectile-find-dir)
+    ("d" project-find-dir)
     ("D" counsel-dired)
-    ("r" projectile-recentf)
-    ("R" counsel-recentf)
-    ("a" counsel-projectile-ag)
+    ("a" my-project-ag)
     ("A" counsel-ag)
-    ("o" projectile-multi-occur)
-    ("O" multi-occur)
-    ("b" counsel-projectile-switch-to-buffer)
+    ("r" my-project-rg)
+    ("R" counsel-rg)
+    ("b" project-switch-to-buffer)
     ("B" counsel-switch-buffer)
-    ("i" projectile-ibuffer)
-    ("I" counsel-ibuffer)
     ("g" magit-status)
     ("G" magit-dispatch)
     ("h" magit-file-dispatch)
-    ("p" counsel-projectile-switch-project)
+    ("p" project-switch-project)
     ("q" nil "cancel" :color blue))
 
   (defhydra hydra-jump (:color teal :hint nil)
@@ -569,6 +555,66 @@ Jump to:
     ("g" link-hint-open-link)
     ("G" link-hint-copy-link)
     ("q" nil "cancel" :color blue)))
+
+(defun my-project-ag (&optional options)
+  "Search the current project with ag.
+
+OPTIONS, if non-nil, is a string containing additional options to
+be passed to ag. It is read from the minibuffer if the function
+is called with a `\\[universal-argument]' prefix argument."
+  (interactive)
+  (if (project-current t)
+    (let* ((ivy--actions-list (copy-sequence ivy--actions-list))
+           (ignored "")
+           (counsel-ag-base-command
+            (let ((counsel-ag-command counsel-ag-base-command))
+              (counsel--format-ag-command ignored "%s"))))
+
+      ;; `counsel-ag' requires a single `\\[universal-argument]'
+      ;; prefix argument to prompt for initial directory and a double
+      ;; `\\[universal-argument]' prefix argument to prompt for extra
+      ;; options. But since the initial directory is always the
+      ;; project root here, prompt for ortpions with a single
+      ;; `\\[universal-argument]' prefix argument prefix argument as
+      ;; well.
+      (when (= (prefix-numeric-value current-prefix-arg) 4)
+        (setq current-prefix-arg '(16)))
+      (counsel-ag nil (project-root (project-current))
+                  options
+                  (concat (car (if (listp counsel-ag-base-command)
+                                   counsel-ag-base-command
+                                 (split-string counsel-ag-base-command)))
+                          ": ")))))
+
+(defun my-project-rg (&optional options)
+  "Search the current project with rg.
+
+OPTIONS, if non-nil, is a string containing additional options to
+be passed to rg. It is read from the minibuffer if the function
+is called with a `\\[universal-argument]' prefix argument."
+  (interactive)
+  (if (project-current t)
+    (let* ((ivy--actions-list (copy-sequence ivy--actions-list))
+           (ignored "")
+           (counsel-rg-base-command
+            (let ((counsel-ag-command counsel-rg-base-command))
+              (counsel--format-ag-command ignored "%s"))))
+      ;; `counsel-rg' requires a single `\\[universal-argument]'
+      ;; prefix argument to prompt for initial directory and a double
+      ;; `\\[universal-argument]' prefix argument to prompt for extra
+      ;; options. But since the initial directory is always the
+      ;; project root here, prompt for ortpions with a single
+      ;; `\\[universal-argument]' prefix argument prefix argument as
+      ;; well.
+      (when (= (prefix-numeric-value current-prefix-arg) 4)
+        (setq current-prefix-arg '(16)))
+      (counsel-rg nil
+                  (project-root (project-current))
+                  options
+                  (concat (car (if (listp counsel-rg-base-command)
+                                   counsel-rg-base-command
+                                 (split-string counsel-rg-base-command)))
+                          ": ")))))
 
 (provide 'init)
 
