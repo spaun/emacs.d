@@ -198,6 +198,7 @@
 
 (use-package swiper
   :delight ivy-mode
+  :demand
   :config
   (defvar ivy-use-virtual-buffers nil)
   (ivy-mode 1)
