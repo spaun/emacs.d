@@ -396,14 +396,8 @@
 
 (use-package typescript-mode
   :mode (("\\.ts" . typescript-mode)
-         ("\\.tsx" . typescript-mode)))
-
-(use-package tide
-  :delight
-  :after (typescript-mode company flycheck)
-  :hook ((typescript-mode . tide-setup)
-         (typescript-mode . tide-hl-identifier-mode)
-         (before-save . tide-format-before-save)))
+         ("\\.tsx" . typescript-mode))
+  :hook (typescript-mode . lsp-deferred))
 
 (use-package toml-mode)
 
