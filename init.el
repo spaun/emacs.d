@@ -365,6 +365,7 @@
   :hook (prog-mode . eldoc-mode))
 
 (use-package yasnippet
+  :delight yas-minor-mode
   :hook (prog-mode . yas-minor-mode)
   :mode (("yasnippet/snippets" . snippet-mode)
          ("\\.yasnippet$" . snippet-mode)))
