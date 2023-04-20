@@ -176,14 +176,16 @@
 (use-package wgrep)
 
 (use-package tab-bar
-  :bind (("M-1" . (lambda () (interactive) (tab-bar-select-tab-by-name "ws1")))
-         ("M-2" . (lambda () (interactive) (tab-bar-select-tab-by-name "ws2")))
-         ("M-3" . (lambda () (interactive) (tab-bar-select-tab-by-name "mail")))
-         ("M-4" . (lambda () (interactive) (tab-bar-select-tab-by-name "org"))))
+  :bind
+  (("M-1" . (lambda () (interactive) (tab-bar-select-tab-by-name "ws1")))
+   ("M-2" . (lambda () (interactive) (tab-bar-select-tab-by-name "ws2")))
+   ("M-3" . (lambda () (interactive) (tab-bar-select-tab-by-name "mail")))
+   ("M-4" . (lambda () (interactive) (tab-bar-select-tab-by-name "org"))))
+  :custom
+  (tab-bar-new-button-show nil)
+  (tab-bar-close-button-show nil)
   :config
-  (setq
-   tab-bar-new-button-show nil
-   tab-bar-close-button-show nil)
+  (add-hook 'after-make-frame-functions  #'(lambda (frame) (select-frame frame) (init-workspaces)))
   (defun init-workspaces ()
     (tab-bar-mode)
     (tab-bar-rename-tab "ws1")
@@ -194,10 +196,7 @@
     (tab-bar-new-tab)
     (tab-bar-rename-tab "org")
     (tab-bar-select-tab "ws1"))
-  (init-workspaces)
-  (add-hook
-   'after-make-frame-functions
-   (lambda (frame) (select-frame frame) (init-workspaces))))
+  (init-workspaces))
 
 (use-package swiper
   :delight ivy-mode
@@ -291,12 +290,12 @@
          :map company-active-map
          ("C-n" . company-select-next-or-abort)
          ("C-p" . company-select-previous-or-abort))
-  :config
-  (global-company-mode))
+  :hook
+  (after-init . global-company-mode))
 
 (use-package rainbow-delimiters
   :hook
-  ('prog-mode . 'rainbow-delimiters-mode))
+  (prog-mode . rainbow-delimiters-mode))
 
 ;; TODO Configure this
 (use-package spaceline-config
@@ -319,10 +318,11 @@
 (use-package undo-tree
   :demand
   :delight
-  :config
-  (global-undo-tree-mode)
-  (setq undo-tree-visualizer-diff t
-	    undo-tree-history-directory-alist (list (cons "." (no-littering-expand-var-file-name "undo")))))
+  :custom
+  (undo-tree-visualizer-diff t)
+  (undo-tree-history-directory-alist (list (cons "." (no-littering-expand-var-file-name "undo"))))
+:hook
+  (after-init . global-undo-tree-mode))
 
 (use-package web-mode
   :mode (("\\.html\\.twig" . web-mode)
@@ -414,14 +414,13 @@
 (use-package flycheck-rust
   :hook (flycheck-mode . flycheck-rust-setup))
 
-(defun ime-go-before-save ()
-  (interactive)
-  (lsp-organize-imports)
-  (lsp-format-buffer))
-
 (use-package go-mode
   :hook ((go-mode . lsp-deferred)
-         (go-mode . (lambda () (add-hook 'before-save-hook #'ime-go-before-save))))
+         (before-save . (lambda ()
+                          (interactive)
+                          (when (derived-mode-p 'go-mode)
+                            (lsp-organize-imports)
+                            (lsp-format-buffer)))))
   :bind (:map go-mode-map
               ("<f9>" . (lambda () (interactive) (compile "go run .")))))
 
