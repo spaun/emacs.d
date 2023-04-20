@@ -479,6 +479,21 @@
    :map org-mode-map
    ("C-c d" . org-decrypt-entry)))
 
+(use-package org-roam
+  :ensure t
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory "~/safe/org-roam")
+  (org-roam-complete-everywhere t)
+  :config
+  (org-roam-setup)
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert)
+         :map org-mode-map
+         ("C-M-i" . completion-at-point)))
+
 (use-package pass)
 
 (use-package auth-source-pass
