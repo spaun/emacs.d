@@ -8,12 +8,12 @@
 
 (setq
  ;; Backups - set it up early to not be affected by any errors below
- backup-by-copying t
+ backup-by-copying nil
  delete-old-versions t
  kept-new-versions 6
  kept-old-versions 2
  version-control t
- vc-make-backup-files t
+ vc-make-backup-files nil
 
  font-use-system-font t
  inhibit-startup-message t
@@ -104,9 +104,12 @@
 (use-package no-littering
   :config
   (add-to-list 'load-path no-littering-etc-directory)
-  (setq custom-file (no-littering-expand-etc-file-name "custom.el")
+  (setq custom-file
+        (no-littering-expand-etc-file-name "custom.el")
         auto-save-file-name-transforms
-        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))
+        backup-directory-alist
+        (list (cons ".*" (no-littering-expand-var-file-name "backup/")))))
 
 (use-package doom-themes
   :config
@@ -318,7 +321,8 @@
   :delight
   :config
   (global-undo-tree-mode)
-  (setq undo-tree-visualizer-diff t))
+  (setq undo-tree-visualizer-diff t
+	    undo-tree-history-directory-alist (list (cons "." (no-littering-expand-var-file-name "undo")))))
 
 (use-package web-mode
   :mode (("\\.html\\.twig" . web-mode)
