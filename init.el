@@ -480,13 +480,17 @@
 
 (use-package org-roam
   :ensure t
-  :init
-  (setq org-roam-v2-ack t)
   :custom
   (org-roam-directory "~/safe/org-roam")
-  (org-roam-complete-everywhere t)
+  (org-roam-completion-everywhere t)
   :config
-  (org-roam-setup)
+  (org-roam-db-autosync-enable)
+  (add-to-list 'display-buffer-alist
+             '("\\*org-roam\\*"
+               (display-buffer-in-direction)
+               (direction . right)
+               (window-width . 0.33)
+               (window-height . fit-window-to-buffer)))
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
          ("C-c n i" . org-roam-node-insert)
