@@ -471,6 +471,10 @@
    :follow (lambda (path)
      "Opens an email in Thunderbird with ThunderLink."
      (start-process "myname" nil "thunderbird" "-thunderlink" (concat "thunderlink:" path))))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((shell . t)
+     (emacs-lisp . t)))
   :bind
   (("C-c l" . org-store-link)
    ("C-c a" . org-agenda)
