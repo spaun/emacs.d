@@ -459,7 +459,7 @@
    org-html-doctype "html5"
    org-html-htmlize-output-type 'css
    org-log-into-drawer "LOGBOOK"
-   org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i!)" "PAUSED(p@)" "|" "DONE(d!)" "CANCELLED(c@)"))
+   org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i!)" "PAUSED(p@)" "WAIT(w!)" "|" "DONE(d!)" "CANCELLED(c@)"))
    org-M-RET-may-split-line nil
    org-capture-templates '(
     ("l" "Link" entry (file+headline "~/safe/org/bookmarks.org" "Links")
