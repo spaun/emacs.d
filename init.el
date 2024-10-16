@@ -57,6 +57,8 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 
+(pinentry-start 'quiet)
+
 ;; UX
 (defalias 'yes-or-no-p 'y-or-n-p)
 
