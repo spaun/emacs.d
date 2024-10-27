@@ -3,6 +3,22 @@
 ;;; Commentary:
 
 ;;; Code:
+(require 'use-package)
+
+(use-package use-package
+  :no-require
+  :custom
+  (use-package-imenu-support t)
+  :config
+  (require 'package)
+  (setq
+   package-archives
+   '(("gnu" . "https://elpa.gnu.org/packages/")
+     ("melpa" . "https://melpa.org/packages/"))
+   use-package-always-ensure t)
+  (package-initialize)
+  (unless package-archive-contents
+    (package-refresh-contents)))
 
 (set-language-environment "UTF-8")
 
@@ -57,6 +73,8 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 
+(use-package delight)
+
 (use-package pinentry
   :ensure t
   :config
@@ -76,22 +94,6 @@
   (global-unset-key (kbd (format "M-%d" n))))
 
 ;; Packages
-(eval-when-compile
-  (require 'package)
-  (setq package-archives
-        '(("gnu" . "https://elpa.gnu.org/packages/")
-          ("melpa" . "https://melpa.org/packages/")))
-
-  (package-initialize)
-  (unless package-archive-contents
-    (package-refresh-contents))
-
-  (dolist (p '(delight use-package))
-    (unless (package-installed-p p)
-      (package-install p)))
-
-  (require 'use-package)
-  (setq use-package-always-ensure t))
 
 (use-package autorevert
   :ensure nil
