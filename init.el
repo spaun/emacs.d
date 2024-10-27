@@ -20,58 +20,68 @@
   (unless package-archive-contents
     (package-refresh-contents)))
 
-(set-language-environment "UTF-8")
+(use-package emacs
+  :config
+  (set-language-environment "UTF-8")
+  ;; Forbid tabs by default
+  ;; Use C-q to insert TAB (C-q <tab>)
+  (setq-default
+   y-or-n-p-use-read-key t
+   indent-tabs-mode nil
+   tab-width 4)
+  (defalias 'yes-or-no-p 'y-or-n-p)
+  (setq
+   ;; Backups - set it up early to not be affected by any errors below
+   backup-by-copying nil
+   delete-old-versions t
+   kept-new-versions 6
+   kept-old-versions 2
+   version-control t
+   vc-make-backup-files nil
 
-(setq
- ;; Backups - set it up early to not be affected by any errors below
- backup-by-copying nil
- delete-old-versions t
- kept-new-versions 6
- kept-old-versions 2
- version-control t
- vc-make-backup-files nil
+   font-use-system-font t
+   inhibit-startup-message t
+   initial-scratch-message nil
+   scroll-conservatively 100000
+   scroll-margin 0
 
- font-use-system-font t
- inhibit-startup-message t
- initial-scratch-message nil
- scroll-conservatively 100000
- scroll-margin 0
+   ;; Don't ring on any occasion
+   ring-bell-function 'ignore
+   ;; Increse GC threshold to 200Mb
+   gc-cons-threshold 200000000
+   ;; Real emacs knights don't use shift to mark things
+   shift-select-mode nil
+   ;; Move files to trash when deleting
+   delete-by-moving-to-trash t
+   read-process-output-max (* 1024 1024))
 
- ;; Don't ring on any occasion
- ring-bell-function 'ignore
- ;; Increse GC threshold to 100Mb
- gc-cons-threshold 100000000
- ;; Real emacs knights don't use shift to mark things
- shift-select-mode nil
- ;; Move files to trash when deleting
- delete-by-moving-to-trash t
- server-socket-dir (getenv "XDG_RUNTIME_DIR"))
+  ;; Start maximized
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+  (add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
+  (add-to-list 'default-frame-alist '(horizontal-scroll-bars . nil))
+  (add-to-list 'default-frame-alist '(undecorated . t))
 
-;; Forbid tabs by default
-;; Use C-q to insert TAB (C-q <tab>)
-(setq-default indent-tabs-mode nil)
-;; Default tab width is 4
-(setq-default tab-width 4)
+  (auto-compression-mode t)
+  (column-number-mode 1)
+  (size-indication-mode t)
+  (global-hl-line-mode)
+  (blink-cursor-mode -1)
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
 
-;; Start maximized
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
-(add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
-(add-to-list 'default-frame-alist '(horizontal-scroll-bars . nil))
-(add-to-list 'default-frame-alist '(undecorated . t))
+  ;; Enable the functionality disabled by default
+  (put 'narrow-to-region 'disabled nil)
 
-;; Transparently open compressed files
-(auto-compression-mode t)
-;; Show column number on mode line
-(column-number-mode 1)
-;; Show buffer size on mode line
-(size-indication-mode t)
-;; Highlight current line
-(global-hl-line-mode)
-;; Don't blink the cursor
-(blink-cursor-mode -1)
-;; Unclutter the UI
-(menu-bar-mode -1)
-(tool-bar-mode -1)
+  ;; Show time on the mode line, only in text terminal
+  (display-time-mode (not (display-graphic-p)))
+
+  (dotimes (n 10)
+    (global-unset-key (kbd (format "C-%d" n)))
+    (global-unset-key (kbd (format "M-%d" n)))))
+
+(use-package server
+  :config
+  (setq server-socket-dir (getenv "XDG_RUNTIME_DIR")))
 
 (use-package delight)
 
@@ -79,21 +89,6 @@
   :ensure t
   :config
   (pinentry-start))
-
-;; UX
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-;; Enable the functionality disabled by default
-(put 'narrow-to-region 'disabled nil)
-
-;; Show time on the mode line, only in text terminal
-(display-time-mode (not (display-graphic-p)))
-
-(dotimes (n 10)
-  (global-unset-key (kbd (format "C-%d" n)))
-  (global-unset-key (kbd (format "M-%d" n))))
-
-;; Packages
 
 (use-package autorevert
   :ensure nil
