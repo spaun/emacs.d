@@ -3,20 +3,18 @@
 ;;; Commentary:
 
 ;;; Code:
-(setenv "LSP_USE_PLISTS" "true")
-
 (require 'use-package)
 
 (use-package use-package
   :no-require
   :custom
   (use-package-imenu-support t)
-  :config
-  (require 'package)
-  (setq
-   package-archives
+  (package-native-compile t)
+  (package-archives
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
+  :config
+  (require 'package)
   (package-initialize)
   (unless package-archive-contents
     (package-refresh-contents)))
