@@ -14,8 +14,7 @@
   (setq
    package-archives
    '(("gnu" . "https://elpa.gnu.org/packages/")
-     ("melpa" . "https://melpa.org/packages/"))
-   use-package-always-ensure t)
+     ("melpa" . "https://melpa.org/packages/")))
   (package-initialize)
   (unless package-archive-contents
     (package-refresh-contents)))
@@ -83,7 +82,8 @@
   :config
   (setq server-socket-dir (getenv "XDG_RUNTIME_DIR")))
 
-(use-package delight)
+(use-package delight
+  :ensure t)
 
 (use-package pinentry
   :ensure t
@@ -91,19 +91,17 @@
   (pinentry-start))
 
 (use-package autorevert
-  :ensure nil
   :delight auto-revert-mode)
 
 (use-package abbrev
-  :ensure nil
   :delight)
 
 (use-package subword
-  :ensure nil
   :delight
   :hook (php-mode clojure-mode typescript-mode))
 
 (use-package no-littering
+  :ensure t
   :config
   (add-to-list 'load-path no-littering-etc-directory)
   (setq custom-file
@@ -114,6 +112,7 @@
         (list (cons ".*" (no-littering-expand-var-file-name "backup/")))))
 
 (use-package doom-themes
+  :ensure t
   :config
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
@@ -133,6 +132,7 @@
   (show-paren-mode t))
 
 (use-package whitespace-cleanup-mode
+  :ensure t
   :delight
   :config
   (setq
@@ -142,6 +142,7 @@
   (global-whitespace-cleanup-mode))
 
 (use-package beginend
+  :ensure t
   :delight beginend-global-mode
   :hook
   ((dired-mode . beginend-dired-mode)
@@ -175,7 +176,8 @@
    recentf-auto-cleanup 'never)
   (recentf-mode 1))
 
-(use-package wgrep)
+(use-package wgrep
+  :ensure t)
 
 (use-package tab-bar
   :bind
@@ -201,6 +203,7 @@
   (init-workspaces))
 
 (use-package swiper
+  :ensure t
   :delight ivy-mode
   :demand
   :config
@@ -219,15 +222,19 @@
    ("C-r" . counsel-minibuffer-history)))
 
 (use-package counsel
+  :ensure t
   :after swiper)
 
 (use-package ivy-hydra
+  :ensure t
   :after ivy-mode)
 
 (use-package amx
+  :ensure t
   :after ivy-mode)
 
 (use-package lsp-mode
+  :ensure t
   :delight
   :commands lsp-deferred
   :init
@@ -237,6 +244,7 @@
   (define-key lsp-mode-map (kbd lsp-keymap-prefix) lsp-command-map))
 
 (use-package lsp-ui
+  :ensure t
   :after lsp-mode
   :config
   (defvar lsp-intelephense-storage-path)
@@ -251,6 +259,7 @@
    lsp-intelephense-stubs ["apache" "bcmath" "bz2" "calendar" "com_dotnet" "Core" "ctype" "curl" "date" "dba" "dom" "enchant" "exif" "fileinfo" "filter" "fpm" "ftp" "gd" "hash" "iconv" "imap" "interbase" "intl" "json" "ldap" "libxml" "mbstring" "mcrypt" "meta" "mssql" "mysqli" "oci8" "odbc" "openssl" "pcntl" "pcre" "PDO" "pdo_ibm" "pdo_mysql" "pdo_pgsql" "pdo_sqlite" "pgsql" "Phar" "posix" "pspell" "readline" "recode" "Reflection" "regex" "session" "shmop" "SimpleXML" "snmp" "soap" "sockets" "sodium" "SPL" "sqlite3" "standard" "superglobals" "sybase" "sysvmsg" "sysvsem" "sysvshm" "tidy" "tokenizer" "wddx" "xml" "xmlreader" "xmlrpc" "xmlwriter" "Zend OPcache" "zip" "zlib" "redis"]))
 
 (use-package multiple-cursors
+  :ensure t
   :config
   (require 'mc-hide-unmatched-lines-mode)
   (setq
@@ -259,6 +268,7 @@
          ("C-S-<mouse-1>" . mc/add-cursor-on-click)))
 
 (use-package ace-window
+  :ensure t
   :config (setq
            aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
            aw-dispatch-always t
@@ -267,14 +277,17 @@
   :bind ("M-o" . ace-window))
 
 (use-package avy
+  :ensure t
   :config
   (setq avy-background t))
 
 (use-package dumb-jump
+  :ensure t
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
 (use-package flycheck
+  :ensure t
   :demand
   :delight
   :config
@@ -286,6 +299,7 @@
   (global-flycheck-mode))
 
 (use-package company
+  :ensure t
   :demand
   :delight
   :bind (("C-." . company-complete)
@@ -296,6 +310,7 @@
   (after-init . global-company-mode))
 
 (use-package rainbow-delimiters
+  :ensure t
   :hook
   (prog-mode . rainbow-delimiters-mode))
 
@@ -318,6 +333,7 @@
     (spaceline-emacs-theme 'my-project-name)))
 
 (use-package undo-tree
+  :ensure t
   :demand
   :delight
   :custom
@@ -327,6 +343,7 @@
   (after-init . global-undo-tree-mode))
 
 (use-package web-mode
+  :ensure t
   :mode (("\\.html\\.twig" . web-mode)
          ("\\.html" . web-mode)
          ("\\.vue" . (lambda () (web-mode) (lsp))))
@@ -340,12 +357,15 @@
         web-mode-enable-auto-quoting t))
 
 (use-package evil
+  :ensure t
   :commands evil-mode)
 
 (use-package ag
+  :ensure t
   :commands ag)
 
 (use-package magit
+  :ensure t
   :config
   (unbind-key "M-1" magit-mode-map)
   (unbind-key "M-2" magit-mode-map)
@@ -354,6 +374,7 @@
 
 ;; TODO Possibly replace with smartparens
 (use-package paredit
+  :ensure t
   :delight
   :commands paredit-mode
   :hook ((emacs-lisp-mode clojure-mode) . paredit-mode)
@@ -371,20 +392,18 @@
   :hook (prog-mode . eldoc-mode))
 
 (use-package yasnippet
+  :ensure t
   :delight yas-minor-mode
   :hook (prog-mode . yas-minor-mode)
   :mode (("yasnippet/snippets" . snippet-mode)
          ("\\.yasnippet$" . snippet-mode)))
 
 (use-package smart-semicolon
+  :ensure t
   :delight
   :hook ((php-mode typescript-mode) . smart-semicolon-mode))
 
-(use-package yaml-mode
-  :mode ("\\.yml" . yaml-mode))
-
 (use-package python
-  :ensure nil
   :mode ("\\.py" . python-mode)
   :interpreter ("ipython" . python-mode)
   :config
@@ -392,8 +411,8 @@
         python-shell-interpreter "ipython"
         python-shell-interpreter-args "-i --simple-prompt"))
 
-;;; npm i -g intelephense
 (use-package php-mode
+  :ensure t
   :mode ("\\.php" . php-mode)
   :hook (php-mode . lsp-deferred)
   :config
@@ -401,22 +420,28 @@
         php-mode-coding-style 'psr2))
 
 (use-package typescript-mode
+  :ensure t
   :mode (("\\.ts" . typescript-mode)
          ("\\.tsx" . typescript-mode))
   :hook (typescript-mode . lsp-deferred))
 
-(use-package toml-mode)
+(use-package toml-mode
+  :ensure t)
 
 (use-package rust-mode
+  :ensure t
   :hook (rust-mode . lsp-deferred))
 
 (use-package cargo
+  :ensure t
   :hook (rust-mode . cargo-minor-mode))
 
 (use-package flycheck-rust
+  :ensure t
   :hook (flycheck-mode . flycheck-rust-setup))
 
 (use-package go-mode
+  :ensure t
   :hook ((go-mode . lsp-deferred)
          (before-save . (lambda ()
                           (interactive)
@@ -426,11 +451,14 @@
   :bind (:map go-mode-map
               ("<f9>" . (lambda () (interactive) (compile "go run .")))))
 
-(use-package haskell-mode)
+(use-package haskell-mode
+  :ensure t)
 
-(use-package clojure-mode)
+(use-package clojure-mode
+  :ensure t)
 
-(use-package htmlize)
+(use-package htmlize
+  :ensure t)
 
 (use-package org
   :pin gnu
@@ -503,21 +531,26 @@
          :map org-mode-map
          ("C-M-i" . completion-at-point)))
 
-(use-package pass)
+(use-package pass
+  :ensure t)
 
 (use-package auth-source-pass
+  :ensure t
   :pin melpa
   :config
   (auth-source-pass-enable))
 
-(use-package link-hint)
+(use-package link-hint
+  :ensure t)
 
 (use-package move-text
+  :ensure t
   :bind
   ("M-p" . move-text-up)
   ("M-n" . move-text-down))
 
 (use-package orgalist
+  :ensure t
   :commands orgalist-mode)
 
 (load custom-file)
@@ -526,6 +559,7 @@
   (require p nil t))
 
 (use-package hydra
+  :ensure t
   :bind (("M-i" . hydra-file/body)
          ("M-j" . hydra-jump/body))
   :config
