@@ -3,6 +3,8 @@
 ;;; Commentary:
 
 ;;; Code:
+(setenv "LSP_USE_PLISTS" "true")
+
 (require 'use-package)
 
 (use-package use-package
@@ -234,10 +236,9 @@
   :delight
   :commands lsp-deferred
   :init
-  (setq
-   lsp-keymap-prefix "M-q")
-  :config
-  (define-key lsp-mode-map (kbd lsp-keymap-prefix) lsp-command-map))
+  (setq lsp-use-plists t)
+  :custom
+  (lsp-keymap-prefix "M-q"))
 
 (use-package lsp-ui
   :ensure t
