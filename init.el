@@ -225,10 +225,6 @@
   :ensure t
   :after swiper)
 
-(use-package ivy-hydra
-  :ensure t
-  :after ivy-mode)
-
 (use-package amx
   :ensure t
   :after ivy-mode)
@@ -557,61 +553,6 @@
 
 (dolist  (p '(my-mu4e my-transmission my-functions))
   (require p nil t))
-
-(use-package hydra
-  :ensure t
-  :bind (("M-i" . hydra-file/body)
-         ("M-j" . hydra-jump/body))
-  :config
-  (defhydra hydra-file (:color teal :hint nil)
-    "
-%s(concat \"Project: \" (if (project-current) (project-root (project-current)) \"none\"))
-  _f_: project file  _a_: project ag   _b_: project buffer   _g_: magit status
-  _F_: file          _A_: ag           _B_: buffer           _G_: magit dispatch
-  _d_: project dir   _r_: project rg   _p_: switch project   _h_: magit file dispatch
-  _D_: dir           _R_: rg
-"
-    ("f" project-find-file)
-    ("F" counsel-find-file)
-    ("d" project-find-dir)
-    ("D" counsel-dired)
-    ("a" my-project-ag)
-    ("A" counsel-ag)
-    ("r" my-project-rg)
-    ("R" counsel-rg)
-    ("b" project-switch-to-buffer)
-    ("B" counsel-switch-buffer)
-    ("g" magit-status)
-    ("G" magit-dispatch)
-    ("h" magit-file-dispatch)
-    ("p" project-switch-project)
-    ("q" nil "cancel" :color blue))
-
-  (defhydra hydra-jump (:color teal :hint nil)
-    "
-Jump to:
-  _l_: line    _e_: errors        _g_: link
-  _s_: char    _j_: next error    _G_: copy link
-  _d_: doc     _k_: prev error
-"
-    ("e" (lambda () (interactive)
-           (flycheck-list-errors)
-           (set-frame-selected-window
-            nil
-            (get-buffer-window flycheck-error-list-buffer))))
-    ("j" flycheck-next-error :color amaranth)
-    ("k" flycheck-previous-error :color amaranth)
-    ("d" (lambda () (interactive)
-           (with-selected-window
-               (frame-selected-window)
-             (if (bound-and-true-p lsp-mode)
-                 (lsp-describe-thing-at-point)
-               (describe-symbol (symbol-at-point))))))
-    ("s" avy-goto-char-timer)
-    ("l" goto-line)
-    ("g" link-hint-open-link)
-    ("G" link-hint-copy-link)
-    ("q" nil "cancel" :color blue)))
 
 (defun my-project-ag (&optional options)
   "Search the current project with ag.
