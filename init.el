@@ -57,7 +57,10 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 
-(pinentry-start 'quiet)
+(use-package pinentry
+  :ensure t
+  :config
+  (pinentry-start))
 
 ;; UX
 (defalias 'yes-or-no-p 'y-or-n-p)
