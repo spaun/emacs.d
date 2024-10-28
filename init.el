@@ -44,6 +44,8 @@
    scroll-conservatively 100000
    scroll-margin 0
 
+   enable-recursive-minibuffers t
+
    ;; Don't ring on any occasion
    ring-bell-function 'ignore
    ;; Increse GC threshold to 200Mb
@@ -131,6 +133,115 @@
   (setq show-paren-delay 0)
   (show-paren-mode t))
 
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
+
+(use-package marginalia
+  :ensure t
+  :bind (:map minibuffer-local-map
+              ("M-A" . marginalia-cycle))
+  :init
+  (marginalia-mode))
+
+(use-package vertico
+  :ensure t
+  :init
+  (vertico-mode))
+
+(use-package consult
+  :ensure t
+  :bind
+  (("C-c M-x" . consult-mode-command)
+   ("C-c h" . consult-history)
+   ("C-c k" . consult-kmacro)
+   ("C-c m" . consult-man)
+   ("C-c i" . consult-info)
+   ([remap Info-search] . consult-info)
+   ("C-x M-:" . consult-complex-command)
+   ("C-x b" . consult-buffer)
+   ("C-x 4 b" . consult-buffer-other-window)
+   ("C-x 5 b" . consult-buffer-other-frame)
+   ("C-x t b" . consult-buffer-other-tab)
+   ("C-x r b" . consult-bookmark)
+   ("C-x p b" . consult-project-buffer)
+   ("M-#" . consult-register-load)
+   ("M-'" . consult-register-store)
+   ("C-M-#" . consult-register)
+   ("M-y" . consult-yank-pop)
+   ("M-g e" . consult-compile-error)
+   ("M-g f" . consult-flycheck) ;; Alternative: consult-flymake
+   ("M-g g" . consult-goto-line)
+   ("M-g M-g" . consult-goto-line)
+   ("M-g o" . consult-outline) ;; Alternative: consult-org-heading
+   ("M-g m" . consult-mark)
+   ("M-g k" . consult-global-mark)
+   ("M-g i" . consult-imenu)
+   ("M-g I" . consult-imenu-multi)
+   ("M-s d" . consult-find) ;; Alternative: consult-fd
+   ("M-s r" . consult-ripgrep)
+   ("M-s l" . consult-line)
+   ("M-s L" . consult-line-multi)
+   ("M-s k" . consult-keep-lines)
+   ("M-s u" . consult-focus-lines)
+   ("M-s e" . consult-isearch-history)
+   :map isearch-mode-map
+   ("M-e" . consult-isearch-history)
+   ("M-s e" . consult-isearch-history)
+   ("M-s l" . consult-line)
+   ("M-s L" . consult-line-multi)
+   :map minibuffer-local-map
+   ("M-s" . consult-history)
+   ("M-r" . consult-history))
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+  :init
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+  (advice-add #'register-preview :override #'consult-register-window)
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+  :config
+  (consult-customize
+   consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-file-register
+   consult--source-recent-file consult--source-project-recent-file
+   :preview-key '(:debounce 0.4 any))
+  (setq consult-narrow-key "<")
+)
+
+(use-package consult-flycheck
+  :ensure t)
+
+(use-package embark
+  :ensure t
+  :bind
+  (("C-." . embark-act)
+   ("M-." . embark-dwim)
+   ("C-h B" . embark-bindings))
+  :init
+  (setq
+   prefix-help-command #'embark-prefix-help-command
+   embark-help-key "?"
+   embark-indicators
+   '(embark-minimal-indicator
+     embark-highlight-indicator
+     embark-isearch-highlight-indicator))
+  :config
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
+
+(use-package embark-consult
+  :ensure t
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+
 (use-package whitespace-cleanup-mode
   :ensure t
   :delight
@@ -202,33 +313,6 @@
     (tab-bar-select-tab "ws1"))
   (init-workspaces))
 
-(use-package swiper
-  :ensure t
-  :delight ivy-mode
-  :demand
-  :config
-  (defvar ivy-use-virtual-buffers nil)
-  (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t
-        enable-recursive-minibuffers t)
-  :bind
-  (("C-s" . swiper-isearch)
-   ("C-r" . swiper-isearch-backward)
-   ("C-c C-r" . ivy-resume)
-   ("M-x" . counsel-M-x)
-   ("C-x C-f" . counsel-find-file)
-   ("M-y" . counsel-yank-pop)
-   :map minibuffer-local-map
-   ("C-r" . counsel-minibuffer-history)))
-
-(use-package counsel
-  :ensure t
-  :after swiper)
-
-(use-package amx
-  :ensure t
-  :after ivy-mode)
-
 (use-package lsp-mode
   :ensure t
   :delight
@@ -283,15 +367,14 @@
 
 (use-package flycheck
   :ensure t
-  :demand
   :delight
+  :init
+  (global-flycheck-mode)
   :config
-  (declare-function global-flycheck-mode "ext:flycheck")
   (setq
    flycheck-check-syntax-automatically '(save idle-change mode-enabled)
    flycheck-emacs-lisp-load-path 'inherit
-   flycheck-checker-error-threshold nil)
-  (global-flycheck-mode))
+   flycheck-checker-error-threshold nil))
 
 (use-package company
   :ensure t
@@ -379,7 +462,9 @@
          ("M-R" . paredit-raise-sexp)
          ("M-)" . paredit-wrap-round)
          ("M-]" . paredit-wrap-square)
-         ("M-}" . paredit-wrap-curly)))
+         ("M-}" . paredit-wrap-curly))
+  :config
+  (keymap-unset paredit-mode-map "M-s" 'remove))
 
 (use-package eldoc
   :delight
@@ -552,66 +637,6 @@
 
 (dolist  (p '(my-mu4e my-transmission my-functions))
   (require p nil t))
-
-(defun my-project-ag (&optional options)
-  "Search the current project with ag.
-
-OPTIONS, if non-nil, is a string containing additional options to
-be passed to ag. It is read from the minibuffer if the function
-is called with a `\\[universal-argument]' prefix argument."
-  (interactive)
-  (if (project-current t)
-    (let* ((ivy--actions-list (copy-sequence ivy--actions-list))
-           (ignored "")
-           (counsel-ag-base-command
-            (let ((counsel-ag-command counsel-ag-base-command))
-              (counsel--format-ag-command ignored "%s"))))
-
-      ;; `counsel-ag' requires a single `\\[universal-argument]'
-      ;; prefix argument to prompt for initial directory and a double
-      ;; `\\[universal-argument]' prefix argument to prompt for extra
-      ;; options. But since the initial directory is always the
-      ;; project root here, prompt for ortpions with a single
-      ;; `\\[universal-argument]' prefix argument prefix argument as
-      ;; well.
-      (when (= (prefix-numeric-value current-prefix-arg) 4)
-        (setq current-prefix-arg '(16)))
-      (counsel-ag nil (project-root (project-current))
-                  options
-                  (concat (car (if (listp counsel-ag-base-command)
-                                   counsel-ag-base-command
-                                 (split-string counsel-ag-base-command)))
-                          ": ")))))
-
-(defun my-project-rg (&optional options)
-  "Search the current project with rg.
-
-OPTIONS, if non-nil, is a string containing additional options to
-be passed to rg. It is read from the minibuffer if the function
-is called with a `\\[universal-argument]' prefix argument."
-  (interactive)
-  (if (project-current t)
-    (let* ((ivy--actions-list (copy-sequence ivy--actions-list))
-           (ignored "")
-           (counsel-rg-base-command
-            (let ((counsel-ag-command counsel-rg-base-command))
-              (counsel--format-ag-command ignored "%s"))))
-      ;; `counsel-rg' requires a single `\\[universal-argument]'
-      ;; prefix argument to prompt for initial directory and a double
-      ;; `\\[universal-argument]' prefix argument to prompt for extra
-      ;; options. But since the initial directory is always the
-      ;; project root here, prompt for ortpions with a single
-      ;; `\\[universal-argument]' prefix argument prefix argument as
-      ;; well.
-      (when (= (prefix-numeric-value current-prefix-arg) 4)
-        (setq current-prefix-arg '(16)))
-      (counsel-rg nil
-                  (project-root (project-current))
-                  options
-                  (concat (car (if (listp counsel-rg-base-command)
-                                   counsel-rg-base-command
-                                 (split-string counsel-rg-base-command)))
-                          ": ")))))
 
 (provide 'init)
 
