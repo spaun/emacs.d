@@ -98,7 +98,7 @@
 
 (use-package subword
   :delight
-  :hook (php-mode clojure-mode typescript-mode))
+  :hook prog-mode)
 
 (use-package no-littering
   :ensure t
