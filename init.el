@@ -264,6 +264,10 @@
   :custom-face
   (corfu-popupinfo ((t :height 1.0))))
 
+(use-package cape
+  :ensure t
+  :bind ("C-c p" . cape-prefix-map))
+
 (use-package whitespace-cleanup-mode
   :ensure t
   :delight
