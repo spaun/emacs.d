@@ -317,26 +317,26 @@
   :ensure t)
 
 (use-package tab-bar
+  :commands init-workspaces
   :bind
-  (("M-1" . (lambda () (interactive) (tab-bar-select-tab-by-name "ws1")))
-   ("M-2" . (lambda () (interactive) (tab-bar-select-tab-by-name "ws2")))
-   ("M-3" . (lambda () (interactive) (tab-bar-select-tab-by-name "mail")))
-   ("M-4" . (lambda () (interactive) (tab-bar-select-tab-by-name "org"))))
+  (("M-1" . (lambda () (interactive) (tab-bar-select-tab)))
+   ("M-2" . (lambda () (interactive) (tab-bar-select-tab)))
+   ("M-3" . (lambda () (interactive) (tab-bar-select-tab)))
+   ("M-4" . (lambda () (interactive) (tab-bar-select-tab)))
+   ("M-5" . (lambda () (interactive) (tab-bar-select-tab)))
+   ("M-6" . (lambda () (interactive) (tab-bar-select-tab))))
   :custom
   (tab-bar-new-button-show nil)
   (tab-bar-close-button-show nil)
+  (tab-bar-new-tab-to 'rightmost)
   :config
   (add-hook 'after-make-frame-functions  #'(lambda (frame) (select-frame frame) (init-workspaces)))
   (defun init-workspaces ()
     (tab-bar-mode)
-    (tab-bar-rename-tab "ws1")
-    (tab-bar-new-tab)
-    (tab-bar-rename-tab "ws2")
-    (tab-bar-new-tab)
     (tab-bar-rename-tab "mail")
     (tab-bar-new-tab)
     (tab-bar-rename-tab "org")
-    (tab-bar-select-tab "ws1"))
+    (tab-bar-select-tab 1))
   (init-workspaces))
 
 (use-package lsp-mode
