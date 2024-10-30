@@ -242,6 +242,28 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
+(use-package corfu
+  :ensure t
+  :custom
+  (corfu-auto t)             ; Enable auto completion
+  (corfu-auto-prefix 2)      ; Minimum length of prefix for completion
+  (corfu-auto-delay 0)       ; No delay for completion
+  (corfu-popupinfo-delay '(0.5 . 0.2)) ; Automatically update info popup after that numver of seconds
+  (corfu-preview-current 'insert)      ; insert previewed candidate
+  (corfu-preselect 'prompt)
+  (corfu-on-exact-match nil)    ; Don't auto expand tempel snippets
+  :init
+  (global-corfu-mode))
+
+(use-package corfu-popupinfo
+  :after corfu
+  :bind (:map corfu-popupinfo-map
+         ("M-p" . corfu-popupinfo-scroll-down)
+         ("M-n" . corfu-popupinfo-scroll-up))
+  :hook (corfu-mode . corfu-popupinfo-mode)
+  :custom-face
+  (corfu-popupinfo ((t :height 1.0))))
+
 (use-package whitespace-cleanup-mode
   :ensure t
   :delight
@@ -317,6 +339,8 @@
   :ensure t
   :delight
   :commands lsp-deferred
+  :custom
+  (lsp-completion-provider :none) ; delegate to Corfu
   :init
   (setq lsp-use-plists t)
   :custom
@@ -375,17 +399,6 @@
    flycheck-check-syntax-automatically '(save idle-change mode-enabled)
    flycheck-emacs-lisp-load-path 'inherit
    flycheck-checker-error-threshold nil))
-
-(use-package company
-  :ensure t
-  :demand
-  :delight
-  :bind (("C-." . company-complete)
-         :map company-active-map
-         ("C-n" . company-select-next-or-abort)
-         ("C-p" . company-select-previous-or-abort))
-  :hook
-  (after-init . global-company-mode))
 
 (use-package rainbow-delimiters
   :ensure t
