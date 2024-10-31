@@ -268,6 +268,34 @@
   :ensure t
   :bind ("C-c p" . cape-prefix-map))
 
+(use-package treesit
+  :config
+  (setq
+   treesit-language-source-alist
+   '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+     (c "https://github.com/tree-sitter/tree-sitter-c")
+     (cmake "https://github.com/uyha/tree-sitter-cmake")
+     (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+     (css . ("https://github.com/tree-sitter/tree-sitter-css" "v0.20.0"))
+     (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+     (go "https://github.com/tree-sitter/tree-sitter-go" "v0.20.0")
+     (html . ("https://github.com/tree-sitter/tree-sitter-html" "v0.20.1"))
+     (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "v0.21.2" "src"))
+     (json . ("https://github.com/tree-sitter/tree-sitter-json" "v0.20.2"))
+     (make "https://github.com/alemuller/tree-sitter-make")
+     (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+     (php "https://github.com/tree-sitter/tree-sitter-php" "v0.23.3" "php/src" )
+     (python . ("https://github.com/tree-sitter/tree-sitter-python" "v0.20.4"))
+     (toml "https://github.com/tree-sitter/tree-sitter-toml")
+     (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "v0.20.3" "tsx/src"))
+     (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "v0.20.3" "typescript/src"))
+     (yaml . ("https://github.com/ikatyang/tree-sitter-yaml" "v0.5.0"))))
+  (mapc
+   (lambda (lang)
+     (unless (treesit-language-available-p lang)
+       (treesit-install-language-grammar lang)))
+   (mapcar #'car treesit-language-source-alist)))
+
 (use-package whitespace-cleanup-mode
   :ensure t
   :delight
@@ -498,7 +526,7 @@
 (use-package smart-semicolon
   :ensure t
   :delight
-  :hook ((php-mode typescript-mode) . smart-semicolon-mode))
+  :hook ((php-ts-mode typescript-ts-mode) . smart-semicolon-mode))
 
 (use-package python
   :mode ("\\.py" . python-mode)
@@ -508,19 +536,22 @@
         python-shell-interpreter "ipython"
         python-shell-interpreter-args "-i --simple-prompt"))
 
-(use-package php-mode
-  :ensure t
-  :mode ("\\.php" . php-mode)
-  :hook (php-mode . lsp-deferred)
-  :config
-  (setq php-mode-template-compatibility nil
-        php-mode-coding-style 'psr2))
+(use-package php-ts-mode
+  ;; :ensure t
+  ;; :vc (:url "https://github.com/emacs-php/php-ts-mode")
+  :mode "\\.php\\'"
+  :hook (php-ts-mode . lsp-deferred))
 
-(use-package typescript-mode
-  :ensure t
-  :mode (("\\.ts" . typescript-mode)
-         ("\\.tsx" . typescript-mode))
-  :hook (typescript-mode . lsp-deferred))
+(use-package typescript-ts-mode
+  :mode (("\\.cjs\\'" . typescript-ts-mode)
+         ("\\.js\\'" . typescript-ts-mode)
+         ("\\.jsx\\'" . tsx-ts-mode)
+         ("\\.mjs\\'" . typescript-ts-mode)
+         ("\\.mts\\'" . typescript-ts-mode)
+         ("\\.ts\\'" . typescript-ts-mode)
+         ("\\.tsx\\'" . tsx-ts-mode))
+  :hook ((typescript-ts-mode . lsp-deferred)
+         (tsx-ts-mode . lsp-deferred)))
 
 (use-package toml-mode
   :ensure t)

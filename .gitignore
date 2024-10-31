@@ -1,2 +1,4 @@
 /etc/
 /var/
+/tree-sitter/
+/eln-cache/
