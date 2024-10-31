@@ -399,6 +399,14 @@
    lsp-intelephense-storage-path (no-littering-expand-var-file-name "intelephense")
    lsp-intelephense-stubs ["apache" "bcmath" "bz2" "calendar" "com_dotnet" "Core" "ctype" "curl" "date" "dba" "dom" "enchant" "exif" "fileinfo" "filter" "fpm" "ftp" "gd" "hash" "iconv" "imap" "interbase" "intl" "json" "ldap" "libxml" "mbstring" "mcrypt" "meta" "mssql" "mysqli" "oci8" "odbc" "openssl" "pcntl" "pcre" "PDO" "pdo_ibm" "pdo_mysql" "pdo_pgsql" "pdo_sqlite" "pgsql" "Phar" "posix" "pspell" "readline" "recode" "Reflection" "regex" "session" "shmop" "SimpleXML" "snmp" "soap" "sockets" "sodium" "SPL" "sqlite3" "standard" "superglobals" "sybase" "sysvmsg" "sysvsem" "sysvshm" "tidy" "tokenizer" "wddx" "xml" "xmlreader" "xmlrpc" "xmlwriter" "Zend OPcache" "zip" "zlib" "redis"]))
 
+(use-package apheleia
+  :ensure t
+  :delight
+  :init
+  (apheleia-global-mode +1)
+  :config
+  (setf (alist-get 'php-ts-mode apheleia-mode-alist) 'phpcs))
+
 (use-package multiple-cursors
   :ensure t
   :config
@@ -576,14 +584,10 @@
 
 (use-package go-mode
   :ensure t
-  :hook ((go-mode . lsp-deferred)
-         (before-save . (lambda ()
-                          (interactive)
-                          (when (derived-mode-p 'go-mode)
-                            (lsp-organize-imports)
-                            (lsp-format-buffer)))))
-  :bind (:map go-mode-map
-              ("<f9>" . (lambda () (interactive) (compile "go run .")))))
+  :hook (go-mode . lsp-deferred)
+  :bind
+  (:map go-mode-map
+        ("<f9>" . (lambda () (interactive) (compile "go run .")))))
 
 (use-package haskell-mode
   :ensure t)
