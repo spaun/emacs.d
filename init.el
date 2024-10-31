@@ -216,8 +216,7 @@
    consult--source-bookmark consult--source-file-register
    consult--source-recent-file consult--source-project-recent-file
    :preview-key '(:debounce 0.4 any))
-  (setq consult-narrow-key "<")
-)
+  (setq consult-narrow-key "<"))
 
 (use-package consult-flycheck
   :ensure t)
@@ -264,8 +263,8 @@
 (use-package corfu-popupinfo
   :after corfu
   :bind (:map corfu-popupinfo-map
-         ("M-p" . corfu-popupinfo-scroll-down)
-         ("M-n" . corfu-popupinfo-scroll-up))
+              ("M-p" . corfu-popupinfo-scroll-down)
+              ("M-n" . corfu-popupinfo-scroll-up))
   :hook (corfu-mode . corfu-popupinfo-mode)
   :custom-face
   (corfu-popupinfo ((t :height 1.0))))
@@ -476,7 +475,7 @@
   :custom
   (undo-tree-visualizer-diff t)
   (undo-tree-history-directory-alist (list (cons "." (no-littering-expand-var-file-name "undo"))))
-:hook
+  :hook
   (after-init . global-undo-tree-mode))
 
 (use-package web-mode
@@ -629,16 +628,15 @@
    org-log-into-drawer "LOGBOOK"
    org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i!)" "PAUSED(p@)" "WAIT(w!)" "|" "DONE(d!)" "CANCELLED(c@)"))
    org-M-RET-may-split-line nil
-   org-capture-templates '(
-    ("l" "Link" entry (file+headline "~/safe/org/bookmarks.org" "Links")
-     "* %a\n  %?\n  Added: %U")
-    ("L" "Link with quote" entry (file+headline "~/safe/org/bookmarks.org" "Links")
-     "* %a\n  #+BEGIN_QUOTE\n  %i\n  #+END_QUOTE\n  %?\n  Added: %U")))
+   org-capture-templates '(("l" "Link" entry (file+headline "~/safe/org/bookmarks.org" "Links")
+                            "* %a\n  %?\n  Added: %U")
+                           ("L" "Link with quote" entry (file+headline "~/safe/org/bookmarks.org" "Links")
+                            "* %a\n  #+BEGIN_QUOTE\n  %i\n  #+END_QUOTE\n  %?\n  Added: %U")))
   (org-link-set-parameters
    "thunderlink"
    :follow (lambda (path)
-     "Opens an email in Thunderbird with ThunderLink."
-     (start-process "myname" nil "thunderbird" "-thunderlink" (concat "thunderlink:" path))))
+             "Opens an email in Thunderbird with ThunderLink."
+             (start-process "myname" nil "thunderbird" "-thunderlink" (concat "thunderlink:" path))))
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((shell . t)
@@ -658,11 +656,11 @@
   :config
   (org-roam-db-autosync-enable)
   (add-to-list 'display-buffer-alist
-             '("\\*org-roam\\*"
-               (display-buffer-in-direction)
-               (direction . right)
-               (window-width . 0.33)
-               (window-height . fit-window-to-buffer)))
+               '("\\*org-roam\\*"
+                 (display-buffer-in-direction)
+                 (direction . right)
+                 (window-width . 0.33)
+                 (window-height . fit-window-to-buffer)))
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
          ("C-c n i" . org-roam-node-insert)
