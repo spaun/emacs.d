@@ -135,8 +135,14 @@
 
 (use-package orderless
   :ensure t
+  :hook
+  (lsp-completion-mode . (lambda ()
+                           (setf
+                            (alist-get 'lsp-capf completion-category-defaults nil 'remove)
+                            nil)))
   :custom
   (completion-styles '(orderless basic))
+  (completion-category-defaults nil)
   (completion-category-overrides '((file (styles basic partial-completion)))))
 
 (use-package marginalia
