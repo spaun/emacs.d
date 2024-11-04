@@ -284,6 +284,7 @@
      (css . ("https://github.com/tree-sitter/tree-sitter-css" "v0.20.0"))
      (elisp "https://github.com/Wilfred/tree-sitter-elisp")
      (go "https://github.com/tree-sitter/tree-sitter-go" "v0.20.0")
+     (gomod "https://github.com/camdencheek/tree-sitter-go-mod")
      (html . ("https://github.com/tree-sitter/tree-sitter-html" "v0.20.1"))
      (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "v0.21.2" "src"))
      (json . ("https://github.com/tree-sitter/tree-sitter-json" "v0.20.2"))
@@ -404,7 +405,8 @@
   :init
   (apheleia-global-mode +1)
   :config
-  (setf (alist-get 'php-ts-mode apheleia-mode-alist) 'phpcs))
+  (setf (alist-get 'php-ts-mode apheleia-mode-alist) 'phpcs)
+  (setf (alist-get 'go-ts-mode apheleia-mode-alist) 'goimports))
 
 (use-package multiple-cursors
   :ensure t
@@ -581,12 +583,24 @@
   :ensure t
   :hook (flycheck-mode . flycheck-rust-setup))
 
-(use-package go-mode
-  :ensure t
-  :hook (go-mode . lsp-deferred)
+(use-package go-ts-mode
+  :mode "\\.go\\'"
+  :hook (go-ts-mode . lsp-deferred)
+  :custom
+  (go-ts-mode-indent-offset 4)
+  :config
+  (setq-local intent-tabs-mode nil)
   :bind
-  (:map go-mode-map
+  (:map go-ts-mode-map
         ("<f9>" . (lambda () (interactive) (compile "go run .")))))
+
+(use-package go-mod-ts-mode
+  :mode "/go\\.mod\\'"
+  :config
+  (setq-local intent-tabs-mode nil))
+
+(use-package go-add-tags
+  :ensure t)
 
 (use-package haskell-mode
   :ensure t)
