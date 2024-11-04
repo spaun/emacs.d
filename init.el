@@ -70,6 +70,15 @@
   (menu-bar-mode -1)
   (tool-bar-mode -1)
 
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (replace-regexp-in-string
+                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                   crm-separator)
+                  (car args))
+          (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
   ;; Enable the functionality disabled by default
   (put 'narrow-to-region 'disabled nil)
 
