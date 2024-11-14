@@ -20,6 +20,10 @@
     (package-refresh-contents)))
 
 (use-package emacs
+  :defines
+  crm-separator
+  :functions
+  crm-indicator
   :config
   (set-language-environment "UTF-8")
   ;; Forbid tabs by default
@@ -168,6 +172,9 @@
 
 (use-package consult
   :ensure t
+  :defines
+  xref-show-xrefs-function
+  xref-show-definitions-function
   :bind
   (("C-c M-x" . consult-mode-command)
    ("C-c h" . consult-history)
@@ -389,24 +396,25 @@
   :custom
   (lsp-completion-provider :none) ; delegate to Corfu
   :init
-  (setq lsp-use-plists t)
-  :custom
-  (lsp-keymap-prefix "M-q"))
+  (setq
+   lsp-use-plists t
+   lsp-file-watch-threshold 20000))
+
+(use-package lsp-php
+  :after lsp-mode
+  :config
+  (setq
+   lsp-intelephense-completion-fully-qualify-global-constants-and-functions t
+   lsp-intelephense-storage-path (no-littering-expand-var-file-name "intelephense")
+   lsp-intelephense-stubs (vconcat lsp-intelephense-stubs ["redis"])))
 
 (use-package lsp-ui
   :ensure t
   :after lsp-mode
   :config
-  (defvar lsp-intelephense-storage-path)
-  (defvar lsp-intelephense-stubs)
-  (defvar lsp-intelephense-completion-fully-qualify-global-constants-and-functions)
   (setq
    lsp-ui-sideline-enable nil
-   lsp-ui-doc-enable nil
-   lsp-file-watch-threshold 20000
-   lsp-intelephense-completion-fully-qualify-global-constants-and-functions t
-   lsp-intelephense-storage-path (no-littering-expand-var-file-name "intelephense")
-   lsp-intelephense-stubs ["apache" "bcmath" "bz2" "calendar" "com_dotnet" "Core" "ctype" "curl" "date" "dba" "dom" "enchant" "exif" "fileinfo" "filter" "fpm" "ftp" "gd" "hash" "iconv" "imap" "interbase" "intl" "json" "ldap" "libxml" "mbstring" "mcrypt" "meta" "mssql" "mysqli" "oci8" "odbc" "openssl" "pcntl" "pcre" "PDO" "pdo_ibm" "pdo_mysql" "pdo_pgsql" "pdo_sqlite" "pgsql" "Phar" "posix" "pspell" "readline" "recode" "Reflection" "regex" "session" "shmop" "SimpleXML" "snmp" "soap" "sockets" "sodium" "SPL" "sqlite3" "standard" "superglobals" "sybase" "sysvmsg" "sysvsem" "sysvshm" "tidy" "tokenizer" "wddx" "xml" "xmlreader" "xmlrpc" "xmlwriter" "Zend OPcache" "zip" "zlib" "redis"]))
+   lsp-ui-doc-enable nil))
 
 (use-package apheleia
   :ensure t
@@ -464,6 +472,7 @@
 ;; TODO Configure this
 (use-package spaceline-config
   :ensure spaceline
+  :functions spaceline-toggle-my-project-name-on
   :config
   (spaceline-define-segment my-project-name
     "The current project name"
@@ -622,17 +631,17 @@
 
 (use-package org
   :pin gnu
+  :defines
+  org-html-doctype
+  org-html-htmlize-output-type
+  org-crypt-disable-auto-save
+  org-crypt-key
+  org-capture-templates
+
   :config
   (require 'epa-file)
   (require 'org-crypt)
   (require 'org-protocol)
-  (declare-function org-link-set-parameters "ext:org")
-  (declare-function org-crypt-use-before-save-magic "ext:org-crypt")
-  (defvar org-html-doctype)
-  (defvar org-html-htmlize-output-type)
-  (defvar org-crypt-disable-auto-save)
-  (defvar org-crypt-key)
-  (defvar org-capture-templates)
   (epa-file-enable)
   (org-crypt-use-before-save-magic)
   (setq
@@ -655,11 +664,6 @@
                             "* %a\n  %?\n  Added: %U")
                            ("L" "Link with quote" entry (file+headline "~/safe/org/bookmarks.org" "Links")
                             "* %a\n  #+BEGIN_QUOTE\n  %i\n  #+END_QUOTE\n  %?\n  Added: %U")))
-  (org-link-set-parameters
-   "thunderlink"
-   :follow (lambda (path)
-             "Opens an email in Thunderbird with ThunderLink."
-             (start-process "myname" nil "thunderbird" "-thunderlink" (concat "thunderlink:" path))))
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((shell . t)
