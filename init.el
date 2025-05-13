@@ -469,25 +469,6 @@
   :hook
   (prog-mode . rainbow-delimiters-mode))
 
-;; TODO Configure this
-(use-package spaceline-config
-  :ensure spaceline
-  :functions spaceline-toggle-my-project-name-on
-  :config
-  (spaceline-define-segment my-project-name
-    "The current project name"
-    (propertize (format "<%s>"
-                        (or (and (boundp 'project-name) project-name)
-                            (when-let ((project-current (project-current)))
-                              (file-name-nondirectory (directory-file-name (project-root project-current))))
-                            "-")) 'face 'bold))
-  (setq powerline-default-separator 'wave)
-  (set-face-attribute 'mode-line nil :box nil)
-  (set-face-attribute 'mode-line-inactive nil :box nil)
-  (spaceline-toggle-my-project-name-on)
-  (when (fboundp 'spaceline-emacs-theme)
-    (spaceline-emacs-theme 'my-project-name)))
-
 (use-package undo-tree
   :ensure t
   :demand
