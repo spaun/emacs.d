@@ -619,6 +619,7 @@
 
 (use-package org
   :pin gnu
+  :demand
   :defines
   org-html-doctype
   org-html-htmlize-output-type
@@ -665,10 +666,13 @@
 
 (use-package org-roam
   :ensure t
+  :demand
+  :after org
   :custom
   (org-roam-directory "~/safe/org-roam")
   (org-roam-completion-everywhere t)
   :config
+  (require 'org-roam-protocol)
   (org-roam-db-autosync-enable)
   (add-to-list 'display-buffer-alist
                '("\\*org-roam\\*"
