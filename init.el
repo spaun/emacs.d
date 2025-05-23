@@ -423,6 +423,11 @@
    lsp-ui-sideline-enable nil
    lsp-ui-doc-enable nil))
 
+(use-package lsp-tailwindcss
+  :after lsp-mode
+  :init
+  (setq lsp-tailwindcss-add-on-mode t))
+
 (use-package apheleia
   :ensure t
   :delight
