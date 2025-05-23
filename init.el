@@ -66,6 +66,9 @@
   (add-to-list 'default-frame-alist '(horizontal-scroll-bars . nil))
   (add-to-list 'default-frame-alist '(undecorated . t))
 
+  (add-to-list 'major-mode-remap-alist '(php-mode . php-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(go-mode . go-ts-mode))
+
   (auto-compression-mode t)
   (column-number-mode 1)
   (size-indication-mode t)
@@ -73,6 +76,10 @@
   (blink-cursor-mode -1)
   (menu-bar-mode -1)
   (tool-bar-mode -1)
+
+  ;; fix syntax highlighting in org-mode's code blocks
+  (defun go-mode () (go-ts-mode))
+  (defun php-mode () (php-ts-mode))
 
   (defun crm-indicator (args)
     (cons (format "[CRM%s] %s"
