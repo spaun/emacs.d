@@ -209,7 +209,7 @@
    ("M-g k" . consult-global-mark)
    ("M-g i" . consult-imenu)
    ("M-g I" . consult-imenu-multi)
-   ("M-s d" . consult-find) ;; Alternative: consult-fd
+   ("M-s d" . consult-fd) ;; Alternative consult-find
    ("M-s r" . consult-ripgrep)
    ("M-s l" . consult-line)
    ("M-s L" . consult-line-multi)
@@ -224,11 +224,10 @@
    :map minibuffer-local-map
    ("M-s" . consult-history)
    ("M-r" . consult-history))
-  :hook (completion-list-mode . consult-preview-at-point-mode)
   :init
+  (advice-add #'register-preview :override #'consult-register-window)
   (setq register-preview-delay 0.5
         register-preview-function #'consult-register-format)
-  (advice-add #'register-preview :override #'consult-register-window)
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref)
   :config
@@ -236,8 +235,8 @@
    consult-theme :preview-key '(:debounce 0.2 any)
    consult-ripgrep consult-git-grep consult-grep
    consult-bookmark consult-recent-file consult-xref
-   consult--source-bookmark consult--source-file-register
-   consult--source-recent-file consult--source-project-recent-file
+   consult-source-bookmark consult-source-file-register
+   consult-source-recent-file consult-source-project-recent-file
    :preview-key '(:debounce 0.4 any))
   (setq consult-narrow-key "<"))
 
