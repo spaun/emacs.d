@@ -639,6 +639,7 @@
   (epa-file-enable)
   (org-crypt-use-before-save-magic)
   (setq
+   org-format-latex-options (plist-put org-format-latex-options :scale 2.0)
    org-tags-exclude-from-inheritance '("crypt")
    org-crypt-disable-auto-save 'encrypt
    org-crypt-key (getenv "CRYPTO_KEY")
