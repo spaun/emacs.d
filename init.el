@@ -265,9 +265,7 @@
                  (window-parameters (mode-line-format . none)))))
 
 (use-package embark-consult
-  :ensure t
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
+  :ensure t)
 
 (use-package corfu
   :ensure t
@@ -680,7 +678,7 @@
   (org-roam-completion-everywhere t)
   :config
   (require 'org-roam-protocol)
-  (org-roam-db-autosync-enable)
+  (org-roam-db-autosync-mode)
   (add-to-list 'display-buffer-alist
                '("\\*org-roam\\*"
                  (display-buffer-in-direction)
