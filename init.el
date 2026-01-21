@@ -407,6 +407,7 @@
    lsp-file-watch-threshold 20000))
 
 (use-package lsp-php
+  :ensure t
   :after lsp-mode
   :config
   (setq
@@ -423,6 +424,7 @@
    lsp-ui-doc-enable nil))
 
 (use-package lsp-tailwindcss
+  :ensure t
   :after lsp-mode
   :init
   (setq lsp-tailwindcss-add-on-mode t))
