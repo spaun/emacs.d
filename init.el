@@ -405,7 +405,6 @@
    lsp-file-watch-threshold 20000))
 
 (use-package lsp-php
-  :ensure t
   :after lsp-mode
   :config
   (setq
