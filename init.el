@@ -153,6 +153,10 @@
   (setq show-paren-delay 0)
   (show-paren-mode t))
 
+(use-package eat
+  :ensure t
+  :vc (:url "https://github.com/kephale/emacs-eat.git"))
+
 (use-package orderless
   :ensure t
   :hook
