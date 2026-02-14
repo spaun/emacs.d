@@ -528,7 +528,7 @@
   :ensure t
   :delight
   :commands paredit-mode
-  :hook ((emacs-lisp-mode clojure-mode) . paredit-mode)
+  :hook ((emacs-lisp-mode) . paredit-mode)
   :bind (("C-M-u" . paredit-backward-up)
          ("C-M-n" . paredit-forward-up)
          ("M-S" . paredit-splice-sexp-killing-backward)
@@ -584,18 +584,6 @@
 (use-package toml-mode
   :ensure t)
 
-(use-package rust-mode
-  :ensure t
-  :hook (rust-mode . lsp-deferred))
-
-(use-package cargo
-  :ensure t
-  :hook (rust-mode . cargo-minor-mode))
-
-(use-package flycheck-rust
-  :ensure t
-  :hook (flycheck-mode . flycheck-rust-setup))
-
 (use-package go-ts-mode
   :mode "\\.go\\'"
   :hook (go-ts-mode . lsp-deferred)
@@ -613,12 +601,6 @@
   (setq-local intent-tabs-mode nil))
 
 (use-package go-add-tags
-  :ensure t)
-
-(use-package haskell-mode
-  :ensure t)
-
-(use-package clojure-mode
   :ensure t)
 
 (use-package htmlize
