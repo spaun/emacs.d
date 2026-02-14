@@ -161,6 +161,9 @@
   :ensure t
   :vc (:url "https://github.com/kephale/emacs-eat.git"))
 
+(use-package vterm
+  :ensure t)
+
 (use-package orderless
   :ensure t
   :hook
@@ -481,6 +484,15 @@
    flycheck-check-syntax-automatically '(save idle-change mode-enabled)
    flycheck-emacs-lisp-load-path 'inherit
    flycheck-checker-error-threshold nil))
+
+(use-package claude-code-ide
+  :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
+  :ensure t
+  :bind ("C-c C-'" . claude-code-ide-menu)
+  :config
+  (claude-code-ide-emacs-tools-setup)
+  (setq
+   claude-code-ide-terminal-backend 'vterm))
 
 (use-package rainbow-delimiters
   :ensure t
