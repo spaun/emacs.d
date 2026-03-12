@@ -638,6 +638,7 @@
   (require 'org-protocol)
   (epa-file-enable)
   (org-crypt-use-before-save-magic)
+  (auto-revert-mode 1)
   (setq
    org-format-latex-options (plist-put org-format-latex-options :scale 2.0)
    org-tags-exclude-from-inheritance '("crypt")
@@ -679,7 +680,8 @@
   (org-roam-completion-everywhere t)
   :config
   (require 'org-roam-protocol)
-  (org-roam-db-autosync-mode)
+  (org-roam-db-autosync-mode -1)
+  (auto-revert-mode 1)
   (add-to-list 'display-buffer-alist
                '("\\*org-roam\\*"
                  (display-buffer-in-direction)
