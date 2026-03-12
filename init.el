@@ -129,9 +129,9 @@
   (setq custom-file
         (no-littering-expand-etc-file-name "custom.el")
         auto-save-file-name-transforms
-        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))
+        `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" ,(no-littering-expand-var-file-name "auto-save/\\2") t))
         backup-directory-alist
-        (list (cons ".*" (no-littering-expand-var-file-name "backup/")))))
+        (list (cons "." (no-littering-expand-var-file-name "backup/")))))
 
 (use-package doom-themes
   :ensure t
