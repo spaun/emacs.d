@@ -10,6 +10,7 @@
   :custom
   (use-package-imenu-support t)
   (package-native-compile t)
+  (native-comp-async-report-warnings-errors nil)
   (package-archives
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
@@ -32,7 +33,7 @@
    y-or-n-p-use-read-key t
    indent-tabs-mode nil
    tab-width 4)
-  (defalias 'yes-or-no-p 'y-or-n-p)
+  (setq use-short-answers t)
   (setq
    ;; Backups - set it up early to not be affected by any errors below
    backup-by-copying nil
@@ -52,7 +53,7 @@
 
    ;; Don't ring on any occasion
    ring-bell-function 'ignore
-   ;; Increse GC threshold to 200Mb
+   ;; Increase GC threshold to 200Mb
    gc-cons-threshold 200000000
    ;; Real emacs knights don't use shift to mark things
    shift-select-mode nil
@@ -513,7 +514,10 @@
   :ensure t
   :mode (("\\.html\\.twig" . web-mode)
          ("\\.html" . web-mode)
-         ("\\.vue" . (lambda () (web-mode) (lsp))))
+         ("\\.vue" . web-mode))
+  :hook (web-mode . (lambda ()
+                      (when (string-suffix-p ".vue" (or buffer-file-name ""))
+                        (lsp-deferred))))
   :config
   (setq web-mode-markup-indent-offset 2
         web-mode-css-indent-offset 2
@@ -602,19 +606,17 @@
 
 (use-package go-ts-mode
   :mode "\\.go\\'"
-  :hook (go-ts-mode . lsp-deferred)
+  :hook ((go-ts-mode . lsp-deferred)
+         (go-ts-mode . (lambda () (setq-local indent-tabs-mode nil))))
   :custom
   (go-ts-mode-indent-offset 4)
-  :config
-  (setq-local intent-tabs-mode nil)
   :bind
   (:map go-ts-mode-map
         ("<f9>" . (lambda () (interactive) (compile "go run .")))))
 
 (use-package go-mod-ts-mode
   :mode "/go\\.mod\\'"
-  :config
-  (setq-local intent-tabs-mode nil))
+  :hook (go-mod-ts-mode . (lambda () (setq-local indent-tabs-mode nil))))
 
 (use-package go-add-tags
   :ensure t)
