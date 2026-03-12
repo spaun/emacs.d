@@ -470,11 +470,6 @@
   :config
   (setq avy-background t))
 
-(use-package dumb-jump
-  :ensure t
-  :config
-  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
-
 (use-package flycheck
   :ensure t
   :delight
@@ -530,10 +525,6 @@
 (use-package evil
   :ensure t
   :commands evil-mode)
-
-(use-package ag
-  :ensure t
-  :commands ag)
 
 (use-package magit
   :ensure t
