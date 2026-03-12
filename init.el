@@ -133,6 +133,10 @@
         backup-directory-alist
         (list (cons "." (no-littering-expand-var-file-name "backup/")))))
 
+(use-package tramp
+  :custom
+  (tramp-histfile-override (no-littering-expand-var-file-name "tramp_history")))
+
 (use-package doom-themes
   :ensure t
   :config
