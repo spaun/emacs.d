@@ -33,9 +33,10 @@
    y-or-n-p-use-read-key t
    indent-tabs-mode nil
    tab-width 4)
-  (setq use-short-answers t)
   (setq
+   split-width-threshold 150
    ;; Backups - set it up early to not be affected by any errors below
+   use-short-answers t
    backup-by-copying nil
    delete-old-versions t
    kept-new-versions 6
