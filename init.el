@@ -27,6 +27,8 @@
   crm-indicator
   :config
   (set-language-environment "UTF-8")
+  (set-input-method "russian-computer")
+  (deactivate-input-method)
   ;; Forbid tabs by default
   ;; Use C-q to insert TAB (C-q <tab>)
   (setq-default
