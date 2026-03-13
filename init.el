@@ -73,10 +73,10 @@
   (add-to-list 'major-mode-remap-alist '(php-mode . php-ts-mode))
   (add-to-list 'major-mode-remap-alist '(go-mode . go-ts-mode))
 
-  (auto-compression-mode t)
+  (auto-compression-mode 1)
   (column-number-mode 1)
-  (size-indication-mode t)
-  (global-hl-line-mode)
+  (size-indication-mode 1)
+  (global-hl-line-mode 1)
   (blink-cursor-mode -1)
   (menu-bar-mode -1)
   (tool-bar-mode -1)
@@ -98,7 +98,7 @@
   (put 'narrow-to-region 'disabled nil)
 
   ;; Show time on the mode line, only in text terminal
-  (display-time-mode (not (display-graphic-p)))
+  (display-time-mode (if (display-graphic-p) -1 1))
 
   (dotimes (n 10)
     (global-unset-key (kbd (format "C-%d" n)))
@@ -159,7 +159,7 @@
 (use-package paren
   :config
   (setq show-paren-delay 0)
-  (show-paren-mode t))
+  (show-paren-mode 1))
 
 (use-package eat
   :ensure t
