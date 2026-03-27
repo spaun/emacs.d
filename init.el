@@ -414,10 +414,8 @@
   :commands lsp-deferred
   :custom
   (lsp-completion-provider :none) ; delegate to Corfu
-  :init
-  (setq
-   lsp-use-plists t
-   lsp-file-watch-threshold 20000))
+  (lsp-keymap-prefix "M-j")
+  (lsp-file-watch-threshold 20000))
 
 (use-package lsp-php
   :after lsp-mode
