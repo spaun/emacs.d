@@ -492,6 +492,10 @@
   (setq
    claude-code-ide-terminal-backend 'vterm))
 
+(use-package mise
+  :ensure t
+  :hook (after-init . #'global-mise-mode))
+
 (use-package rainbow-delimiters
   :ensure t
   :hook
