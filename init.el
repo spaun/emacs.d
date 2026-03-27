@@ -423,7 +423,8 @@
   (setq
    lsp-intelephense-completion-fully-qualify-global-constants-and-functions t
    lsp-intelephense-storage-path (no-littering-expand-var-file-name "intelephense")
-   lsp-intelephense-stubs (vconcat lsp-intelephense-stubs ["redis"])))
+   lsp-intelephense-stubs (vconcat lsp-intelephense-stubs ["random" "redis" "xhprof"])
+   lsp-intelephense-files-associations (vconcat lsp-intelephense-files-associations ["*.inc"])))
 
 (use-package lsp-ui
   :ensure t
