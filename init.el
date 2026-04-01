@@ -29,16 +29,19 @@
   (default-input-method "russian-computer")
   :config
   (deactivate-input-method)
-  ;; Forbid tabs by default
-  ;; Use C-q to insert TAB (C-q <tab>)
   (setq-default
    y-or-n-p-use-read-key t
+   ;; Forbid tabs by default
+   ;; Use C-q to insert TAB (C-q <tab>)
    indent-tabs-mode nil
    tab-width 4)
   (setq
    split-width-threshold 150
-   ;; Backups - set it up early to not be affected by any errors below
    use-short-answers t
+
+   create-lockfiles nil
+
+   ;; Backups - set it up early to not be affected by any errors below
    backup-by-copying nil
    delete-old-versions t
    kept-new-versions 6
@@ -130,12 +133,9 @@
   :ensure t
   :config
   (add-to-list 'load-path no-littering-etc-directory)
+  (no-littering-theme-backups)
   (setq custom-file
-        (no-littering-expand-etc-file-name "custom.el")
-        auto-save-file-name-transforms
-        `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" ,(no-littering-expand-var-file-name "auto-save/\\2") t))
-        backup-directory-alist
-        (list (cons "." (no-littering-expand-var-file-name "backup/")))))
+        (no-littering-expand-etc-file-name "custom.el")))
 
 (use-package tramp
   :custom
