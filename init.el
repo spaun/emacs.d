@@ -645,9 +645,9 @@
    org-crypt-key (getenv "CRYPTO_KEY")
    org-src-fontify-natively t
    org-return-follows-link t
-   org-agenda-files '("~/safe/org/tasks.org")
+   org-agenda-files '("~/Store/org/tasks.org")
    org-archive-location (format-time-string
-                         "~/safe/org/archive/tasks-%Y.org::* Finished Tasks"
+                         "~/Store/org/archive/tasks-%Y.org::* Finished Tasks"
                          (current-time))
    org-link-frame-setup '((file . find-file))
    org-html-doctype "html5"
@@ -655,9 +655,9 @@
    org-log-into-drawer "LOGBOOK"
    org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i!)" "PAUSED(p@)" "WAIT(w!)" "|" "DONE(d!)" "CANCELLED(c@)"))
    org-M-RET-may-split-line nil
-   org-capture-templates '(("l" "Link" entry (file+headline "~/safe/org/bookmarks.org" "Links")
+   org-capture-templates '(("l" "Link" entry (file+headline "~/Store/org/bookmarks.org" "Links")
                             "* %a\n  %?\n  Added: %U")
-                           ("L" "Link with quote" entry (file+headline "~/safe/org/bookmarks.org" "Links")
+                           ("L" "Link with quote" entry (file+headline "~/Store/org/bookmarks.org" "Links")
                             "* %a\n  #+BEGIN_QUOTE\n  %i\n  #+END_QUOTE\n  %?\n  Added: %U")))
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -675,7 +675,7 @@
   :demand
   :after org
   :custom
-  (org-roam-directory "~/safe/org-roam")
+  (org-roam-directory "~/Store/org-roam")
   (org-roam-completion-everywhere t)
   :config
   (require 'org-roam-protocol)
