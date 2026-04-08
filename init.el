@@ -107,10 +107,6 @@
     (global-unset-key (kbd (format "C-%d" n)))
     (global-unset-key (kbd (format "M-%d" n)))))
 
-(use-package server
-  :config
-  (setq server-socket-dir (getenv "XDG_RUNTIME_DIR")))
-
 (use-package delight
   :ensure t)
 
