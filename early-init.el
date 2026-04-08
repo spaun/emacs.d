@@ -6,7 +6,11 @@
 (setenv "LSP_USE_PLISTS" "true")
 
 (setq
- package-user-dir (expand-file-name "var/elpa" user-emacs-directory))
+ package-user-dir (expand-file-name
+                   "emacs/site-lisp/elpa"
+                   (or
+                    (getenv "XDG_DATA_HOME")
+                    "~/.local/share")))
 
 (provide 'early-init)
 ;;; early-init.el ends here
