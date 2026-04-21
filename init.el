@@ -137,13 +137,11 @@
   :custom
   (tramp-histfile-override (no-littering-expand-var-file-name "tramp_history")))
 
-(use-package doom-themes
+(use-package catppuccin-theme
   :ensure t
   :config
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t)
-  (load-theme 'doom-one-light t)
-  (doom-themes-org-config))
+  (load-theme 'catppuccin :no-confirm))
+
 
 (use-package flyspell
   :delight
