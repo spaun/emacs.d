@@ -142,6 +142,12 @@
   :config
   (load-theme 'catppuccin :no-confirm))
 
+(use-package appearance
+  :ensure t
+  :vc (:url "https://github.com/spaun/emacs-light-dark-theme-switcher.git")
+  :custom
+  (appearance-light-theme (lambda () (setq catppuccin-flavor 'latte) 'catppuccin))
+  (appearance-dark-theme (lambda () (setq catppuccin-flavor 'mocha) 'catppuccin)))
 
 (use-package flyspell
   :delight
