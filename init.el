@@ -311,6 +311,9 @@
 (use-package treesit
   :config
   (setq
+   treesit-extra-load-path
+   (list
+    (expand-file-name "emacs/treesit" (or (getenv "XDG_DATA_HOME") "~/.local/share")))
    treesit-language-source-alist
    '((bash "https://github.com/tree-sitter/tree-sitter-bash")
      (c "https://github.com/tree-sitter/tree-sitter-c")
@@ -334,7 +337,9 @@
   (mapc
    (lambda (lang)
      (unless (treesit-language-available-p lang)
-       (treesit-install-language-grammar lang)))
+       (treesit-install-language-grammar
+        lang
+        (car treesit-extra-load-path))))
    (mapcar #'car treesit-language-source-alist)))
 
 (use-package whitespace-cleanup-mode
