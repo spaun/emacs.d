@@ -311,9 +311,6 @@
 (use-package treesit
   :config
   (setq
-   treesit-extra-load-path
-   (list
-    (expand-file-name "emacs/treesit" (or (getenv "XDG_DATA_HOME") "~/.local/share")))
    treesit-language-source-alist
    '((bash "https://github.com/tree-sitter/tree-sitter-bash")
      (c "https://github.com/tree-sitter/tree-sitter-c")
