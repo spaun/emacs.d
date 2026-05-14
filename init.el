@@ -143,6 +143,9 @@
   :config
   (load-theme 'catppuccin :no-confirm))
 
+(use-package nerd-icons
+  :ensure t)
+
 (use-package appearance
   :ensure t
   :vc (:url "https://github.com/spaun/emacs-light-dark-theme-switcher.git")
@@ -341,6 +344,54 @@
         lang
         (car treesit-extra-load-path))))
    (mapcar #'car treesit-language-source-alist)))
+
+(use-package dired
+  :config
+  (setq dired-listing-switches
+        "-l --almost-all --human-readable --group-directories-first --no-group")
+  (put 'dired-find-alternate-file 'disabled nil))
+
+(use-package dirvish
+  :ensure t
+  :defines
+  dirvish-side-attributes
+  :init
+  (dirvish-override-dired-mode)
+  :config
+  (dirvish-peek-mode)
+  (dirvish-side-follow-mode)
+  (setq dirvish-mode-line-format
+        '(:left (sort symlink) :right (omit yank index)))
+  (setq dirvish-attributes           ; The order *MATTERS* for some attributes
+        '(vc-state subtree-state nerd-icons collapse git-msg file-time file-size)
+        dirvish-side-attributes
+        '(vc-state nerd-icons collapse file-size))
+  ;; open large directory (over 20000 files) asynchronously with `fd' command
+  (setq dirvish-large-directory-threshold 20000)
+  :bind
+  (("C-c f" . dirvish-side)
+   ("C-x d" . dirvish-dwim)
+   :map dirvish-mode-map
+   ("h"   . dired-up-directory)
+   ("l"   . dired-find-file)
+   ("j"   . dired-next-line)
+   ("k"   . dired-previous-line)
+   ("?"   . dirvish-dispatch)
+   ("a"   . dirvish-setup-menu)        ; [a]ttributes settings:`t' toggles mtime, `f' toggles fullframe, etc.
+   ("f"   . dirvish-file-info-menu)    ; [f]ile info
+   ("O"   . dirvish-quick-access)      ; [O]pen `dirvish-quick-access-entries'
+   ("s"   . dirvish-quicksort)         ; [s]ort flie list
+   ("r"   . dirvish-history-jump)      ; [r]ecent visited
+   ("L"   . dirvish-ls-switches-menu)  ; [l]s command flags
+   ("v"   . dirvish-vc-menu)           ; [v]ersion control commands
+   ("*"   . dirvish-mark-menu)
+   ("y"   . dirvish-yank-menu)
+   ("N"   . dirvish-narrow)
+   ("^"   . dirvish-history-last)
+   ("TAB" . dirvish-subtree-toggle)
+   ("M-f" . dirvish-history-go-forward)
+   ("M-b" . dirvish-history-go-backward)
+   ("M-e" . dirvish-emerge-menu)))
 
 (use-package whitespace-cleanup-mode
   :ensure t
