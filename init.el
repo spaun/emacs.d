@@ -464,6 +464,16 @@
     (tab-bar-select-tab 1))
   (init-workspaces))
 
+(use-package otpp
+  :ensure t
+  :after project
+  :init
+  ;; Enable `otpp-mode` globally
+  (otpp-mode 1)
+  ;; If you want to advice the commands in `otpp-override-commands`
+  ;; to be run in the current's tab (so, current project's) root directory
+  (otpp-override-mode 1))
+
 (use-package lsp-mode
   :ensure t
   :delight
