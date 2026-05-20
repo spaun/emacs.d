@@ -174,11 +174,6 @@
 
 (use-package orderless
   :ensure t
-  :hook
-  (lsp-completion-mode . (lambda ()
-                           (setf
-                            (alist-get 'lsp-capf completion-category-defaults nil 'remove)
-                            nil)))
   :custom
   (completion-styles '(orderless basic))
   (completion-category-defaults nil)
@@ -220,7 +215,7 @@
    ("C-M-#" . consult-register)
    ("M-y" . consult-yank-pop)
    ("M-g e" . consult-compile-error)
-   ("M-g f" . consult-flycheck) ;; Alternative: consult-flymake
+   ("M-g f" . consult-flymake) ;; Alternative: consult-flycheck
    ("M-g g" . consult-goto-line)
    ("M-g M-g" . consult-goto-line)
    ("M-g o" . consult-outline) ;; Alternative: consult-org-heading
@@ -258,9 +253,6 @@
    consult-source-recent-file consult-source-project-recent-file
    :preview-key '(:debounce 0.4 any))
   (setq consult-narrow-key "<"))
-
-(use-package consult-flycheck
-  :ensure t)
 
 (use-package embark
   :ensure t
@@ -344,6 +336,10 @@
         lang
         (car treesit-extra-load-path))))
    (mapcar #'car treesit-language-source-alist)))
+
+(use-package eglot
+  :defines
+  eglot-server-programs)
 
 (use-package dired
   :config
@@ -474,46 +470,11 @@
   ;; to be run in the current's tab (so, current project's) root directory
   (otpp-override-mode 1))
 
-(use-package lsp-mode
-  :ensure t
-  :delight
-  :commands lsp-deferred
-  :custom
-  (lsp-completion-provider :none) ; delegate to Corfu
-  (lsp-keymap-prefix "M-j")
-  (lsp-file-watch-threshold 20000))
-
-(use-package lsp-php
-  :after lsp-mode
-  :config
-  (setq
-   lsp-intelephense-completion-fully-qualify-global-constants-and-functions t
-   lsp-intelephense-storage-path (no-littering-expand-var-file-name "intelephense")
-   lsp-intelephense-stubs (vconcat lsp-intelephense-stubs ["random" "redis" "xhprof"])
-   lsp-intelephense-files-associations (vconcat lsp-intelephense-files-associations ["*.inc"])))
-
-(use-package lsp-ui
-  :ensure t
-  :after lsp-mode
-  :config
-  (setq
-   lsp-ui-sideline-enable nil
-   lsp-ui-doc-enable nil))
-
-(use-package lsp-tailwindcss
-  :ensure t
-  :after lsp-mode
-  :init
-  (setq lsp-tailwindcss-add-on-mode t))
-
 (use-package apheleia
   :ensure t
   :delight
   :init
-  (apheleia-global-mode +1)
-  :config
-  (setf (alist-get 'php-ts-mode apheleia-mode-alist) 'phpcs)
-  (setf (alist-get 'go-ts-mode apheleia-mode-alist) 'goimports))
+  (apheleia-global-mode +1))
 
 (use-package multiple-cursors
   :ensure t
@@ -537,17 +498,6 @@
   :ensure t
   :config
   (setq avy-background t))
-
-(use-package flycheck
-  :ensure t
-  :delight
-  :init
-  (global-flycheck-mode)
-  :config
-  (setq
-   flycheck-check-syntax-automatically '(save idle-change mode-enabled)
-   flycheck-emacs-lisp-load-path 'inherit
-   flycheck-checker-error-threshold nil))
 
 (use-package claude-code-ide
   :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
@@ -584,7 +534,7 @@
          ("\\.vue" . web-mode))
   :hook (web-mode . (lambda ()
                       (when (string-suffix-p ".vue" (or buffer-file-name ""))
-                        (lsp-deferred))))
+                        (eglot-ensure))))
   :config
   (setq web-mode-markup-indent-offset 2
         web-mode-css-indent-offset 2
@@ -636,8 +586,7 @@
 
 (use-package smart-semicolon
   :ensure t
-  :delight
-  :hook ((php-ts-mode typescript-ts-mode) . smart-semicolon-mode))
+  :delight)
 
 (use-package python
   :mode ("\\.py" . python-mode)
@@ -648,31 +597,53 @@
         python-shell-interpreter-args "-i --simple-prompt"))
 
 (use-package php-ts-mode
-  ;; :ensure t
-  ;; :vc (:url "https://github.com/emacs-php/php-ts-mode")
   :mode "\\.php\\'"
-  :hook (php-ts-mode . lsp-deferred))
+  :hook
+  ((php-ts-mode . eglot-ensure)
+   (php-ts-mode . smart-semicolon-mode)
+   (php-ts-mode . (lambda ()
+                    (setq-local
+                     compile-command
+                     (concat
+                      "phpstan analyse --error-format=raw --no-progress "
+                      (shell-quote-argument
+                       (file-truename
+                        (if-let* ((prj (project-current)))
+                            (project-root prj)
+                          (f-dirname (buffer-file-name))))))))))
+  :config
+  (setf (alist-get 'php-cs-fixer apheleia-formatters)
+        '("php-cs-fixer" "fix" "--no-interaction" "--quiet" "--using-cache=no" file))
+
+  (add-to-list 'compilation-error-regexp-alist 'phpstan)
+  (add-to-list 'compilation-error-regexp-alist-alist
+               '(phpstan "^\\([^:]+\\.php\\):\\([0-9]+\\):" 1 2))
+  (add-to-list 'apheleia-mode-alist '(php-ts-mode . php-cs-fixer))
+  (add-to-list 'eglot-server-programs
+               '(php-ts-mode . ("phpactor" "language-server"))))
 
 (use-package typescript-ts-mode
   :mode (("\\.cjs\\'" . typescript-ts-mode)
-         ("\\.js\\'" . typescript-ts-mode)
+         ("\\.js\\'" . tsx-ts-mode)
          ("\\.jsx\\'" . tsx-ts-mode)
          ("\\.mjs\\'" . typescript-ts-mode)
          ("\\.mts\\'" . typescript-ts-mode)
-         ("\\.ts\\'" . typescript-ts-mode)
+         ("\\.ts\\'" . tsx-ts-mode)
          ("\\.tsx\\'" . tsx-ts-mode))
-  :hook ((typescript-ts-mode . lsp-deferred)
-         (tsx-ts-mode . lsp-deferred)))
+  :hook (((tsx-ts-mode typescript-ts-mode) . eglot-ensure)
+         (tsx-ts-mode typescript-ts-mode) . smart-semicolon-mode))
 
 (use-package toml-mode
   :ensure t)
 
 (use-package go-ts-mode
   :mode "\\.go\\'"
-  :hook ((go-ts-mode . lsp-deferred)
+  :hook ((go-ts-mode . eglot-ensure)
          (go-ts-mode . (lambda () (setq-local indent-tabs-mode nil))))
   :custom
   (go-ts-mode-indent-offset 4)
+  :config
+  (setf (alist-get 'go-ts-mode apheleia-mode-alist) 'goimports)
   :bind
   (:map go-ts-mode-map
         ("<f9>" . (lambda () (interactive) (compile "go run .")))))
