@@ -638,8 +638,7 @@
 
 (use-package go-ts-mode
   :mode "\\.go\\'"
-  :hook ((go-ts-mode . eglot-ensure)
-         (go-ts-mode . (lambda () (setq-local indent-tabs-mode nil))))
+  :hook ((go-ts-mode . eglot-ensure))
   :custom
   (go-ts-mode-indent-offset 4)
   :config
@@ -649,8 +648,7 @@
         ("<f9>" . (lambda () (interactive) (compile "go run .")))))
 
 (use-package go-mod-ts-mode
-  :mode "/go\\.mod\\'"
-  :hook (go-mod-ts-mode . (lambda () (setq-local indent-tabs-mode nil))))
+  :mode "/go\\.mod\\'")
 
 (use-package go-add-tags
   :ensure t)
