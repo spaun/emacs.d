@@ -16,15 +16,10 @@
      ("melpa" . "https://melpa.org/packages/")))
   :config
   (require 'package)
-  (package-initialize)
   (unless package-archive-contents
     (package-refresh-contents)))
 
 (use-package emacs
-  :defines
-  crm-separator
-  :functions
-  crm-indicator
   :custom
   (default-input-method "russian-computer")
   :config
@@ -74,29 +69,12 @@
   (add-to-list 'default-frame-alist '(horizontal-scroll-bars . nil))
   (add-to-list 'default-frame-alist '(undecorated . t))
 
-  (add-to-list 'major-mode-remap-alist '(php-mode . php-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(go-mode . go-ts-mode))
-
-  (auto-compression-mode 1)
   (column-number-mode 1)
   (size-indication-mode 1)
   (global-hl-line-mode 1)
   (blink-cursor-mode -1)
   (menu-bar-mode -1)
   (tool-bar-mode -1)
-
-  ;; fix syntax highlighting in org-mode's code blocks
-  (defun go-mode () (go-ts-mode))
-  (defun php-mode () (php-ts-mode))
-
-  (defun crm-indicator (args)
-    (cons (format "[CRM%s] %s"
-                  (replace-regexp-in-string
-                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
-                   crm-separator)
-                  (car args))
-          (cdr args)))
-  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
   ;; Enable the functionality disabled by default
   (put 'narrow-to-region 'disabled nil)
@@ -307,6 +285,8 @@
 (use-package treesit
   :config
   (setq
+   treesit-enabled-modes t
+   treesit-auto-install-grammar 'ask
    treesit-language-source-alist
    '((bash "https://github.com/tree-sitter/tree-sitter-bash")
      (c "https://github.com/tree-sitter/tree-sitter-c")
@@ -328,14 +308,7 @@
      (toml "https://github.com/tree-sitter/tree-sitter-toml")
      (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "v0.23.2" "tsx/src"))
      (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "v0.23.2" "typescript/src"))
-     (yaml . ("https://github.com/ikatyang/tree-sitter-yaml" "v0.5.0"))))
-  (mapc
-   (lambda (lang)
-     (unless (treesit-language-available-p lang)
-       (treesit-install-language-grammar
-        lang
-        (car treesit-extra-load-path))))
-   (mapcar #'car treesit-language-source-alist)))
+     (yaml . ("https://github.com/ikatyang/tree-sitter-yaml" "v0.5.0")))))
 
 (use-package eglot
   :defines
@@ -366,52 +339,21 @@
   (setq dirvish-large-directory-threshold 20000)
   :bind
   (("C-c f" . dirvish-side)
-   ("C-x d" . dirvish-dwim)
-   :map dirvish-mode-map
-   ("h"   . dired-up-directory)
-   ("l"   . dired-find-file)
-   ("j"   . dired-next-line)
-   ("k"   . dired-previous-line)
-   ("?"   . dirvish-dispatch)
-   ("a"   . my-dired-create-file-or-directory)
-   ("f"   . dirvish-file-info-menu)    ; [f]ile info
-   ("O"   . dirvish-quick-access)      ; [O]pen `dirvish-quick-access-entries'
-   ("s"   . dirvish-quicksort)         ; [s]ort flie list
-   ("r"   . dirvish-history-jump)      ; [r]ecent visited
-   ("L"   . dirvish-ls-switches-menu)  ; [l]s command flags
-   ("v"   . dirvish-vc-menu)           ; [v]ersion control commands
-   ("*"   . dirvish-mark-menu)
-   ("y"   . dirvish-yank-menu)
-   ("N"   . dirvish-narrow)
-   ("^"   . dirvish-history-last)
-   ("TAB" . dirvish-subtree-toggle)
-   ("M-f" . dirvish-history-go-forward)
-   ("M-b" . dirvish-history-go-backward)
-   ("M-e" . dirvish-emerge-menu)))
-
-(use-package whitespace-cleanup-mode
-  :ensure t
-  :delight
-  :config
-  (setq
-   whitespace-style
-   '(trailing lines space-before-tab indentation space-after-tab)
-   whitespace-line-column 100)
-  (global-whitespace-cleanup-mode))
+   ("C-x d" . dirvish-dwim)))
 
 (use-package beginend
   :ensure t
   :delight beginend-global-mode
   :hook
   ((dired-mode . beginend-dired-mode)
-   (prog-mode . beginend-prog-mode)
+   (ibuffer-mode . beginend-ibuffer-mode)
+   (magit-status-mode . beginend-magit-status-mode)
    (message-mode . beginend-message-mode)
-   (mu4e-view-mode . beginend-message-mode)
    (mu4e-compose-mode . beginend-message-mode)
    (mu4e-headers-mode . beginend-mu4e-headers-mode)
+   (mu4e-view-mode . beginend-message-mode)
    (occur-mode . beginend-occur-mode)
-   (ibuffer-mode-hook . beginend-ibuffer-mode)
-   (magit-status-mode . beginend-magit-status-mode))
+   (prog-mode . beginend-prog-mode))
   :config
   (beginend-define-mode mu4e-headers-mode
     (progn
@@ -434,26 +376,18 @@
    recentf-auto-cleanup 'never)
   (recentf-mode 1))
 
-(use-package wgrep
-  :ensure t)
-
 (use-package tab-bar
   :commands init-workspaces
-  :bind
-  (("M-1" . (lambda () (interactive) (tab-bar-select-tab)))
-   ("M-2" . (lambda () (interactive) (tab-bar-select-tab)))
-   ("M-3" . (lambda () (interactive) (tab-bar-select-tab)))
-   ("M-4" . (lambda () (interactive) (tab-bar-select-tab)))
-   ("M-5" . (lambda () (interactive) (tab-bar-select-tab)))
-   ("M-6" . (lambda () (interactive) (tab-bar-select-tab))))
   :custom
+  (tab-bar-select-tab-modifiers '(meta))
+  (tab-bar-define-keys 'numeric)
   (tab-bar-new-button-show nil)
   (tab-bar-close-button-show nil)
   (tab-bar-new-tab-to 'rightmost)
   :config
   (add-hook 'after-make-frame-functions  #'(lambda (frame) (select-frame frame) (init-workspaces)))
   (defun init-workspaces ()
-    (tab-bar-mode)
+    (tab-bar-mode 1)
     (tab-bar-rename-tab "mail")
     (tab-bar-new-tab)
     (tab-bar-rename-tab "org")
@@ -580,11 +514,26 @@
   ;; Dirvish's additional keymap.
   (with-eval-after-load 'dirvish
     (evil-define-key 'normal dirvish-mode-map
-      "a" #'my-dired-create-file-or-directory
-      "h" #'dired-up-directory
-      "l" #'dired-find-file
-      "j" #'dired-next-line
-      "k" #'dired-previous-line)))
+      "a"   #'my-dired-create-file-or-directory
+      "h"   #'dired-up-directory
+      "l"   #'dired-find-file
+      "j"   #'dired-next-line
+      "k"   #'dired-previous-line
+      "?"   #'dirvish-dispatch
+      "f"   #'dirvish-file-info-menu    ; [f]ile info
+      "O"   #'dirvish-quick-access      ; [O]pen `dirvish-quick-access-entries'
+      "s"   #'dirvish-quicksort         ; [s]ort flie list
+      "r"   #'dirvish-history-jump      ; [r]ecent visited
+      "L"   #'dirvish-ls-switches-menu  ; [l]s command flags
+      "v"   #'dirvish-vc-menu           ; [v]ersion control commands
+      "*"   #'dirvish-mark-menu
+      "y"   #'dirvish-yank-menu
+      "N"   #'dirvish-narrow
+      "^"   #'dirvish-history-last
+      "TAB" #'dirvish-subtree-toggle
+      "M-f" #'dirvish-history-go-forward
+      "M-b" #'dirvish-history-go-backward
+      "M-e" #'dirvish-emerge-menu)))
 
 (use-package magit
   :ensure t
@@ -672,14 +621,14 @@
   :hook (((tsx-ts-mode typescript-ts-mode) . eglot-ensure)
          ((tsx-ts-mode typescript-ts-mode) . smart-semicolon-mode)))
 
-(use-package toml-mode
-  :ensure t)
+(use-package toml-ts-mode
+  :mode "\\.toml\\'")
 
 (use-package go-ts-mode
   :mode "\\.go\\'"
   :hook ((go-ts-mode . eglot-ensure))
   :custom
-  (go-ts-mode-indent-offset 4)
+  (go-ts-indent-offset 4)
   :config
   (setf (alist-get 'go-ts-mode apheleia-mode-alist) 'goimports)
   :bind
@@ -712,6 +661,8 @@
   (epa-file-enable)
   (org-crypt-use-before-save-magic)
   (auto-revert-mode 1)
+  (setf (alist-get "go" org-src-lang-modes nil nil #'equal) 'go-ts
+        (alist-get "php" org-src-lang-modes nil nil #'equal) 'php-ts)
   (setq
    org-format-latex-options (plist-put org-format-latex-options :scale 2.0)
    org-tags-exclude-from-inheritance '("crypt")
@@ -771,8 +722,6 @@
   :ensure t)
 
 (use-package auth-source-pass
-  :ensure t
-  :pin melpa
   :config
   (auth-source-pass-enable))
 
