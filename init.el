@@ -536,7 +536,19 @@
 
 (use-package evil
   :ensure t
+  :custom
+  (evil-undo-system 'undo-redo)
+  :init
+  (setq evil-want-integration t
+        evil-want-keybinding nil
+        evil-undo-system 'undo-redo)
   :commands evil-mode)
+
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
 
 (use-package magit
   :ensure t
