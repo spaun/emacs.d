@@ -621,7 +621,7 @@
          ("\\.ts\\'" . tsx-ts-mode)
          ("\\.tsx\\'" . tsx-ts-mode))
   :hook (((tsx-ts-mode typescript-ts-mode) . eglot-ensure)
-         (tsx-ts-mode typescript-ts-mode) . smart-semicolon-mode))
+         ((tsx-ts-mode typescript-ts-mode) . smart-semicolon-mode)))
 
 (use-package toml-mode
   :ensure t)
