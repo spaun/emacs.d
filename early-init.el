@@ -3,8 +3,6 @@
 ;;; Commentary:
 
 ;;; Code:
-(setenv "LSP_USE_PLISTS" "true")
-
 (require 'xdg)
 
 (startup-redirect-eln-cache
