@@ -373,7 +373,7 @@
    ("j"   . dired-next-line)
    ("k"   . dired-previous-line)
    ("?"   . dirvish-dispatch)
-   ("a"   . dirvish-setup-menu)        ; [a]ttributes settings:`t' toggles mtime, `f' toggles fullframe, etc.
+   ("a"   . my-dired-create-file-or-directory)
    ("f"   . dirvish-file-info-menu)    ; [f]ile info
    ("O"   . dirvish-quick-access)      ; [O]pen `dirvish-quick-access-entries'
    ("s"   . dirvish-quicksort)         ; [s]ort flie list
@@ -534,6 +534,24 @@
         web-mode-enable-auto-closing t
         web-mode-enable-auto-quoting t))
 
+(defun my-dired-create-file-or-directory (name)
+  "Create an empty file NAME, or a directory if NAME ends with a slash.
+ Parent directories are created as needed. Existing paths are not overwritten."
+  (interactive
+   (list (read-file-name
+          "Create file or directory (trailing / for directory): "
+          default-directory)))
+  (let ((directory-p (directory-name-p name))
+        (path (expand-file-name name default-directory)))
+    (when (file-exists-p path)
+      (user-error "%s already exists" path))
+    (if directory-p
+        (make-directory path t)
+      (make-directory (file-name-directory path) t)
+      (write-region "" nil path nil nil nil 'excl))
+    (revert-buffer)
+    (dired-goto-file path)))
+
 (use-package evil
   :ensure t
   :custom
@@ -542,13 +560,31 @@
   (setq evil-want-integration t
         evil-want-keybinding nil
         evil-undo-system 'undo-redo)
-  :commands evil-mode)
+  :config
+  (evil-mode 1))
 
 (use-package evil-collection
   :after evil
   :ensure t
   :config
-  (evil-collection-init))
+  (evil-collection-init)
+  ;; Regular Dired buffers.
+  (with-eval-after-load 'dired
+    (evil-define-key 'normal dired-mode-map
+      "a" #'my-dired-create-file-or-directory
+      "h" #'dired-up-directory
+      "l" #'dired-find-file
+      "j" #'dired-next-line
+      "k" #'dired-previous-line))
+
+  ;; Dirvish's additional keymap.
+  (with-eval-after-load 'dirvish
+    (evil-define-key 'normal dirvish-mode-map
+      "a" #'my-dired-create-file-or-directory
+      "h" #'dired-up-directory
+      "l" #'dired-find-file
+      "j" #'dired-next-line
+      "k" #'dired-previous-line)))
 
 (use-package magit
   :ensure t
@@ -559,6 +595,7 @@
   (unbind-key "M-4" magit-mode-map))
 
 ;; TODO Possibly replace with smartparens
+
 (use-package paredit
   :ensure t
   :delight
