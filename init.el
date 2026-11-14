@@ -517,16 +517,6 @@
   :hook
   (prog-mode . rainbow-delimiters-mode))
 
-(use-package undo-tree
-  :ensure t
-  :demand
-  :delight
-  :custom
-  (undo-tree-visualizer-diff t)
-  (undo-tree-history-directory-alist (list (cons "." (no-littering-expand-var-file-name "undo"))))
-  :hook
-  (after-init . global-undo-tree-mode))
-
 (use-package web-mode
   :ensure t
   :mode (("\\.html\\.twig" . web-mode)
