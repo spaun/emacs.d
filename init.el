@@ -13,7 +13,8 @@
   (native-comp-async-report-warnings-errors nil)
   (package-archives
    '(("gnu" . "https://elpa.gnu.org/packages/")
-     ("melpa" . "https://melpa.org/packages/")))
+     ("melpa" . "https://melpa.org/packages/")
+     ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
   :config
   (require 'package)
   (unless package-archive-contents
