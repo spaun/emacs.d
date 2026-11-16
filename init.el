@@ -317,7 +317,7 @@
 (use-package dired
   :config
   (setq dired-listing-switches
-        "-l --almost-all --human-readable --group-directories-first --no-group")
+        "-lv --almost-all --human-readable --group-directories-first --no-group")
   (put 'dired-find-alternate-file 'disabled nil))
 
 (use-package dirvish
