@@ -146,10 +146,6 @@
   (show-paren-mode 1))
 
 (use-package eat
-  :ensure t
-  :vc (:url "https://github.com/kephale/emacs-eat.git"))
-
-(use-package vterm
   :ensure t)
 
 (use-package orderless
