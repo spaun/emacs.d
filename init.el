@@ -17,6 +17,7 @@
      ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
   :config
   (require 'package)
+  (package-read-all-archive-contents)
   (unless package-archive-contents
     (package-refresh-contents)))
 
