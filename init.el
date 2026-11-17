@@ -145,6 +145,14 @@
   (setq show-paren-delay 0)
   (show-paren-mode 1))
 
+(use-package eglot
+  :config
+  (add-to-list 'eglot-server-programs
+               '(php-ts-mode . ("phpactor" "language-server")))
+  (add-to-list 'eglot-server-programs
+               '((python-ts-mode :language-id "python")
+                 . ("rass" "python"))))
+
 (use-package eat
   :ensure t)
 
@@ -406,7 +414,20 @@
   :ensure t
   :delight
   :init
-  (apheleia-global-mode +1))
+  (apheleia-global-mode +1)
+  :config
+  (setf (alist-get 'go-ts-mode apheleia-mode-alist) 'goimports)
+  (setf (alist-get 'php-cs-fixer apheleia-formatters)
+        '("php-cs-fixer" "fix"
+          "--no-interaction"
+          "--quiet"
+          "--using-cache=no"
+          file))
+  (setf (alist-get 'php-ts-mode apheleia-mode-alist)
+        'php-cs-fixer)
+  ;; Organize imports first, then format.
+  (setf (alist-get 'python-ts-mode apheleia-mode-alist)
+        '(ruff-isort ruff)))
 
 (use-package multiple-cursors
   :ensure t
@@ -575,38 +596,21 @@
   :delight)
 
 (use-package python
-  :mode ("\\.py" . python-mode)
-  :interpreter ("ipython" . python-mode)
-  :config
-  (setq python-indent-offset 4
-        python-shell-interpreter "ipython"
-        python-shell-interpreter-args "-i --simple-prompt"))
+  :mode ("\\.py\\'" . python-ts-mode)
+  :interpreter ("python" . python-ts-mode)
+  :hook (python-ts-mode . eglot-ensure)
+  :custom
+  (python-indent-offset 4))
 
 (use-package php-ts-mode
   :mode "\\.php\\'"
   :hook
   ((php-ts-mode . eglot-ensure)
-   (php-ts-mode . smart-semicolon-mode)
-   (php-ts-mode . (lambda ()
-                    (setq-local
-                     compile-command
-                     (concat
-                      "phpstan analyse --error-format=raw --no-progress "
-                      (shell-quote-argument
-                       (file-truename
-                        (if-let* ((prj (project-current)))
-                            (project-root prj)
-                          (f-dirname (buffer-file-name))))))))))
-  :config
-  (setf (alist-get 'php-cs-fixer apheleia-formatters)
-        '("php-cs-fixer" "fix" "--no-interaction" "--quiet" "--using-cache=no" file))
+   (php-ts-mode . smart-semicolon-mode)))
 
-  (add-to-list 'compilation-error-regexp-alist 'phpstan)
-  (add-to-list 'compilation-error-regexp-alist-alist
-               '(phpstan "^\\([^:]+\\.php\\):\\([0-9]+\\):" 1 2))
-  (add-to-list 'apheleia-mode-alist '(php-ts-mode . php-cs-fixer))
-  (add-to-list 'eglot-server-programs
-               '(php-ts-mode . ("phpactor" "language-server"))))
+(use-package flymake-phpstan
+  :ensure t
+  :hook (php-ts-mode . flymake-phpstan-turn-on)) 
 
 (use-package typescript-ts-mode
   :mode (("\\.cjs\\'" . typescript-ts-mode)
@@ -627,8 +631,6 @@
   :hook ((go-ts-mode . eglot-ensure))
   :custom
   (go-ts-indent-offset 4)
-  :config
-  (setf (alist-get 'go-ts-mode apheleia-mode-alist) 'goimports)
   :bind
   (:map go-ts-mode-map
         ("<f9>" . (lambda () (interactive) (compile "go run .")))))
