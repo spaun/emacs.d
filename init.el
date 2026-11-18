@@ -608,10 +608,6 @@
   ((php-ts-mode . eglot-ensure)
    (php-ts-mode . smart-semicolon-mode)))
 
-(use-package flymake-phpstan
-  :ensure t
-  :hook (php-ts-mode . flymake-phpstan-turn-on)) 
-
 (use-package typescript-ts-mode
   :mode (("\\.cjs\\'" . typescript-ts-mode)
          ("\\.js\\'" . tsx-ts-mode)
