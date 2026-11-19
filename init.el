@@ -292,29 +292,7 @@
   :config
   (setq
    treesit-enabled-modes t
-   treesit-auto-install-grammar 'ask
-   treesit-language-source-alist
-   '((bash "https://github.com/tree-sitter/tree-sitter-bash")
-     (c "https://github.com/tree-sitter/tree-sitter-c")
-     (cmake "https://github.com/uyha/tree-sitter-cmake")
-     (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
-     (css . ("https://github.com/tree-sitter/tree-sitter-css" "v0.25.0"))
-     (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-     (go "https://github.com/tree-sitter/tree-sitter-go" "v0.25.0")
-     (gomod "https://github.com/camdencheek/tree-sitter-go-mod")
-     (html . ("https://github.com/tree-sitter/tree-sitter-html" "v0.23.2"))
-     (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "v0.25.0" "src"))
-     (jsdoc "https://github.com/tree-sitter/tree-sitter-jsdoc" "v0.23.0")
-     (json . ("https://github.com/tree-sitter/tree-sitter-json" "v0.24.8"))
-     (make "https://github.com/alemuller/tree-sitter-make")
-     (markdown "https://github.com/ikatyang/tree-sitter-markdown")
-     (php "https://github.com/tree-sitter/tree-sitter-php" "v0.23.12" "php/src" )
-     (phpdoc "https://github.com/claytonrcarter/tree-sitter-phpdoc")
-     (python . ("https://github.com/tree-sitter/tree-sitter-python" "v0.25.0"))
-     (toml "https://github.com/tree-sitter/tree-sitter-toml")
-     (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "v0.23.2" "tsx/src"))
-     (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "v0.23.2" "typescript/src"))
-     (yaml . ("https://github.com/ikatyang/tree-sitter-yaml" "v0.5.0")))))
+   treesit-auto-install-grammar 'ask))
 
 (use-package eglot
   :defines
